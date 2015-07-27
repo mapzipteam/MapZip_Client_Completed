@@ -1,27 +1,60 @@
 package com.example.ppangg.mapzipproject;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
+    ConnectWebpage testcw = null;
+
+    TextView state ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        state = (TextView)findViewById(R.id.TextState);
+        testcw = new ConnectWebpage(this);
+
     }
 
-    public void onButton1Cliecked(View v) {
+    public void DoLogin(View v) {
         Toast.makeText(getApplicationContext(),"Btn Clicked!", Toast.LENGTH_LONG).show();
 
         Intent intent = new Intent(getApplicationContext(),Tabactivity.class);
         startActivity(intent);
-        finish();
+
+    }
+    public void DoJoin(View v){
+        String strUrl = "http://ljs93kr.cafe24.com/mapzip/login/joincheck.php";
+        try{
+            if(strUrl!=null && strUrl.length()>0){
+                ConnectivityManager conMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo netState = conMgr.getActiveNetworkInfo();
+                if(netState!=null && netState.isConnected()){
+                    testcw.execute(strUrl);
+                }
+                else{
+                    throw new Exception("NETWORK ERROR");
+                }
+            }
+            else{
+                throw new Exception("BAD URL");
+            }
+        }
+        catch(Exception e){
+            state.setText(e.getMessage());
+        }
+
     }
 
 

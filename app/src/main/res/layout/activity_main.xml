@@ -21,13 +21,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="로그인"
-        android:id="@+id/button"
-        android:onClick="onButton1Cliecked" />
+        android:id="@+id/btnLogin"
+        android:onClick="DoLogin" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="회원가입"
-        android:id="@+id/button2" />
+        android:id="@+id/btnJoin"
+        android:onClick="DoJoin"/>
+
+    <TextView
+        android:id="@+id/TextState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="show stat in here..."/>
 
 </LinearLayout>
