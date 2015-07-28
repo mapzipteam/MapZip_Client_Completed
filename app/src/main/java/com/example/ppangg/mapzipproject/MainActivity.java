@@ -22,6 +22,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // new line
+
         state = (TextView)findViewById(R.id.TextState);
         testcw = new ConnectWebpage(this);
 
