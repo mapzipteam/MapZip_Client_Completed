@@ -1,7 +1,6 @@
 package com.example.ppangg.mapzipproject;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
@@ -11,16 +10,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.ppangg.mapzipproject.network.MyVolley;
 
-import java.net.URLEncoder;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -53,18 +54,27 @@ public class MainActivity extends ActionBarActivity {
 //        startActivity(intent);
         RequestQueue queue = MyVolley.getInstance(this.getApplicationContext()).getRequestQueue();
         String url = SystemMain.SERVER_JOIN_URL;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,url,new Response.Listener<String>(){
-            @Override
-            public void onResponse(String response) {
-                state.setText("Response is :"+response);
-            }
-        },new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                state.setText("That didn't work!");
-            }
-        });
-        queue.add(stringRequest);
+        final String userid = inputID.getText().toString();
+        final String userpw = inputPW.getText().toString();
+        if(userid !=null && !userid.equals("")&& userpw !=null && !userpw.equals("")){
+            StringRequest myReq = new StringRequest(Request.Method.POST,
+                    SystemMain.SERVER_JOIN_URL,
+                    NetSuccessListener(),
+                    NetErrorListener()){
+
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String,String> params = new HashMap<String,String>();
+                    params.put("userid", userid);
+                    params.put("userpw",userpw);
+
+                    return params;
+                }
+            };
+            queue.add(myReq);
+        }
+
+
 
     }
     public void DoJoin(View v){
@@ -91,6 +101,23 @@ public class MainActivity extends ActionBarActivity {
             state.setText(e.getMessage());
         }
 
+    }
+
+    private Response.Listener<String> NetSuccessListener(){
+        return new Response.Listener<String>(){
+            @Override
+            public void onResponse(String response) {
+                state.setText(response);
+            }
+        };
+    }
+    private Response.ErrorListener NetErrorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                state.setText(error.getMessage());
+            }
+        };
     }
 
 

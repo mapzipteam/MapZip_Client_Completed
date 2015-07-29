@@ -1,4 +1,4 @@
-package com.example.ppangg.mapzipproject;
+package com.example.ppangg.mapzipproject.network;
 
 import android.content.Context;
 
