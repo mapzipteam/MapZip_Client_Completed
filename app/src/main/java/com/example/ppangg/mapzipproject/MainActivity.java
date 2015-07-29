@@ -19,7 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.ppangg.mapzipproject.network.MyVolley;
 
-import java.lang.reflect.Method;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,32 +30,24 @@ public class MainActivity extends ActionBarActivity {
     private TextView state ;
 
     private EditText inputID;
+    private EditText inputName;
     private EditText inputPW;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // new line
-
         state = (TextView)findViewById(R.id.TextState);
         inputID = (EditText)findViewById(R.id.InputID);
+        inputName = (EditText)findViewById(R.id.InputName);
         inputPW = (EditText)findViewById(R.id.InputPW);
-
-
-
-
-
 
     }
 
     public void DoLogin(View v) {
-//        Toast.makeText(getApplicationContext(),"Btn Clicked!", Toast.LENGTH_LONG).show();
-//
-//        Intent intent = new Intent(getApplicationContext(),Tabactivity.class);
-//        startActivity(intent);
+
         RequestQueue queue = MyVolley.getInstance(this.getApplicationContext()).getRequestQueue();
-        String url = SystemMain.SERVER_JOIN_URL;
+
         final String userid = inputID.getText().toString();
         final String userpw = inputPW.getText().toString();
         if(userid !=null && !userid.equals("")&& userpw !=null && !userpw.equals("")){
@@ -75,33 +67,33 @@ public class MainActivity extends ActionBarActivity {
             };
             queue.add(myReq);
         }
-
-
-
     }
     public void DoJoin(View v){
-        String strUrl = SystemMain.SERVER_JOIN_URL;
-        //String params = "userid="+ URLEncoder.encode(inputID.getText(),"UTF-8")+"&userpw="+inputPW.getText();
-        String params = "userid="+inputID.getText().toString()+"&userpw="+inputPW.getText().toString();
-        ConnectWebpage testcw = new ConnectWebpage(this,params);
-        try{
-            if(strUrl!=null && strUrl.length()>0){
-                ConnectivityManager conMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo netState = conMgr.getActiveNetworkInfo();
-                if(netState!=null && netState.isConnected()){
-                    testcw.execute(strUrl);
+        RequestQueue queue = MyVolley.getInstance(this.getApplicationContext()).getRequestQueue();
+        String url = SystemMain.SERVER_JOIN_URL;
+        final String userid = inputID.getText().toString();
+        final String userpw = inputPW.getText().toString();
+        final String username = inputName.getText().toString();
+        if(userid !=null && !userid.equals("")&& userpw !=null && !userpw.equals("")&& username !=null && !username.equals("")){
+            StringRequest myReq = new StringRequest(Request.Method.POST,
+                    url,
+                    NetSuccessListener(),
+                    NetErrorListener()){
+
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String,String> params = new HashMap<String,String>();
+                    params.put("userid", userid);
+                    params.put("userpw",userpw);
+                    params.put("username",username);
+
+                    return params;
                 }
-                else{
-                    throw new Exception("NETWORK ERROR");
-                }
-            }
-            else{
-                throw new Exception("BAD URL");
-            }
+            };
+            queue.add(myReq);
         }
-        catch(Exception e){
-            state.setText(e.getMessage());
-        }
+
+
 
     }
 

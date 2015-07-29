@@ -2,15 +2,15 @@ package com.example.ppangg.mapzipproject;
 
 /**
  * Created by ljs93kr on 2015-07-27.
- * º» ¾îÇÃ ³»¿¡¼­ °øÅëÀûÀ¸·Î »ç¿ëÇÒ »ó¼ö¸íµé°ú ÇÔ¼öµéÀ» staticÀ¸·Î Á¤ÀÇÇÒ °Í
+ * ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ staticï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
  */
 public class SystemMain {
 
     /**
-     * Server Á¢¼Ó½Ã »ç¿ëÇÏ´Â URLµéÀ» Á¤ÀÇ
+     * Server ï¿½ï¿½ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ URLï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
      */
-    public static String SERVER_ROOT_URL = "http://ljs93kr.cafe24.com/mapzip/"; // ¼­¹öÀÇ ·çÆ®url
-    public static String SERVER_JOIN_URL = SERVER_ROOT_URL+"login/joincheck.php"; // ¼­¹öÀÇ join url
+    public static final String SERVER_ROOT_URL = "http://ljs93kr.cafe24.com/mapzip"; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®url
+    public static final String SERVER_JOIN_URL = SERVER_ROOT_URL+"/login/joincheck.php"; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ join url
 
 
 }
