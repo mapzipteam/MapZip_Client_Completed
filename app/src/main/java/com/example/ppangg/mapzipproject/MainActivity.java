@@ -36,6 +36,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // new line
+
         state = (TextView)findViewById(R.id.TextState);
         inputID = (EditText)findViewById(R.id.InputID);
         inputPW = (EditText)findViewById(R.id.InputPW);
