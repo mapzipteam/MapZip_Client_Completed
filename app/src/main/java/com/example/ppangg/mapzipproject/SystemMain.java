@@ -11,6 +11,7 @@ public class SystemMain {
      */
     public static final String SERVER_ROOT_URL = "http://ljs93kr.cafe24.com/mapzip"; // ������ ��Ʈurl
     public static final String SERVER_JOIN_URL = SERVER_ROOT_URL+"/login/joincheck.php"; // ������ join url
+    public static final String SERVER_LOGIN_URL = SERVER_ROOT_URL+"/login/logincheck.php";
 
 
 }

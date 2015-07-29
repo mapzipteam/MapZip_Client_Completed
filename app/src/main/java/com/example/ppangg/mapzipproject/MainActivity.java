@@ -52,7 +52,7 @@ public class MainActivity extends ActionBarActivity {
         final String userpw = inputPW.getText().toString();
         if(userid !=null && !userid.equals("")&& userpw !=null && !userpw.equals("")){
             StringRequest myReq = new StringRequest(Request.Method.POST,
-                    SystemMain.SERVER_JOIN_URL,
+                    SystemMain.SERVER_LOGIN_URL,
                     NetSuccessListener(),
                     NetErrorListener()){
 
