@@ -9,33 +9,69 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.net.URLEncoder;
+
 public class MainActivity extends ActionBarActivity {
 
-    ConnectWebpage testcw = null;
 
-    TextView state ;
+
+    private TextView state ;
+
+    private EditText inputID;
+    private EditText inputPW;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         state = (TextView)findViewById(R.id.TextState);
-        testcw = new ConnectWebpage(this);
+        inputID = (EditText)findViewById(R.id.InputID);
+        inputPW = (EditText)findViewById(R.id.InputPW);
+
+
+
+
+
 
     }
 
     public void DoLogin(View v) {
-        Toast.makeText(getApplicationContext(),"Btn Clicked!", Toast.LENGTH_LONG).show();
-
-        Intent intent = new Intent(getApplicationContext(),Tabactivity.class);
-        startActivity(intent);
+//        Toast.makeText(getApplicationContext(),"Btn Clicked!", Toast.LENGTH_LONG).show();
+//
+//        Intent intent = new Intent(getApplicationContext(),Tabactivity.class);
+//        startActivity(intent);
+        RequestQueue queue = MyVolley.getInstance(this.getApplicationContext()).getRequestQueue();
+        String url = SystemMain.SERVER_JOIN_URL;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,url,new Response.Listener<String>(){
+            @Override
+            public void onResponse(String response) {
+                state.setText("Response is :"+response);
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                state.setText("That didn't work!");
+            }
+        });
+        queue.add(stringRequest);
 
     }
     public void DoJoin(View v){
-        String strUrl = "http://ljs93kr.cafe24.com/mapzip/login/joincheck.php";
+        String strUrl = SystemMain.SERVER_JOIN_URL;
+        //String params = "userid="+ URLEncoder.encode(inputID.getText(),"UTF-8")+"&userpw="+inputPW.getText();
+        String params = "userid="+inputID.getText().toString()+"&userpw="+inputPW.getText().toString();
+        ConnectWebpage testcw = new ConnectWebpage(this,params);
         try{
             if(strUrl!=null && strUrl.length()>0){
                 ConnectivityManager conMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);

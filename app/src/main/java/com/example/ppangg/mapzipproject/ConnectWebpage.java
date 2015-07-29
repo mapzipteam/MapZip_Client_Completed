@@ -8,6 +8,8 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -19,10 +21,15 @@ public class ConnectWebpage extends AsyncTask<String,String,String>{
 
     private Context currContext;
 
+    private String params;
+
     public ConnectWebpage(){};
     public ConnectWebpage(Context context) {
         currContext = context;
-
+    }
+    public ConnectWebpage(Context context, String params){
+        currContext = context;
+        this.params = params;
     }
 
     @Override
@@ -33,7 +40,7 @@ public class ConnectWebpage extends AsyncTask<String,String,String>{
     @Override
     protected String doInBackground(String... params) {
         try{
-            return (String)DownloadUrl((String)params[0]);
+            return (String)DownloadUrl((String) params[0]);
         }
         catch(IOException e){
             Log.d("CONNECTION","The msg is "+e.getMessage());
@@ -54,9 +61,16 @@ public class ConnectWebpage extends AsyncTask<String,String,String>{
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
             conn.setReadTimeout(5000);
             conn.setConnectTimeout(5000);
-            conn.setRequestMethod("GET");
+            conn.setRequestMethod("POST");
             conn.setDoInput(true);
-            conn.connect();
+            conn.setDoOutput(true);
+
+            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+            writer.write(params);
+            writer.flush();
+            writer.close();
+
+            //conn.connect();
 
             int resp = conn.getResponseCode();
             Log.d("CONNECTION", "The response is "+resp);

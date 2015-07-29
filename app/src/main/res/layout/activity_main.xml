@@ -7,7 +7,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/InputID"
         android:hint="ID를 입력하세요"/>
 
     <EditText
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:hint="Password를 입력하세요"
-        android:id="@+id/editText2" />
+        android:id="@+id/InputPW" />
 
     <Button
         android:layout_width="wrap_content"
@@ -35,6 +35,6 @@
         android:id="@+id/TextState"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="show stat in here..."/>
+        android:text="show stat in here...1"/>
 
 </LinearLayout>
