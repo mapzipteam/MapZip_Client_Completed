@@ -27,9 +27,7 @@ public class MyVolley {
         return one;
     }
 
-    public RequestQueue getRequestQueue() {
-        return requestQueue;
-    }
+    public RequestQueue getRequestQueue() { return requestQueue; }
 
     public ImageLoader getImageLoader() {
         return imageLoader;

@@ -3,6 +3,12 @@ package com.example.ppangg.mapzipproject;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,96 +29,49 @@ import com.example.ppangg.mapzipproject.network.MyVolley;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends FragmentActivity {
 
+    private ViewPager mViewPager;
+    private PagerAdapter mPagerAdapter;
 
-
-    private TextView state ;
-
-    private EditText inputID;
-    private EditText inputName;
-    private EditText inputPW;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        state = (TextView)findViewById(R.id.TextState);
-        inputID = (EditText)findViewById(R.id.InputID);
-        inputName = (EditText)findViewById(R.id.InputName);
-        inputPW = (EditText)findViewById(R.id.InputPW);
-
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mPagerAdapter);
     }
 
-    public void DoLogin(View v) {
-
-        RequestQueue queue = MyVolley.getInstance(this.getApplicationContext()).getRequestQueue();
-
-        final String userid = inputID.getText().toString();
-        final String userpw = inputPW.getText().toString();
-        if(userid !=null && !userid.equals("")&& userpw !=null && !userpw.equals("")){
-            StringRequest myReq = new StringRequest(Request.Method.POST,
-                    SystemMain.SERVER_LOGIN_URL,
-                    NetSuccessListener(),
-                    NetErrorListener()){
-
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String,String> params = new HashMap<String,String>();
-                    params.put("userid", userid);
-                    params.put("userpw",userpw);
-
-                    return params;
-                }
-            };
-            queue.add(myReq);
-        }
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
     }
-    public void DoJoin(View v){
-        RequestQueue queue = MyVolley.getInstance(this.getApplicationContext()).getRequestQueue();
-        String url = SystemMain.SERVER_JOIN_URL;
-        final String userid = inputID.getText().toString();
-        final String userpw = inputPW.getText().toString();
-        final String username = inputName.getText().toString();
-        if(userid !=null && !userid.equals("")&& userpw !=null && !userpw.equals("")&& username !=null && !username.equals("")){
-            StringRequest myReq = new StringRequest(Request.Method.POST,
-                    url,
-                    NetSuccessListener(),
-                    NetErrorListener()){
 
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String,String> params = new HashMap<String,String>();
-                    params.put("userid", userid);
-                    params.put("userpw",userpw);
-                    params.put("username",username);
 
-                    return params;
-                }
-            };
-            queue.add(myReq);
+    private class PagerAdapter extends FragmentStatePagerAdapter {
+
+        public PagerAdapter(FragmentManager fm) {
+            super(fm);
         }
 
+        @Override
+        public Fragment getItem(int position) {
+            // �ش��ϴ� page�� Fragment�� �����մϴ�.
+            if(position == 1)
+                return loginFragment.create(position);
+            else
+                return joinFragment.create(position);
+        }
 
-
+        @Override
+        public int getCount() {
+            return 2;
+        }
     }
 
-    private Response.Listener<String> NetSuccessListener(){
-        return new Response.Listener<String>(){
-            @Override
-            public void onResponse(String response) {
-                state.setText(response);
-            }
-        };
-    }
-    private Response.ErrorListener NetErrorListener() {
-        return new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                state.setText(error.getMessage());
-            }
-        };
-    }
+
 
 
     @Override
