@@ -44,11 +44,12 @@ public class MainActivity extends FragmentActivity {
         mViewPager.setAdapter(mPagerAdapter);
     }
 
+    /*
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
     }
-
+*/
 
     private class PagerAdapter extends FragmentStatePagerAdapter {
 
@@ -59,7 +60,7 @@ public class MainActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
             // �ش��ϴ� page�� Fragment�� �����մϴ�.
-            if(position == 1)
+            if(position == 0)
                 return loginFragment.create(position);
             else
                 return joinFragment.create(position);
