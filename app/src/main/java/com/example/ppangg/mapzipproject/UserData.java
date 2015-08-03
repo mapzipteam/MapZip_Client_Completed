@@ -8,8 +8,8 @@ public class UserData {
     private static UserData ourInstance;
 
     private boolean LoginPermission; // 로그인허가
-    String UserID; // 사용자 아이디
-    String UserName; // 사용자 이름
+    private String UserID; // 사용자 아이디
+    private String UserName; // 사용자 이름
 
     public static UserData getInstance() {
         if(ourInstance == null) {
@@ -36,6 +36,20 @@ public class UserData {
         return LoginPermission;
     }
 
+    public void inputID(String id){
+        UserID = id;
+    }
 
+    public void inputName(String name){
+        UserName = name;
+    }
+
+    public String getUserID(){
+        return UserID;
+    }
+
+    public String getUserName(){
+        return UserName;
+    }
 
 }

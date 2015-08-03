@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/topstate"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="사용자(ididid)"
@@ -14,5 +14,11 @@
         android:paddingBottom="10dp"
         android:paddingLeft="5dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="친구추가"/>
 
 </RelativeLayout>
