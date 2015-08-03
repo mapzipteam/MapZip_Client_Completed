@@ -3,12 +3,10 @@ package com.example.ppangg.mapzipproject;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.res.Resources;
-import android.view.View;
 
 public class Tabactivity extends FragmentActivity {
 
@@ -32,11 +30,11 @@ public class Tabactivity extends FragmentActivity {
 
         Bundle b = new Bundle();
         b.putString("key", "Sample");
-        mTabHost.addTab(mTabHost.newTabSpec("home").setIndicator("", draw1), Fragment1.class, b);
-        mTabHost.addTab(mTabHost.newTabSpec("posting").setIndicator("",draw2), Fragment2.class, b);
-        mTabHost.addTab(mTabHost.newTabSpec("search").setIndicator("",draw3),Fragment3.class, b);
-        mTabHost.addTab(mTabHost.newTabSpec("friend").setIndicator("", draw4), Fragment4.class, b);
-        mTabHost.addTab(mTabHost.newTabSpec("setting").setIndicator("",draw5),Fragment5.class, b);
+        mTabHost.addTab(mTabHost.newTabSpec("home").setIndicator("", draw1), home_Fragment.class, b);
+        mTabHost.addTab(mTabHost.newTabSpec("posting").setIndicator("",draw2), review_Fragment.class, b);
+        mTabHost.addTab(mTabHost.newTabSpec("search").setIndicator("",draw3),search_Fragment.class, b);
+        mTabHost.addTab(mTabHost.newTabSpec("friend").setIndicator("", draw4), friend_Fragment.class, b);
+        mTabHost.addTab(mTabHost.newTabSpec("setting").setIndicator("",draw5),setting_Fragment.class, b);
         // setContentView(mTabHost);
 
     }

@@ -1,5 +1,6 @@
 package com.example.ppangg.mapzipproject;
 
+
 /**
  * Created by ppangg on 2015-07-20.
  */
@@ -9,9 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class Fragment1 extends Fragment {
+public class review_Fragment extends Fragment {
 
-    public Fragment1() {
+    public review_Fragment() {
         // TODO Auto-generated constructor stub
 
     }
@@ -26,7 +27,7 @@ public class Fragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.homelayout,
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.layout,
                 null);
         return v;
     }

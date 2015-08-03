@@ -1,6 +1,5 @@
 package com.example.ppangg.mapzipproject;
 
-
 /**
  * Created by ppangg on 2015-07-20.
  */
@@ -10,9 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class Fragment2 extends Fragment {
+public class search_Fragment extends Fragment {
 
-    public Fragment2() {
+    public search_Fragment() {
         // TODO Auto-generated constructor stub
 
     }

@@ -9,9 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class Fragment3 extends Fragment {
+public class home_Fragment extends Fragment {
 
-    public Fragment3() {
+    public home_Fragment() {
         // TODO Auto-generated constructor stub
 
     }
@@ -26,7 +26,7 @@ public class Fragment3 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.layout,
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.homelayout,
                 null);
         return v;
     }
