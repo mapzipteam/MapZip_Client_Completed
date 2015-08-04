@@ -15,13 +15,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.example.ppangg.mapzipproject.network.MyVolley;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -105,6 +108,20 @@ public class loginFragment extends Fragment {
                     params.put("userpw",userpw);
 
                     return params;
+                }
+
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    try {
+                        String utf_String = new String(response.data,"UTF-8");
+                        return Response.success(utf_String,HttpHeaderParser.parseCacheHeaders(response));
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                        return Response.error(new VolleyError());
+                    }
+
+
+
                 }
             };
             queue.add(myReq);
