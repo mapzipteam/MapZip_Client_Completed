@@ -138,7 +138,7 @@ public class loginFragment extends Fragment {
                 Log.v("내용", response);
                 Log.v("길이", String.valueOf(response.length()));
 
-                if(response.charAt(3) == '1'){
+                if(response.charAt(1) == '1'){
                     Log.v("로그인", "성공");
 
                     //Toast.makeText(cont, "로그인 성공!", Toast.LENGTH_LONG).show();
@@ -146,7 +146,7 @@ public class loginFragment extends Fragment {
                     UserData user = UserData.getInstance();
                     user.LoginOK();
                     user.inputID(inputID.getText().toString());
-                    user.inputName(response.substring(4));
+                    user.inputName(response.substring(2));
 
                     Log.v("테스트 아이디", user.getUserID());
                     Log.v("테스트 로그인",String.valueOf(user.getLoginPermission()));
