@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,6 +41,8 @@ public class joinFragment extends Fragment {
 
     private Button JoinBtn;
 
+    private View layout;
+    private TextView text;
 
     public static joinFragment create(int pageNumber) {
         joinFragment fragment = new joinFragment();
@@ -53,6 +56,12 @@ public class joinFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPageNumber = getArguments().getInt("page");
+
+        cont=getActivity();
+
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        layout = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
+        text = (TextView)layout.findViewById(R.id.textToShow);
     }
 
     @Override
@@ -114,11 +123,25 @@ public class joinFragment extends Fragment {
                 Log.v("길이", String.valueOf(response.length()));
 
                 if(response.substring(3).equals("1")) {
-                    state.setText("회원가입에 성공하였습니다.");
+                    // toast
+                    text.setText("회원가입에 성공하였습니다.");
+                    Toast toast = new Toast(cont);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout);
+                    toast.show();
+
+                    //state.setText("회원가입에 성공하였습니다.");
                     Log.v("회원가입", "성공");
                 }
                 else {
-                    state.setText("이미 존재하는 계정입니다.");
+                    // toast
+                    text.setText("이미 존재하는 계정정보입니다.");
+                    Toast toast = new Toast(cont);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout);
+                    toast.show();
+
+                   //state.setText("이미 존재하는 계정입니다.");
                     Log.v("회원가입", "실패");
                 }
             }
@@ -129,8 +152,15 @@ public class joinFragment extends Fragment {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("회원가입",error.getMessage());
-                state.setText("인터넷 연결이 필요합니다.");
+                // toast
+                text.setText("인터넷 연결이 필요합니다.");
+                Toast toast = new Toast(cont);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
+                toast.show();
+
+                Log.e("회원가입", error.getMessage());
+                //state.setText("인터넷 연결이 필요합니다.");
             }
         };
     }

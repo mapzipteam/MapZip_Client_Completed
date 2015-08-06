@@ -46,6 +46,8 @@ public class loginFragment extends Fragment {
 
     private Button LoginBtn;
 
+    private View layout;
+    private TextView text;
 
     public static loginFragment create(int pageNumber) {
         loginFragment fragment = new loginFragment();
@@ -61,6 +63,10 @@ public class loginFragment extends Fragment {
         mPageNumber = getArguments().getInt("page");
 
         cont=getActivity();
+
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        layout = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
+        text = (TextView)layout.findViewById(R.id.textToShow);
     }
 
     @Override
@@ -141,7 +147,12 @@ public class loginFragment extends Fragment {
                 if(response.charAt(1) == '1'){
                     Log.v("로그인", "성공");
 
-                    //Toast.makeText(cont, "로그인 성공!", Toast.LENGTH_LONG).show();
+                    // toast
+                    text.setText("환영합니다!");
+                    Toast toast = new Toast(cont);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout);
+                    toast.show();
 
                     UserData user = UserData.getInstance();
                     user.LoginOK();
@@ -157,7 +168,14 @@ public class loginFragment extends Fragment {
                     getActivity().finish();
                 }
                 else {
-                    state.setText("존재하지 않는 계정정보입니다.");
+                    // toast
+                    text.setText("존재하지 않는 계정정보입니다.");
+                    Toast toast = new Toast(cont);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout);
+                    toast.show();
+                    //state.setText("존재하지 않는 계정정보입니다.");
+
                     Log.v("로그인", "실패");
                 }
             }
@@ -167,8 +185,15 @@ public class loginFragment extends Fragment {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("로그인",error.getMessage());
-                state.setText("인터넷 연결이 필요합니다.");
+                // toast
+                text.setText("인터넷 연결이 필요합니다.");
+                Toast toast = new Toast(cont);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
+                toast.show();
+
+                Log.e("로그인", error.getMessage());
+                //state.setText("인터넷 연결이 필요합니다.");
             }
         };
     }
