@@ -21,8 +21,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.ppangg.mapzipproject.network.MyVolley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -36,7 +41,7 @@ import java.util.Map;
 public class loginFragment extends Fragment {
 
 
-    private TextView state ;
+    private TextView state;
 
     private EditText inputID;
     private EditText inputPW;
@@ -62,11 +67,11 @@ public class loginFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mPageNumber = getArguments().getInt("page");
 
-        cont=getActivity();
+        cont = getActivity();
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         layout = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
-        text = (TextView)layout.findViewById(R.id.textToShow);
+        text = (TextView) layout.findViewById(R.id.textToShow);
     }
 
     @Override
@@ -74,39 +79,48 @@ public class loginFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.login_layout, container, false);
 
-        state = (TextView)rootView.findViewById(R.id.TextState);
-        inputID = (EditText)rootView.findViewById(R.id.InputID);
-        inputPW = (EditText)rootView.findViewById(R.id.InputPW);
-        LoginBtn = (Button)rootView.findViewById(R.id.btnLogin);
+        state = (TextView) rootView.findViewById(R.id.TextState);
+        inputID = (EditText) rootView.findViewById(R.id.InputID);
+        inputPW = (EditText) rootView.findViewById(R.id.InputPW);
+        LoginBtn = (Button) rootView.findViewById(R.id.btnLogin);
 
         LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             DoLogin(v);
+                DoLogin(v);
             }
         });
 
         return rootView;
     }
-/*
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-    }
-*/
 
     public void DoLogin(View v) {
         RequestQueue queue = MyVolley.getInstance(cont).getRequestQueue();
 
         final String userid = inputID.getText().toString();
         final String userpw = inputPW.getText().toString();
-        if(userid !=null && !userid.equals("")&& userpw !=null && !userpw.equals("")){
-            StringRequest myReq = new StringRequest(Request.Method.POST,
-                    SystemMain.SERVER_LOGIN_URL,
-                    NetSuccessListener(),
-                    NetErrorListener()){
+        if (userid != null && !userid.equals("") && userpw != null && !userpw.equals("")) {
+            /*
+            Map<String,String> params = new HashMap<String,String>();
+            params.put("userid", userid);
+            params.put("userpw",userpw);
+            */
 
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("userid", userid);
+                obj.put("userpw", userpw);
+                Log.v("제이손 보내기",obj.toString());
+            } catch (JSONException e) {
+                Log.v("제이손", "에러");
+            }
+
+            JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                    SystemMain.SERVER_LOGIN_URL,
+                    obj,
+                    createMyReqSuccessListener(),
+                    createMyReqErrorListener()) {
+/*
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String,String> params = new HashMap<String,String>();
@@ -114,8 +128,8 @@ public class loginFragment extends Fragment {
                     params.put("userpw",userpw);
 
                     return params;
-                }
-
+                }*/
+/*
                 @Override
                 protected Response<String> parseNetworkResponse(NetworkResponse response) {
                     try {
@@ -128,7 +142,7 @@ public class loginFragment extends Fragment {
 
 
 
-                }
+                }*/
             };
             queue.add(myReq);
 
@@ -136,52 +150,50 @@ public class loginFragment extends Fragment {
         }
     }
 
-    private Response.Listener<String> NetSuccessListener(){
-        return new Response.Listener<String>(){
+    private Response.Listener<JSONObject> createMyReqSuccessListener() {
+        return new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(JSONObject response) {
 
-                Log.v("내용", response);
-                Log.v("길이", String.valueOf(response.length()));
+               try {
+                    Log.v("제이손", response.toString());
 
-                if(response.charAt(1) == '1'){
-                    Log.v("로그인", "성공");
+                    if (response.get("login").toString().equals("1")) {
+                        // toast
+                        text.setText("환영합니다!");
+                        Toast toast = new Toast(cont);
+                        toast.setDuration(Toast.LENGTH_LONG);
+                        toast.setView(layout);
+                        toast.show();
 
-                    // toast
-                    text.setText("환영합니다!");
-                    Toast toast = new Toast(cont);
-                    toast.setDuration(Toast.LENGTH_LONG);
-                    toast.setView(layout);
-                    toast.show();
+                        UserData user = UserData.getInstance();
+                        user.LoginOK();
+                        user.inputID(inputID.getText().toString());
+                        user.inputName(response.get("username").toString());
 
-                    UserData user = UserData.getInstance();
-                    user.LoginOK();
-                    user.inputID(inputID.getText().toString());
-                    user.inputName(response.substring(2));
+                        Log.v("테스트 아이디", user.getUserID());
+                        Log.v("테스트 로그인", String.valueOf(user.getLoginPermission()));
+                        Log.v("테스트 이름", user.getUserName());
 
-                    Log.v("테스트 아이디", user.getUserID());
-                    Log.v("테스트 로그인",String.valueOf(user.getLoginPermission()));
-                    Log.v("테스트 이름",user.getUserName());
-
-                    Intent intent = new Intent(cont,Tabactivity.class);
-                    startActivity(intent);
-                    getActivity().finish();
-                }
-                else {
-                    // toast
-                    text.setText("존재하지 않는 계정정보입니다.");
-                    Toast toast = new Toast(cont);
-                    toast.setDuration(Toast.LENGTH_LONG);
-                    toast.setView(layout);
-                    toast.show();
-                    //state.setText("존재하지 않는 계정정보입니다.");
-
-                    Log.v("로그인", "실패");
+                        Intent intent = new Intent(cont, Tabactivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
+                    } else {
+                        // toast
+                        text.setText("존재하지 않는 계정정보입니다.");
+                        Toast toast = new Toast(cont);
+                        toast.setDuration(Toast.LENGTH_LONG);
+                        toast.setView(layout);
+                        toast.show();
+                    }
+                } catch (JSONException e) {
+                    Log.v("에러", "제이손");
                 }
             }
         };
     }
-    private Response.ErrorListener NetErrorListener() {
+
+    private Response.ErrorListener createMyReqErrorListener() {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
