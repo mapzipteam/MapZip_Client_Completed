@@ -155,7 +155,11 @@ public class loginFragment extends Fragment {
             @Override
             public void onResponse(JSONObject response) {
 
+<<<<<<< HEAD
                try {
+=======
+                try {
+>>>>>>> minj
                     Log.v("제이손", response.toString());
 
                     if (response.get("login").toString().equals("1")) {
@@ -175,7 +179,11 @@ public class loginFragment extends Fragment {
                         Log.v("테스트 로그인", String.valueOf(user.getLoginPermission()));
                         Log.v("테스트 이름", user.getUserName());
 
+<<<<<<< HEAD
                         Intent intent = new Intent(cont, Tabactivity.class);
+=======
+                        Intent intent = new Intent(cont, slidingTap.class);
+>>>>>>> minj
                         startActivity(intent);
                         getActivity().finish();
                     } else {

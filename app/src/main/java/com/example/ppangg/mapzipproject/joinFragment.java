@@ -88,13 +88,13 @@ public class joinFragment extends Fragment {
 
         return rootView;
     }
-/*
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    /*
+        @Override
+        public void onAttach(Activity activity) {
+            super.onAttach(activity);
 
-    }
-*/
+        }
+    */
     public void DoJoin(View v) {
         RequestQueue queue = MyVolley.getInstance(cont).getRequestQueue();
         String url = SystemMain.SERVER_JOIN_URL;

@@ -1,34 +1,28 @@
 package com.example.ppangg.mapzipproject;
 
-/**
- * Created by ppangg on 2015-07-20.
- */
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class search_Fragment extends Fragment {
+public class serarch_Fragment extends Fragment {
+	
+	public serarch_Fragment(){}
 
-    public search_Fragment() {
-        // TODO Auto-generated constructor stub
-
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
     }
-
-    @Override
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.layout,
-                null);
-        return v;
+            Bundle savedInstanceState) {
+ 
+        View rootView = inflater.inflate(R.layout.fragment_search, container, false);
+         
+        return rootView;
     }
 
     @Override
@@ -39,4 +33,3 @@ public class search_Fragment extends Fragment {
     //
 
 }
-

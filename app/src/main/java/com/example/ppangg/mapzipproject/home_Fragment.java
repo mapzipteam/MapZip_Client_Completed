@@ -1,24 +1,17 @@
 package com.example.ppangg.mapzipproject;
 
-/**
- * Created by ppangg on 2015-07-20.
- */
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class home_Fragment extends Fragment {
-
     private TextView topstate ;
     private UserData user;
 
-    public home_Fragment() {
-        // TODO Auto-generated constructor stub
-
-    }
+	public home_Fragment(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,10 +22,9 @@ public class home_Fragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.homelayout,
-                null);
+            Bundle savedInstanceState) {
+ 
+        View v = inflater.inflate(R.layout.homelayout, container, false);
 
         topstate = (TextView)v.findViewById(R.id.topstate);
         topstate.setText(user.getUserName());
@@ -48,7 +40,4 @@ public class home_Fragment extends Fragment {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
     }
-    //
-
 }
-
