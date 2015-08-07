@@ -136,9 +136,9 @@ public class joinFragment extends Fragment {
             @Override
             public void onResponse(JSONObject response) {
 
-                try {
-                    Log.v("제이손", response.toString());
+                Log.v("제이손", response.toString());
 
+                try {
                     if (response.get("join").toString().equals("1")) {
                         // toast
                         text.setText("회원가입에 성공하였습니다.");
