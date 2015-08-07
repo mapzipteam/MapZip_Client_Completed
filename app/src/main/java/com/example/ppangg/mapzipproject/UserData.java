@@ -2,14 +2,14 @@ package com.example.ppangg.mapzipproject;
 
 /**
  * Created by ljs93kr on 2015-07-27.
- * ÇöÀç »ç¿ëÀÚÀÇ ¸ðµç µ¥ÀÌÅÍ¸¦ ´ã´Â ½Ì±ÛÅæ Å¬·¡½º
+
  */
 public class UserData {
     private static UserData ourInstance;
 
-    private boolean LoginPermission; // ·Î±×ÀÎÇã°¡
-    private String UserID; // »ç¿ëÀÚ ¾ÆÀÌµð
-    private String UserName; // »ç¿ëÀÚ ÀÌ¸§
+    private boolean LoginPermission; // ï¿½Î±ï¿½ï¿½ï¿½ï¿½ã°¡
+    private String UserID; // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½
+    private String UserName; // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½
 
     public static UserData getInstance() {
         if(ourInstance == null) {
@@ -23,7 +23,7 @@ public class UserData {
     }
 
     private void init(){
-        LoginPermission = false; // Ã³À½ instanceÈ­ ÇÒ¶§´Â ·Î±×ÀÎÇã°¡ false
+        LoginPermission = false; // Ã³ï¿½ï¿½ instanceÈ­ ï¿½Ò¶ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ã°¡ false
         UserID = null;
         UserName = null;
     }

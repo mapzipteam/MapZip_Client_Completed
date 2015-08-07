@@ -135,8 +135,10 @@ public class loginFragment extends Fragment {
                     Log.v("테스트 로그인",String.valueOf(user.getLoginPermission()));
                     Log.v("테스트 이름",user.getUserName());
 
-                    Intent intent = new Intent(cont,Tabactivity.class);
-                    startActivity(intent);
+              //      Intent intent = new Intent(cont,Tapactivity.class);
+                    Intent i = new Intent(cont,slidingTap.class);
+                    startActivity(i);
+
                     getActivity().finish();
                 }
                 else {
