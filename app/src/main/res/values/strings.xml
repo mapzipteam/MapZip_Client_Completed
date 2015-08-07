@@ -17,6 +17,12 @@
         <item >setting</item>
 
     </string-array>
+    <string-array name="spinner_number">
+        <item >첫번째 지도</item>
+        <item >두번째 지도</item>
+        <item >세번째 지도</item>
+
+    </string-array>
 
     <!-- Nav Drawer List Item Icons -->
     <!-- Keep them in order as the titles are in -->
