@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/topstate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="사용자(ididid)"
+        android:background="#fafab1"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/mapstate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="지도 선택: "
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_below="@+id/topstate" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_toRightOf="@+id/mapstate"
+        android:layout_below="@+id/topstate"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:background="#aec7e1" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:id="@+id/mapimage"
+        android:layout_below="@+id/spinner"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/tagText"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/mapimage"
+        android:background="@color/mainOrange"
+        android:layout_marginTop="15dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:textSize="15dp"
+        android:text="#해쉬#태그#다섯\n#개다#그렇다" />
+
+    <Button
+        android:id="@+id/DoBong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="도봉구"
+        android:layout_below="@+id/spinner"/>
+
+    <Button
+        android:id="@+id/NoWon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinner"
+        android:layout_toRightOf="@+id/DoBong"
+        android:text="노원구"/>
+
+</RelativeLayout>
