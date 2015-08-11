@@ -42,14 +42,6 @@
         android:layout_below="@+id/spinner"
         android:layout_marginTop="5dp" />
 
-    <ImageView
-        android:id="@+id/mapimage2"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_below="@+id/spinner"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/p1"/>
-
     <TextView
         android:id="@+id/tagText"
         android:layout_width="match_parent"

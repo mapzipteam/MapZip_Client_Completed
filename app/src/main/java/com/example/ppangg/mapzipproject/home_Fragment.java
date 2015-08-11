@@ -3,6 +3,7 @@ package com.example.ppangg.mapzipproject;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +13,22 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class home_Fragment extends Fragment {
 
     private View v;
-    private TextView topstate ;
+    private TextView topstate;
+    private TextView hashstate;
     private UserData user;
     private ArrayList<String> sppinerList;
     private View imageview;
+
+    private int mapnum;
 
     private Button DoBong;
     private Button NoWon;
@@ -48,7 +56,8 @@ public class home_Fragment extends Fragment {
     private Button GangNam;
     private Button SongPa;
 
-	public home_Fragment(){}
+    public home_Fragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,53 +65,62 @@ public class home_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         user = UserData.getInstance();
 
+        mapnum = user.getMapmetaArray().length();
+
         sppinerList = new ArrayList<String>();
-        sppinerList.add("Ã¹¹øÂ°");
-        sppinerList.add("second");
+        try {
+            for (int i = 0; i < mapnum; i++) {
+                sppinerList.add(user.getMapmetaArray().getJSONObject(i).getString("title"));
+            }
+        }catch (JSONException ex){
+
+        }
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
- 
-        v = inflater.inflate(R.layout.fragment_home, container, false);
-        imageview = (View)v.findViewById(R.id.mapimage);
+                             Bundle savedInstanceState) {
 
-        topstate = (TextView)v.findViewById(R.id.topstate);
+        v = inflater.inflate(R.layout.fragment_home, container, false);
+        imageview = (View) v.findViewById(R.id.mapimage);
+
+        topstate = (TextView) v.findViewById(R.id.topstate);
         topstate.setText(user.getUserName());
         topstate.append("(");
         topstate.append(user.getUserID());
         topstate.append(")");
 
-        DoBong = (Button)v.findViewById(R.id.DoBong);
-        NoWon = (Button)v.findViewById(R.id.NoWon);
-        GangBuk = (Button)v.findViewById(R.id.GangBuk);
-        SungBuk = (Button)v.findViewById(R.id.SungBuk);
-        ZongRang = (Button)v.findViewById(R.id.ZongRang);
-        EunPhung = (Button)v.findViewById(R.id.EunPhung);
-        ZongRo = (Button)v.findViewById(R.id.ZongRo);
-        DongDaeMon = (Button)v.findViewById(R.id.DongDaeMon);
-        SuDaeMon = (Button)v.findViewById(R.id.SuDaeMon);
-        Zhong = (Button)v.findViewById(R.id.Zhong);
-        SungDong = (Button)v.findViewById(R.id.SungDong);
-        GangZin = (Button)v.findViewById(R.id.GangZin);
-        GangDong = (Button)v.findViewById(R.id.GangDong);
-        MaPho = (Button)v.findViewById(R.id.MaPho);
-        YongSan = (Button)v.findViewById(R.id.YongSan);
-        GangSue = (Button)v.findViewById(R.id.GangSue);
-        YangChen = (Button)v.findViewById(R.id.YangChen);
-        GuRo = (Button)v.findViewById(R.id.GuRo);
-        YongDengPo = (Button)v.findViewById(R.id.YongDengPo);
-        DongJack = (Button)v.findViewById(R.id.DongJack);
-        GemChun = (Button)v.findViewById(R.id.GemChun);
-        GanAk = (Button)v.findViewById(R.id.GanAk);
-        SeoCho = (Button)v.findViewById(R.id.SeoCho);
-        GangNam = (Button)v.findViewById(R.id.GangNam);
-        SongPa = (Button)v.findViewById(R.id.SongPa);
+        hashstate = (TextView) v.findViewById(R.id.tagText);
 
-        Spinner spinner = (Spinner)v.findViewById(R.id.spinner);
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_dropdown_item,sppinerList);
+        DoBong = (Button) v.findViewById(R.id.DoBong);
+        NoWon = (Button) v.findViewById(R.id.NoWon);
+        GangBuk = (Button) v.findViewById(R.id.GangBuk);
+        SungBuk = (Button) v.findViewById(R.id.SungBuk);
+        ZongRang = (Button) v.findViewById(R.id.ZongRang);
+        EunPhung = (Button) v.findViewById(R.id.EunPhung);
+        ZongRo = (Button) v.findViewById(R.id.ZongRo);
+        DongDaeMon = (Button) v.findViewById(R.id.DongDaeMon);
+        SuDaeMon = (Button) v.findViewById(R.id.SuDaeMon);
+        Zhong = (Button) v.findViewById(R.id.Zhong);
+        SungDong = (Button) v.findViewById(R.id.SungDong);
+        GangZin = (Button) v.findViewById(R.id.GangZin);
+        GangDong = (Button) v.findViewById(R.id.GangDong);
+        MaPho = (Button) v.findViewById(R.id.MaPho);
+        YongSan = (Button) v.findViewById(R.id.YongSan);
+        GangSue = (Button) v.findViewById(R.id.GangSue);
+        YangChen = (Button) v.findViewById(R.id.YangChen);
+        GuRo = (Button) v.findViewById(R.id.GuRo);
+        YongDengPo = (Button) v.findViewById(R.id.YongDengPo);
+        DongJack = (Button) v.findViewById(R.id.DongJack);
+        GemChun = (Button) v.findViewById(R.id.GemChun);
+        GanAk = (Button) v.findViewById(R.id.GanAk);
+        SeoCho = (Button) v.findViewById(R.id.SeoCho);
+        GangNam = (Button) v.findViewById(R.id.GangNam);
+        SongPa = (Button) v.findViewById(R.id.SongPa);
+
+        Spinner spinner = (Spinner) v.findViewById(R.id.spinner);
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, sppinerList);
         //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
         //        getActivity(), R.array.spinner_number, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -111,19 +129,29 @@ public class home_Fragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    imageview.setBackgroundResource(R.drawable.seoul);
+                try {
+                    if (position == 0) {
 
-                    seoulBtnVisibility("visible");
+                        JSONObject mapmeta = user.getMapmetaArray().getJSONObject(position);
+                        if (Integer.parseInt(mapmeta.get("category").toString()) == SystemMain.SEOUL_MAP_NUM) {
+                            imageview.setBackgroundResource(R.drawable.seoul);
+                            seoulBtnVisibility("visible");
+                            hashstate.setText(mapmeta.get("hash_tag").toString());
+                        }
 
+                    } else if (position == 1) {
 
-                } else {
-                    imageview.setBackgroundResource(R.drawable.p1);
-
-                    seoulBtnVisibility("gone");
+                        JSONObject mapmeta = user.getMapmetaArray().getJSONObject(position);
+                        if (Integer.parseInt(mapmeta.get("category").toString()) == SystemMain.SEOUL_MAP_NUM) {
+                            imageview.setBackgroundResource(R.drawable.seoul);
+                            seoulBtnVisibility("visible");
+                            hashstate.setText(mapmeta.get("hash_tag").toString());
+                        }
+                    }
+                } catch (JSONException ex) {
                 }
-
             }
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -134,10 +162,10 @@ public class home_Fragment extends Fragment {
         GangNam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),MapActivity.class);
+                Intent intent = new Intent(getActivity(), MapActivity.class);
 
-                //ÁØ¼öÇüÀÌ ÇØÁÖ½Å°Å ÀÌ·±½ÄÀ¸·Î ¹Ù²ã¾ßÇØintent.putExtra("location", 1);
-                /////¤¤¤¤ÀÌ°Ô Á©ÁÁÀºµ¥ ¾ÈµÇ´Â°Í°°´Ùintent.putExtra("location", (Parcelable)Location.setLocation(1));
+                //ì¤€ìˆ˜í˜•ì´ í•´ì£¼ì‹ ê±° ì´ëŸ°ì‹ìœ¼ë¡œ ë°”ê¿”ì•¼í•´intent.putExtra("location", 1);
+                /////ã„´ã„´ì´ê²Œ ì ¤ì¢‹ì€ë° ì•ˆë˜ëŠ”ê²ƒê°™ë‹¤intent.putExtra("location", (Parcelable)Location.setLocation(1));
 
                 intent.putExtra("LNG", Location.GANGNAMGU_LNG);
                 intent.putExtra("LAT", Location.GANGNAMGU_LAT);
@@ -155,9 +183,9 @@ public class home_Fragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    public void seoulBtnVisibility(String visible){
+    public void seoulBtnVisibility(String visible) {
 
-        if(visible.equals("visible")) {
+        if (visible.equals("visible")) {
             DoBong.setVisibility(View.VISIBLE);
             NoWon.setVisibility(View.VISIBLE);
             GangBuk.setVisibility(View.VISIBLE);
@@ -183,8 +211,7 @@ public class home_Fragment extends Fragment {
             SeoCho.setVisibility(View.VISIBLE);
             GangNam.setVisibility(View.VISIBLE);
             SongPa.setVisibility(View.VISIBLE);
-        }
-        else if(visible.equals("gone")){
+        } else if (visible.equals("gone")) {
             DoBong.setVisibility(View.GONE);
             NoWon.setVisibility(View.GONE);
             GangBuk.setVisibility(View.GONE);
@@ -213,12 +240,12 @@ public class home_Fragment extends Fragment {
         }
     }
     /*
-    public void onButton1Clicked(View v)//"1.°­³²±¸"¹öÆ°
+    public void onButton1Clicked(View v)//"1.ê°•ë‚¨êµ¬"ë²„íŠ¼
     {
         Intent intent = new Intent(getActivity(),MapActivity.class);
 
-        //ÁØ¼öÇüÀÌ ÇØÁÖ½Å°Å ÀÌ·±½ÄÀ¸·Î ¹Ù²ã¾ßÇØintent.putExtra("location", 1);
-        /////¤¤¤¤ÀÌ°Ô Á©ÁÁÀºµ¥ ¾ÈµÇ´Â°Í°°´Ùintent.putExtra("location", (Parcelable)Location.setLocation(1));
+        //ì¤€ìˆ˜í˜•ì´ í•´ì£¼ì‹ ê±° ì´ëŸ°ì‹ìœ¼ë¡œ ë°”ê¿”ì•¼í•´intent.putExtra("location", 1);
+        /////ã„´ã„´ì´ê²Œ ì ¤ì¢‹ì€ë° ì•ˆë˜ëŠ”ê²ƒê°™ë‹¤intent.putExtra("location", (Parcelable)Location.setLocation(1));
 
         intent.putExtra("LNG", Location.GANGNAMGU_LNG);
         intent.putExtra("LAT", Location.GANGNAMGU_LAT);

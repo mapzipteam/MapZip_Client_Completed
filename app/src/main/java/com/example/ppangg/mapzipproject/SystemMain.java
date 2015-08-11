@@ -18,5 +18,8 @@ public class SystemMain {
     // 지도 갯수 디폴트값
     public static final int DEFAULT_MAP_COUNT = 2;
 
+    // 지역 디폴트 넘버
+    public static final int SEOUL_MAP_NUM = 1;
+
 
 }

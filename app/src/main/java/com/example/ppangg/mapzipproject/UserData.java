@@ -1,5 +1,7 @@
 package com.example.ppangg.mapzipproject;
 
+import org.json.JSONArray;
+
 /**
  * Created by ljs93kr on 2015-07-27.
 
@@ -10,6 +12,7 @@ public class UserData {
     private boolean LoginPermission; // �α����㰡
     private String UserID; // ����� ���̵�
     private String UserName; // ����� �̸�
+    private JSONArray mapmetaArray;
 
     public static UserData getInstance() {
         if(ourInstance == null) {
@@ -51,5 +54,9 @@ public class UserData {
     public String getUserName(){
         return UserName;
     }
+
+    public JSONArray getMapmetaArray(){ return mapmetaArray; }
+
+    public void setMapmetaArray(JSONArray jarray){ mapmetaArray = jarray; }
 
 }

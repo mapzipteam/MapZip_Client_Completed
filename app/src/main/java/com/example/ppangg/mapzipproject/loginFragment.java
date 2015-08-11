@@ -175,6 +175,8 @@ public class loginFragment extends Fragment {
                         Log.v("테스트 로그인", String.valueOf(user.getLoginPermission()));
                         Log.v("테스트 이름", user.getUserName());
 
+                        user.setMapmetaArray(response.getJSONArray("mapmeta_info"));
+
                         Intent intent = new Intent(cont, slidingTap.class);
                         startActivity(intent);
                         getActivity().finish();
