@@ -8,5 +8,6 @@
 <color name="counter_text_color">#c5c4c4</color>
     <color name="mainYellow">#fafab1</color>
     <color name="mainOrange">#ffc226</color>
+    <color name="transparent">#00000000</color>
 
 </resources>
