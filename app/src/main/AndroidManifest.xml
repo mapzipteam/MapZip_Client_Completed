@@ -20,6 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".slidingTap"/>
+        <activity android:name=".MapActivity"/>
+        <activity android:name=".ReviewActivity"/>
     </application>
 
 </manifest>

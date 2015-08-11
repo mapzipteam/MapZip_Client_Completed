@@ -37,4 +37,6 @@
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
 
+    <string name="str_done">완료</string>
+
 </resources>

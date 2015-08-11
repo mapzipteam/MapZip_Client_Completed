@@ -101,24 +101,23 @@ public class home_Fragment extends Fragment {
         GangNam = (Button)v.findViewById(R.id.GangNam);
         SongPa = (Button)v.findViewById(R.id.SongPa);
 
-        //스피너
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_dropdown_item,sppinerList);
         Spinner spinner = (Spinner)v.findViewById(R.id.spinner);
-        //ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.spinner_number, android.R.layout.simple_spinner_item);
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_dropdown_item,sppinerList);
+        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+        //        getActivity(), R.array.spinner_number, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position==0)
-                {
+                if (position == 0) {
                     imageview.setBackgroundResource(R.drawable.seoul);
 
                     seoulBtnVisibility("visible");
 
 
-                }
-                else
-                {
+                } else {
                     imageview.setBackgroundResource(R.drawable.p1);
 
                     seoulBtnVisibility("gone");
@@ -129,6 +128,21 @@ public class home_Fragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+        GangNam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),MapActivity.class);
+
+                //준수형이 해주신거 이런식으로 바꿔야해intent.putExtra("location", 1);
+                /////ㄴㄴ이게 젤좋은데 안되는것같다intent.putExtra("location", (Parcelable)Location.setLocation(1));
+
+                intent.putExtra("LNG", Location.GANGNAMGU_LNG);
+                intent.putExtra("LAT", Location.GANGNAMGU_LAT);
+
+                startActivity(intent);
             }
         });
 
@@ -198,4 +212,18 @@ public class home_Fragment extends Fragment {
             SongPa.setVisibility(View.GONE);
         }
     }
+    /*
+    public void onButton1Clicked(View v)//"1.강남구"버튼
+    {
+        Intent intent = new Intent(getActivity(),MapActivity.class);
+
+        //준수형이 해주신거 이런식으로 바꿔야해intent.putExtra("location", 1);
+        /////ㄴㄴ이게 젤좋은데 안되는것같다intent.putExtra("location", (Parcelable)Location.setLocation(1));
+
+        intent.putExtra("LNG", Location.GANGNAMGU_LNG);
+        intent.putExtra("LAT", Location.GANGNAMGU_LAT);
+
+        startActivity(intent);
+    }*/
+
 }
