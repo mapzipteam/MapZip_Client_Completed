@@ -13,6 +13,7 @@ public class UserData {
     private String UserID; // ����� ���̵�
     private String UserName; // ����� �̸�
     private JSONArray mapmetaArray;
+    private int testnum=0;
 
     public static UserData getInstance() {
         if(ourInstance == null) {
@@ -59,4 +60,7 @@ public class UserData {
 
     public void setMapmetaArray(JSONArray jarray){ mapmetaArray = jarray; }
 
+    public void inputTestnum(){ testnum++; }
+
+    public int getTestnum(){ return testnum; }
 }

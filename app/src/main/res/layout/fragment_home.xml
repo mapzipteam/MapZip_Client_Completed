@@ -307,7 +307,7 @@
             android:background="@color/transparent"
             android:text="강남구"
             android:textSize="10dp"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/SongPa"
