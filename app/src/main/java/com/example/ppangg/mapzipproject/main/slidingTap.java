@@ -1,5 +1,6 @@
-package com.example.ppangg.mapzipproject;
+package com.example.ppangg.mapzipproject.main;
 
+import com.example.ppangg.mapzipproject.R;
 import com.example.ppangg.mapzipproject.adapter.NavDrawerListAdapter;
 import com.example.ppangg.mapzipproject.model.NavDrawerItem;
 import java.util.ArrayList;

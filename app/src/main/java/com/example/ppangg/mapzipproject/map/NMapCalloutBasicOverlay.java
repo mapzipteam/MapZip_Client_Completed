@@ -1,4 +1,4 @@
-package com.example.ppangg.mapzipproject;
+package com.example.ppangg.mapzipproject.map;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

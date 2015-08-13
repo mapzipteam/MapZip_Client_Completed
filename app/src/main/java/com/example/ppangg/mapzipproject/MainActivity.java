@@ -44,13 +44,6 @@ public class MainActivity extends FragmentActivity {
         mViewPager.setAdapter(mPagerAdapter);
     }
 
-    /*
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-    }
-*/
-
     private class PagerAdapter extends FragmentStatePagerAdapter {
 
         public PagerAdapter(FragmentManager fm) {

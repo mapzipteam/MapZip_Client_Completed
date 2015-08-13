@@ -1,4 +1,4 @@
-package com.example.ppangg.mapzipproject;
+package com.example.ppangg.mapzipproject.main;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -6,18 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class myZip_Fragment extends Fragment {
+import com.example.ppangg.mapzipproject.R;
+
+public class friend_Fragment extends Fragment {
 	
-	public myZip_Fragment(){}
-	
-	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
- 
-        View rootView = inflater.inflate(R.layout.fragment_myzip, container, false);
-         
-        return rootView;
-    }
+	public friend_Fragment(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,7 +18,14 @@ public class myZip_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+ 
+        View rootView = inflater.inflate(R.layout.fragment_pages, container, false);
+         
+        return rootView;
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -35,6 +35,3 @@ public class myZip_Fragment extends Fragment {
     //
 
 }
-
-
-

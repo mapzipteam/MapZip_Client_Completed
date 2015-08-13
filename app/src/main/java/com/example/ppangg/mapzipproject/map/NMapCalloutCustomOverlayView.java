@@ -1,4 +1,4 @@
-package com.example.ppangg.mapzipproject;
+package com.example.ppangg.mapzipproject.map;
 
 
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.ppangg.mapzipproject.R;
 import com.nhn.android.maps.NMapOverlay;
 import com.nhn.android.maps.NMapOverlayItem;
 import com.nhn.android.maps.NMapView;

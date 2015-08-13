@@ -1,4 +1,4 @@
-package com.example.ppangg.mapzipproject;
+package com.example.ppangg.mapzipproject.map;
 
 public class NMapPOIflagType {
 	public static final int UNKNOWN = 0x0000;

@@ -19,9 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".slidingTap"/>
-        <activity android:name=".MapActivity"/>
-        <activity android:name=".ReviewActivity"/>
+        <activity android:name=".main.slidingTap"/>
+        <activity android:name=".map.MapActivity"/>
+        <activity android:name=".map.ReviewActivity"/>
     </application>
 
 </manifest>

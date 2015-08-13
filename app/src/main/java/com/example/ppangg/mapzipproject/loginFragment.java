@@ -1,6 +1,5 @@
 package com.example.ppangg.mapzipproject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,26 +13,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
+import com.example.ppangg.mapzipproject.main.slidingTap;
 import com.example.ppangg.mapzipproject.network.MyVolley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by ppangg on 2015-07-31.
@@ -145,8 +134,6 @@ public class loginFragment extends Fragment {
                 }*/
             };
             queue.add(myReq);
-
-
         }
     }
 
@@ -207,7 +194,6 @@ public class loginFragment extends Fragment {
                 toast.show();
 
                 Log.e("로그인", error.getMessage());
-                //state.setText("인터넷 연결이 필요합니다.");
             }
         };
     }

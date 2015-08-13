@@ -1,25 +1,22 @@
-package com.example.ppangg.mapzipproject;
+package com.example.ppangg.mapzipproject.map;
 
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.ppangg.mapzipproject.R;
 import com.nhn.android.maps.NMapActivity;
 import com.nhn.android.maps.NMapController;
 import com.nhn.android.maps.NMapOverlay;
 import com.nhn.android.maps.NMapOverlayItem;
 import com.nhn.android.maps.NMapView;
-import com.nhn.android.maps.NMapView.OnMapStateChangeListener;
-import com.nhn.android.maps.NMapView.OnMapViewTouchEventListener;
 import com.nhn.android.maps.maplib.NGeoPoint;
 import com.nhn.android.maps.nmapmodel.NMapError;
 import com.nhn.android.maps.overlay.NMapPOIdata;
@@ -28,8 +25,7 @@ import com.nhn.android.mapviewer.overlay.NMapCalloutOverlay;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 
-import static com.example.ppangg.mapzipproject.Location.GANGNAMGU;
-import static com.example.ppangg.mapzipproject.Location.SEOUL;
+import static com.example.ppangg.mapzipproject.map.Location.SEOUL;
 import static com.example.ppangg.mapzipproject.R.id.map;
 
 

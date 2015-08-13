@@ -1,10 +1,11 @@
-package com.example.ppangg.mapzipproject;
+package com.example.ppangg.mapzipproject.map;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.ppangg.mapzipproject.R;
 
 
 /**

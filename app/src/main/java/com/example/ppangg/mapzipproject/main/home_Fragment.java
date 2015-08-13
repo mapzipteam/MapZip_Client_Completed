@@ -1,10 +1,8 @@
-package com.example.ppangg.mapzipproject;
+package com.example.ppangg.mapzipproject.main;
 
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,24 +11,29 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.ppangg.mapzipproject.map.MapActivity;
+import com.example.ppangg.mapzipproject.R;
+import com.example.ppangg.mapzipproject.SystemMain;
+import com.example.ppangg.mapzipproject.UserData;
+import com.example.ppangg.mapzipproject.map.Location;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 public class home_Fragment extends Fragment implements View.OnClickListener{
 
     private View v;
-    private TextView topstate;
-    private TextView hashstate;
     private UserData user;
-    private ArrayList<String> sppinerList;
-    private View imageview;
 
-    private int mapnum;
+    private TextView topstate; // user info
+    private View imageview; // map image
+    private TextView hashstate; // hashtag
+
+    private ArrayList<String> sppinerList; // map name
+    private int mapnum; // map num
 
     // Seoul Btn
     private Button DoBong;
@@ -69,7 +72,6 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         user = UserData.getInstance();
 
         mapnum = user.getMapmetaArray().length();
-
         sppinerList = new ArrayList<String>();
         try {
             for (int i = 0; i < mapnum; i++) {
@@ -78,7 +80,6 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         }catch (JSONException ex){
 
         }
-
     }
 
     @Override
@@ -86,15 +87,14 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
 
         v = inflater.inflate(R.layout.fragment_home, container, false);
-        imageview = (View) v.findViewById(R.id.mapimage);
 
         topstate = (TextView) v.findViewById(R.id.topstate);
         topstate.setText(user.getUserName());
-        topstate.append("(");
+        topstate.append(" (");
         topstate.append(user.getUserID());
         topstate.append(")");
-        //user.inputTestnum();
-        topstate.append(String.valueOf(user.getTestnum()));
+
+        imageview = (View) v.findViewById(R.id.mapimage);
 
         hashstate = (TextView) v.findViewById(R.id.tagText);
 
@@ -125,34 +125,28 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         GangNam = (Button) v.findViewById(R.id.GangNam);
         SongPa = (Button) v.findViewById(R.id.SongPa);
 
+        // map name
         Spinner spinner = (Spinner) v.findViewById(R.id.spinner);
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, sppinerList);
-        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-        //        getActivity(), R.array.spinner_number, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        // map select
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
+                    JSONObject mapmeta = null;
                     if (position == 0) {
-
-                        JSONObject mapmeta = user.getMapmetaArray().getJSONObject(position);
-                        if (Integer.parseInt(mapmeta.get("category").toString()) == SystemMain.SEOUL_MAP_NUM) {
-                            imageview.setBackgroundResource(R.drawable.seoul);
-                            seoulBtnVisibility("visible");
-                            hashstate.setText(mapmeta.get("hash_tag").toString());
-                        }
-
+                        mapmeta = user.getMapmetaArray().getJSONObject(position);
                     } else if (position == 1) {
-
-                        JSONObject mapmeta = user.getMapmetaArray().getJSONObject(position);
-                        if (Integer.parseInt(mapmeta.get("category").toString()) == SystemMain.SEOUL_MAP_NUM) {
-                            imageview.setBackgroundResource(R.drawable.seoul);
-                            seoulBtnVisibility("visible");
-                            hashstate.setText(mapmeta.get("hash_tag").toString());
-                        }
+                       mapmeta = user.getMapmetaArray().getJSONObject(position);
+                    }
+                    // category select (SEOUL)
+                    if (Integer.parseInt(mapmeta.get("category").toString()) == SystemMain.SEOUL_MAP_NUM) {
+                        imageview.setBackgroundResource(R.drawable.seoul);
+                        seoulBtnVisibility("visible");
+                        hashstate.setText(mapmeta.get("hash_tag").toString());
                     }
                 } catch (JSONException ex) {
                 }
@@ -203,6 +197,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
     // 서울 지도 버튼 Visibility
     public void seoulBtnVisibility(String visible) {
         if (visible.equals("visible")) {
+            // Seoul Btn can view
             DoBong.setVisibility(View.VISIBLE);
             NoWon.setVisibility(View.VISIBLE);
             GangBuk.setVisibility(View.VISIBLE);
@@ -229,6 +224,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
             GangNam.setVisibility(View.VISIBLE);
             SongPa.setVisibility(View.VISIBLE);
         } else if (visible.equals("gone")) {
+            // Seoul Btn can not view
             DoBong.setVisibility(View.GONE);
             NoWon.setVisibility(View.GONE);
             GangBuk.setVisibility(View.GONE);
@@ -263,6 +259,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         double loc_LNG = 0;
         double loc_LAT = 0;
         switch (v.getId()){
+           // select location (SEOUL)
             case R.id.DoBong:
                 loc_LNG = Location.DOBONGGU_LNG;
                 loc_LAT = Location.DOBONGGU_LAT;

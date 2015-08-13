@@ -1,4 +1,4 @@
-package com.example.ppangg.mapzipproject;
+package com.example.ppangg.mapzipproject.main;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class serarch_Fragment extends Fragment {
+import com.example.ppangg.mapzipproject.R;
+
+public class setting_Fragment extends Fragment {
 	
-	public serarch_Fragment(){}
+	public setting_Fragment(){}
 
 
     @Override
@@ -16,20 +18,20 @@ public class serarch_Fragment extends Fragment {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
     }
+	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
  
-        View rootView = inflater.inflate(R.layout.fragment_search, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_setting, container, false);
          
         return rootView;
     }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
     }
-    //
-
 }

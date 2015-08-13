@@ -1,4 +1,4 @@
-package com.example.ppangg.mapzipproject;
+package com.example.ppangg.mapzipproject.map;
 import com.nhn.android.maps.maplib.NGeoPoint;
 
 /**
