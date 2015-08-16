@@ -20,5 +20,6 @@ public class SystemMain {
 
     // 지역 디폴트 넘버
     public static final int SEOUL_MAP_NUM = 1;
+    public static final int INCHEUON_MAP_NUM = 2;
 
 }

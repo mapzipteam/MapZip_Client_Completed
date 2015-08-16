@@ -15,6 +15,14 @@
         android:text="사용자(ididid)"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <Button
+        android:id="@+id/mapsetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="지도설정"
+        android:background="@color/transparent"/>
+
     <TextView
         android:id="@+id/mapstate"
         android:layout_width="wrap_content"

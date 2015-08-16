@@ -18,9 +18,8 @@
 
     </string-array>
     <string-array name="spinner_number">
-        <item >첫번째 지도</item>
-        <item >두번째 지도</item>
-
+        <item >서울</item>
+        <item >인천</item>
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->

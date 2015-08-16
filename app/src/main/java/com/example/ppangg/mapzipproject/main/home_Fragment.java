@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.ppangg.mapzipproject.map_setting;
 import com.example.ppangg.mapzipproject.map.MapActivity;
 import com.example.ppangg.mapzipproject.R;
 import com.example.ppangg.mapzipproject.SystemMain;
@@ -31,9 +32,14 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
     private TextView topstate; // user info
     private View imageview; // map image
     private TextView hashstate; // hashtag
+    private String mapcurname=""; // 현재 지도 이름
+    private String mapkindnum; // 현재 지도 속성 번호
 
     private ArrayList<String> sppinerList; // map name
+    Spinner spinner;
     private int mapnum; // map num
+
+    private Button mapsetting;
 
     // Seoul Btn
     private Button DoBong;
@@ -93,10 +99,12 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         topstate.append(" (");
         topstate.append(user.getUserID());
         topstate.append(")");
+        user.inputTestnum();
+        topstate.append(String.valueOf(user.getTestnum()));
 
         imageview = (View) v.findViewById(R.id.mapimage);
-
         hashstate = (TextView) v.findViewById(R.id.tagText);
+        mapsetting = (Button) v.findViewById(R.id.mapsetting);
 
      // Seoul Btn init
         DoBong = (Button) v.findViewById(R.id.DoBong);
@@ -126,7 +134,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         SongPa = (Button) v.findViewById(R.id.SongPa);
 
         // map name
-        Spinner spinner = (Spinner) v.findViewById(R.id.spinner);
+        spinner = (Spinner) v.findViewById(R.id.spinner);
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, sppinerList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -137,11 +145,10 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     JSONObject mapmeta = null;
-                    if (position == 0) {
-                        mapmeta = user.getMapmetaArray().getJSONObject(position);
-                    } else if (position == 1) {
-                       mapmeta = user.getMapmetaArray().getJSONObject(position);
-                    }
+                    mapmeta = user.getMapmetaArray().getJSONObject(position);
+                    mapcurname = sppinerList.get(position);
+                    mapkindnum = mapmeta.get("category").toString();
+
                     // category select (SEOUL)
                     if (Integer.parseInt(mapmeta.get("category").toString()) == SystemMain.SEOUL_MAP_NUM) {
                         imageview.setBackgroundResource(R.drawable.seoul);
@@ -184,6 +191,17 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         SeoCho.setOnClickListener(this);
         GangNam.setOnClickListener(this);
         SongPa.setOnClickListener(this);
+
+        mapsetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), map_setting.class);
+                intent.putExtra("mapcurname",mapcurname);
+                intent.putExtra("hashtag",hashstate.getText().toString());
+                intent.putExtra("mapkindnum",mapkindnum);
+                startActivity(intent);
+            }
+        });
 
         return v;
     }
@@ -253,7 +271,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    // 서울 지도 버튼 클릭 리스너
+    // 버튼 클릭 리스너
     @Override
     public void onClick(View v) {
         double loc_LNG = 0;
@@ -366,4 +384,5 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         intent.putExtra("LAT", loc_LAT);
         startActivity(intent);
     }
+
 }
