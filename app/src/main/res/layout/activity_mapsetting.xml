@@ -30,7 +30,9 @@
             android:id="@+id/maptext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="나만의 지도" />
+            android:hint="나만의 지도"
+            android:singleLine="true"
+            android:maxLength="13"/>
     </LinearLayout>
 
     <LinearLayout
@@ -71,7 +73,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/hashtagView"
-            android:hint="하나" />
+            android:hint="하나"
+            android:singleLine="true"
+            android:maxLength="13"/>
 
         <EditText
             android:id="@+id/hashtext2"
@@ -79,7 +83,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/hashtext1"
             android:layout_toRightOf="@+id/hashtagView"
-            android:hint="둘" />
+            android:hint="둘"
+            android:singleLine="true"
+            android:maxLength="13" />
 
         <EditText
             android:id="@+id/hashtext3"
@@ -87,7 +93,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/hashtext2"
             android:layout_toRightOf="@+id/hashtagView"
-            android:hint="셋" />
+            android:hint="셋"
+            android:singleLine="true"
+            android:maxLength="13" />
 
         <EditText
             android:id="@+id/hashtext4"
@@ -95,7 +103,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/hashtext3"
             android:layout_toRightOf="@+id/hashtagView"
-            android:hint="넷" />
+            android:hint="넷"
+            android:singleLine="true"
+            android:maxLength="13" />
 
         <EditText
             android:id="@+id/hashtext5"
@@ -103,7 +113,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/hashtext4"
             android:layout_toRightOf="@+id/hashtagView"
-            android:hint="다섯" />
+            android:hint="다섯"
+            android:singleLine="true"
+            android:maxLength="13" />
     </RelativeLayout>
 
     <LinearLayout

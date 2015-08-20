@@ -34,6 +34,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
     private TextView hashstate; // hashtag
     private String mapcurname=""; // 현재 지도 이름
     private String mapkindnum; // 현재 지도 속성 번호
+    private String mapid; // 현재 지도 pid값
 
     private ArrayList<String> sppinerList; // map name
     Spinner spinner;
@@ -148,6 +149,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
                     mapmeta = user.getMapmetaArray().getJSONObject(position);
                     mapcurname = sppinerList.get(position);
                     mapkindnum = mapmeta.get("category").toString();
+                    mapid = mapmeta.get("map_id").toString();
 
                     // category select (SEOUL)
                     if (Integer.parseInt(mapmeta.get("category").toString()) == SystemMain.SEOUL_MAP_NUM) {
@@ -199,6 +201,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
                 intent.putExtra("mapcurname",mapcurname);
                 intent.putExtra("hashtag",hashstate.getText().toString());
                 intent.putExtra("mapkindnum",mapkindnum);
+                intent.putExtra("mapid",mapid);
                 startActivity(intent);
             }
         });

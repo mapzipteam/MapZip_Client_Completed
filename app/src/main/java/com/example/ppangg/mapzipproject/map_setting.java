@@ -2,40 +2,62 @@ package com.example.ppangg.mapzipproject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.ppangg.mapzipproject.main.slidingTap;
+import com.example.ppangg.mapzipproject.network.MyVolley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by ppangg on 2015-08-13.
  */
-public class map_setting extends Activity
-{
+public class map_setting extends Activity {
     private UserData user;
     private TextView mapname;
+    private String mapid;
     private TextView hashtag1;
     private TextView hashtag2;
     private TextView hashtag3;
     private TextView hashtag4;
     private TextView hashtag5;
-    private String hashtag_send="";
+    private String hashtag_send = "";
     private int mapkindnum;
+
+    // toast
+    private View layout;
+    private TextView text;
 
     private Button saveBtn;
     private Button cancelBtn;
 
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapsetting);
         user = UserData.getInstance();
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        layout = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
+        text = (TextView) layout.findViewById(R.id.textToShow);
 
         mapname = (TextView) findViewById(R.id.maptext);
         hashtag1 = (TextView) findViewById(R.id.hashtext1);
@@ -44,24 +66,30 @@ public class map_setting extends Activity
         hashtag4 = (TextView) findViewById(R.id.hashtext4);
         hashtag5 = (TextView) findViewById(R.id.hashtext5);
 
+        mapid = getIntent().getStringExtra("mapid");
+
         String str_mapname = getIntent().getStringExtra("mapcurname");
         mapname.setText(str_mapname);
 
         String hashorgin = getIntent().getStringExtra("hashtag");
         String[] hasharr = hashorgin.split("#");
 
-        for(int i=1; i<hasharr.length; i++)
-        {
-            switch (i){
-                case 1: hashtag1.setText(hasharr[i]);
+        for (int i = 1; i < hasharr.length; i++) {
+            switch (i) {
+                case 1:
+                    hashtag1.setText(hasharr[i]);
                     break;
-                case 2: hashtag2.setText(hasharr[i]);
+                case 2:
+                    hashtag2.setText(hasharr[i]);
                     break;
-                case 3: hashtag3.setText(hasharr[i]);
+                case 3:
+                    hashtag3.setText(hasharr[i]);
                     break;
-                case 4: hashtag4.setText(hasharr[i]);
+                case 4:
+                    hashtag4.setText(hasharr[i]);
                     break;
-                case 5: hashtag5.setText(hasharr[i]);
+                case 5:
+                    hashtag5.setText(hasharr[i]);
                     break;
             }
         }
@@ -73,12 +101,12 @@ public class map_setting extends Activity
         spinner.setAdapter(adapter);
 
         mapkindnum = Integer.parseInt(getIntent().getStringExtra("mapkindnum"));
-        spinner.setSelection(mapkindnum-1);
+        spinner.setSelection(mapkindnum - 1);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    mapkindnum = position+1;
+                mapkindnum = position + 1;
             }
 
             @Override
@@ -88,32 +116,106 @@ public class map_setting extends Activity
         });
     }
 
-    public void saveOnclick(View v)
-    {
-        if(!hashtag1.getText().toString().trim().isEmpty())
-            hashtag_send += "#"+hashtag1.getText().toString();
+    public void saveOnclick(View v) {
+        if (!hashtag1.getText().toString().trim().isEmpty())
+            hashtag_send += "#" + hashtag1.getText().toString();
 
-        if(!hashtag2.getText().toString().trim().isEmpty())
-            hashtag_send += "#"+hashtag2.getText().toString();
+        if (!hashtag2.getText().toString().trim().isEmpty())
+            hashtag_send += "#" + hashtag2.getText().toString();
 
-        if(!hashtag3.getText().toString().trim().isEmpty())
-            hashtag_send += "#"+hashtag3.getText().toString();
+        if (!hashtag3.getText().toString().trim().isEmpty())
+            hashtag_send += "#" + hashtag3.getText().toString();
 
-        if(!hashtag4.getText().toString().trim().isEmpty())
-            hashtag_send += "#"+hashtag4.getText().toString();
+        if (!hashtag4.getText().toString().trim().isEmpty())
+            hashtag_send += "#" + hashtag4.getText().toString();
 
-        if(!hashtag5.getText().toString().trim().isEmpty())
-            hashtag_send += "#"+hashtag5.getText().toString();
+        if (!hashtag5.getText().toString().trim().isEmpty())
+            hashtag_send += "#" + hashtag5.getText().toString();
 
         // hash_tag <= hashtag_send
         // category <= mapkindnum
         // title <= mapname.getText().toString();
+        // map_id <= mapid
 
+        DoMapset(v);
+        hashtag_send = "";
     }
 
-    public void cancelOnclick(View v)
-    {
+    public void cancelOnclick(View v) {
         this.finish();
+    }
+
+    public void DoMapset(View v) {
+        RequestQueue queue = MyVolley.getInstance(this).getRequestQueue();
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("userid", user.getUserID());
+            obj.put("hash_tag", hashtag_send);
+            obj.put("category", mapkindnum);
+            obj.put("map_id", mapid);
+            obj.put("title", mapname.getText().toString());
+            Log.v("mapsetting 보내기", obj.toString());
+        } catch (JSONException e) {
+            Log.v("제이손", "에러");
+        }
+
+        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                SystemMain.SERVER_MAPSETTING_URL,
+                obj,
+                createMyReqSuccessListener(),
+                createMyReqErrorListener()) {
+        };
+        queue.add(myReq);
+    }
+
+    private Response.Listener<JSONObject> createMyReqSuccessListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                Log.v("mapsetting 받기", response.toString());
+
+                try {
+                    user.setMapmetaArray(response.getJSONArray("mapmeta_info"));
+                } catch (JSONException ex) {
+
+                }
+
+                text.setText("저장되었습니다.");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
+                toast.show();
+/*
+                try {
+                    if (response.get("login").toString().equals("1")) {
+
+                    } else {
+
+                    }
+                } catch (JSONException e) {
+                    Log.v("에러", "제이손");
+                }
+                */
+            }
+        };
+    }
+
+    private Response.ErrorListener createMyReqErrorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // toast
+                text.setText("인터넷 연결이 필요합니다.");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
+                toast.show();
+
+                Log.e("로그인", error.getMessage());
+            }
+        };
     }
 
 }

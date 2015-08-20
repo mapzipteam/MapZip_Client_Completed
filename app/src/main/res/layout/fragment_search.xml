@@ -2,20 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
-    <TextView
-        android:id="@+id/txtLabel"
-         android:layout_width="wrap_content"
+
+    <Button
+        android:id="@+id/searchBtn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textSize="16dp"
-        android:text="search fragment"/>
-    
-    <ImageView android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:text="검색"/>
+
+    <EditText
+        android:id="@+id/searchText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtLabel"
-        android:src="@drawable/ic_communities"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>    
+        android:layout_toLeftOf="@id/searchBtn"
+        android:layout_margin="10dp"
+        android:hint="해쉬태그로 검색"
+        />
+
+    <ListView
+        android:layout_below="@+id/searchText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/searchList">
+    </ListView>
+
+
+
 
 </RelativeLayout>

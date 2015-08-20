@@ -61,8 +61,11 @@
         android:gravity="center"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="#해쉬#태그#다섯\n#개다#그렇다"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+        android:singleLine="false"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
