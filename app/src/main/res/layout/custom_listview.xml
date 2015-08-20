@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tvCoustId"
-        android:layout_width="0dp"
+        android:id="@+id/nameText_search"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="6"
-        android:text="search text"
+        android:text="username"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    <Button
-        android:id="@+id/listBtn"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/hashText_search"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="클릭"/>
+        android:text="hash"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
 
 </LinearLayout>

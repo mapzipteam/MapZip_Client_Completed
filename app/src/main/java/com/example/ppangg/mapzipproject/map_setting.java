@@ -187,17 +187,6 @@ public class map_setting extends Activity {
                 toast.setDuration(Toast.LENGTH_LONG);
                 toast.setView(layout);
                 toast.show();
-/*
-                try {
-                    if (response.get("login").toString().equals("1")) {
-
-                    } else {
-
-                    }
-                } catch (JSONException e) {
-                    Log.v("에러", "제이손");
-                }
-                */
             }
         };
     }

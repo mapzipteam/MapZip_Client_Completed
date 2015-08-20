@@ -15,6 +15,7 @@ public class SystemMain {
     public static final String SERVER_JOIN_URL = SERVER_ROOT_URL+"/login/joincheck.php"; // ������ join url
     public static final String SERVER_LOGIN_URL = SERVER_ROOT_URL+"/login/logincheck.php";
     public static final String SERVER_MAPSETTING_URL = SERVER_ROOT_URL+"/map_setting/client_map_setting.php";
+    public static final String SERVER_MAPSEARCH_URL = SERVER_ROOT_URL+"/map_search/map_search.php";
 
     // 지도 갯수 디폴트값
     public static final int DEFAULT_MAP_COUNT = 2;
