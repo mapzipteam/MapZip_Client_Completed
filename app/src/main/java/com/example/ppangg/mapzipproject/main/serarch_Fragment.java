@@ -61,7 +61,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     private JSONArray getArray;
 
     public serarch_Fragment(){
-        seq = 1;
+        seq = 0;
     }
 
     @Override
@@ -101,7 +101,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                 DoSearch(v);
 
                 // 임시 데이터 등록
-                addItems(10);
+                addItems(3);
 
                 mLockBtn = false;
             }
@@ -247,7 +247,9 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         if(firstVisibleItem >= count && totalItemCount != 0 && mLockListView == false && mLockBtn == false)
         {
             Log.i("list", "Loading next items");
-            addItems(10);
+            DoSearch(v);
+
+            addItems(3);
         }
 
     }
@@ -259,7 +261,6 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         try {
             obj.put("target", searchhash.getText().toString());
             obj.put("more",seq);
-            seq++;
             Log.v("searchmap 보내기", obj.toString());
         } catch (JSONException e) {
             Log.v("제이손", "에러");
@@ -282,6 +283,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
                 try {
                     getArray = response.getJSONArray("map_search");
+                    seq++;
                     Log.v("searchmap 받기", response.toString());
 
                 }catch (JSONException e){

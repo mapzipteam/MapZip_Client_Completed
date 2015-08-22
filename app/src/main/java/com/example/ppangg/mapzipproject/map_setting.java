@@ -22,6 +22,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.ppangg.mapzipproject.main.home_Fragment;
 import com.example.ppangg.mapzipproject.main.slidingTap;
 import com.example.ppangg.mapzipproject.network.MyVolley;
 
@@ -181,6 +182,11 @@ public class map_setting extends Activity {
                 } catch (JSONException ex) {
 
                 }
+
+                //home_Fragment hf = (home_Fragment) getFragmentManager().findFragmentByTag("home_fragment");
+                //hf.refresh();
+
+                user.inputTestnum(1);
 
                 text.setText("저장되었습니다.");
                 Toast toast = new Toast(getApplicationContext());

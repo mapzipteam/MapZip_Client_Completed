@@ -60,7 +60,7 @@ public class UserData {
 
     public void setMapmetaArray(JSONArray jarray){ mapmetaArray = jarray; }
 
-    public void inputTestnum(){ testnum++; }
+    public void inputTestnum(int i){ testnum=i; }
 
     public int getTestnum(){ return testnum; }
 }

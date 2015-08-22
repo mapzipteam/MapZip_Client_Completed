@@ -3,6 +3,7 @@ package com.example.ppangg.mapzipproject.main;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
 
     private ArrayList<String> sppinerList; // map name
     Spinner spinner;
+    ArrayAdapter adapter;
     private int mapnum; // map num
 
     private Button mapsetting;
@@ -77,7 +79,6 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         user = UserData.getInstance();
-
         mapnum = user.getMapmetaArray().length();
         sppinerList = new ArrayList<String>();
         try {
@@ -100,8 +101,6 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         topstate.append(" (");
         topstate.append(user.getUserID());
         topstate.append(")");
-        user.inputTestnum();
-        topstate.append(String.valueOf(user.getTestnum()));
 
         imageview = (View) v.findViewById(R.id.mapimage);
         hashstate = (TextView) v.findViewById(R.id.tagText);
@@ -136,7 +135,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
 
         // map name
         spinner = (Spinner) v.findViewById(R.id.spinner);
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, sppinerList);
+        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, sppinerList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
@@ -201,7 +200,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
                 intent.putExtra("mapcurname",mapcurname);
                 intent.putExtra("hashtag",hashstate.getText().toString());
                 intent.putExtra("mapkindnum",mapkindnum);
-                intent.putExtra("mapid",mapid);
+                intent.putExtra("mapid", mapid);
                 startActivity(intent);
             }
         });
@@ -387,5 +386,34 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         intent.putExtra("LAT", loc_LAT);
         startActivity(intent);
     }
+
+    public void refresh(){
+        Log.v("리프레쉬","확인");
+        mapnum = user.getMapmetaArray().length();
+        sppinerList = new ArrayList<String>();
+        try {
+            for (int i = 0; i < mapnum; i++) {
+                sppinerList.add(user.getMapmetaArray().getJSONObject(i).getString("title"));
+            }
+        }catch (JSONException ex){
+
+        }
+
+        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, sppinerList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        user.inputTestnum(0);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        user = UserData.getInstance();
+        if(user.getTestnum() == 1)
+            refresh();
+    }
+
+
 
 }
