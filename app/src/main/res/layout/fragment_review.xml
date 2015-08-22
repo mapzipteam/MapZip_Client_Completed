@@ -16,7 +16,18 @@
         android:layout_below="@id/txtLabel"
         android:src="@drawable/ic_photos"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>
-    
+        android:layout_marginTop="10dp"
+        android:id="@+id/imageView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/registerBtn_review"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/imageView"
+        android:layout_toStartOf="@+id/imageView"
+        android:layout_marginTop="80dp" />
+
 
 </RelativeLayout>

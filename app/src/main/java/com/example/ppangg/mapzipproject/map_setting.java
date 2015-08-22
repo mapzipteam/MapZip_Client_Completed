@@ -193,6 +193,8 @@ public class map_setting extends Activity {
                 toast.setDuration(Toast.LENGTH_LONG);
                 toast.setView(layout);
                 toast.show();
+
+                finish();
             }
         };
     }

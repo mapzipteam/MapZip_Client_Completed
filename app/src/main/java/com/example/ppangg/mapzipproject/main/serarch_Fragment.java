@@ -91,13 +91,19 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
         // 스크롤 리스너 등록
         mListView.setOnScrollListener(this);
-
+/*
         mMyAdapte = new MyListAdapter(getActivity(), R.layout.custom_listview, marItem);
         mListView.setAdapter(mMyAdapte);
-
+*/
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                marItem.clear();
+                mMyAdapte = new MyListAdapter(getActivity(), R.layout.custom_listview, marItem);
+                mListView.setAdapter(mMyAdapte);
+                mMyAdapte.notifyDataSetChanged();
+                seq = 0;
+
                 DoSearch(v);
 
                 // 임시 데이터 등록
@@ -213,23 +219,27 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
             @Override
             public void run()
             {
-                try {
-                    for (int i = 0; i < size; i++) {
-                        items = new MyItem(String.valueOf(i), getArray.getJSONObject(i).getString("user_name"), getArray.getJSONObject(i).getString("category"), getArray.getJSONObject(i).getString("hash_tag") );
-                        marItem.add(items);
-                    }
-                }catch(JSONException e){
+                if(mLockBtn == false) {
+                    try {
+                        for (int i = 0; i < size; i++) {
+                            items = new MyItem(String.valueOf(i), getArray.getJSONObject(i).getString("user_name"), getArray.getJSONObject(i).getString("category"), getArray.getJSONObject(i).getString("hash_tag"));
+                            marItem.add(items);
+                        }
+                    } catch (JSONException e) {
 
+                    }
+                    // 모든 데이터를 로드하여 적용하였다면 어댑터에 알리고
+                    // 리스트뷰의 락을 해제합니다.
+                    mMyAdapte.notifyDataSetChanged();
+                    mLockListView = false;
                 }
-                // 모든 데이터를 로드하여 적용하였다면 어댑터에 알리고
-                // 리스트뷰의 락을 해제합니다.
-                mMyAdapte.notifyDataSetChanged();
-                mLockListView = false;
             }
         };
         // 속도의 딜레이를 구현하기 위한 꼼수
+
         Handler handler = new Handler();
-        handler.postDelayed(run, 3000);
+        handler.postDelayed(run, 1000);
+
     }
 
     @Override
@@ -282,9 +292,16 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
             public void onResponse(JSONObject response) {
 
                 try {
-                    getArray = response.getJSONArray("map_search");
-                    seq++;
-                    Log.v("searchmap 받기", response.toString());
+                    int state = response.getInt("state");
+                    if( state == 501) {
+                        getArray = response.getJSONArray("map_search");
+                        seq++;
+
+                        Log.v("searchmap 받기", response.toString());
+
+                    }else if(state == 502){
+                        mLockBtn = true;
+                    }
 
                 }catch (JSONException e){
 
