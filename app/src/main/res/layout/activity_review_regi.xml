@@ -1,11 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/newtextview" />
-</LinearLayout>
+    <ScrollView
+        android:id="@+id/scrollView_review_regi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent">
+
+        <RelativeLayout
+            android:id="@+id/parentlayout_review_regi"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager_review_regi"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+
+            <ImageView
+                android:id="@+id/emotion_review_regi"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/pager_review_regi"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="10dp" />
+
+            <TextView
+                android:id="@+id/name_review_regi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/emotion_review_regi"
+                android:gravity="center"
+                android:singleLine="false"
+                android:padding="10dp"
+                android:text="가게이름"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <LinearLayout
+                android:id="@+id/eval_layout_review_regi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name_review_regi"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/spinner_text_review_regi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:padding="5dp"
+                    android:text="한줄평   " />
+
+                <Spinner
+                    android:id="@+id/spinner_review_regi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp" />
+            </LinearLayout>
+
+            <EditText
+                android:layout_marginTop="10dp"
+                android:id="@+id/editeval_review_regi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/eval_layout_review_regi"
+                android:background="#fffff9"
+                android:inputType="textMultiLine"
+                android:hint="평가를 입력해주세요"
+                android:padding="15dp"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/address_review_regi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_below="@+id/editeval_review_regi">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_marginLeft="10dp"
+                    android:padding="5dp"
+                    android:text="주소    "/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:padding="5dp"
+                    android:singleLine="false"
+                    android:text="서울특별시 동작구 상도1동 숭실대학교 지하1층 티맥스"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/contact_review_regi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_below="@+id/address_review_regi">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_marginLeft="10dp"
+                    android:padding="5dp"
+                    android:text="연락처    "/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:padding="5dp"
+                    android:singleLine="false"
+                    android:text="02-1234-5678"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/contact_review_regi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/enrollBtn_review_regi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:text="등록"/>
+
+                <Button
+                    android:id="@+id/cancelBtn_review_regi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:text="취소"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

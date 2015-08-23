@@ -9,21 +9,27 @@
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
-        <item >Home</item>
-        <item >myZip</item>
-        <item >review</item>
-        <item >search</item>
-        <item >freind</item>
-        <item >setting</item>
+        <item>Home</item>
+        <item>myZip</item>
+        <item>review</item>
+        <item>search</item>
+        <item>freind</item>
+        <item>setting</item>
 
     </string-array>
     <string-array name="spinner_number">
-        <item >서울</item>
-        <item >인천</item>
+        <item>서울</item>
+        <item>인천</item>
     </string-array>
 
-    <!-- Nav Drawer List Item Icons -->
-    <!-- Keep them in order as the titles are in -->
+    <string-array name="spinner_review_regi">
+        <item>선택안함</item>
+        <item>맛있어요!</item>
+        <item>최고에요!</item>
+        <item>직접입력</item>
+    </string-array>
+
+    <!-- Nav Drawer List Item Icons --><!-- Keep them in order as the titles are in -->
     <array name="nav_drawer_icons">
         <item>@drawable/ic_home</item>
         <item>@drawable/ic_people</item>
