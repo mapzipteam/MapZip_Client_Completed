@@ -21,6 +21,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp" />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사진추가"
+                android:layout_margin="5dp"
+                android:background="#ffffff"
+                android:layout_alignParentLeft="true"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="#ffffff"
+                android:text="사진제거"
+                android:layout_alignParentRight="true"/>
+
             <ImageView
                 android:id="@+id/emotion_review_regi"
                 android:layout_width="50dp"
@@ -29,11 +45,18 @@
                 android:layout_centerHorizontal="true"
                 android:paddingTop="10dp" />
 
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:layout_below="@+id/emotion_review_regi"
+                android:id="@+id/emotionBar_review_regi"/>
+
             <TextView
                 android:id="@+id/name_review_regi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/emotion_review_regi"
+                android:layout_below="@+id/emotionBar_review_regi"
                 android:gravity="center"
                 android:singleLine="false"
                 android:padding="10dp"
