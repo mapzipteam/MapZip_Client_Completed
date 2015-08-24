@@ -57,8 +57,11 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     private boolean mLockListView;
 
     private boolean mLockBtn;
+    private boolean mSendLock;
 
     private JSONArray getArray;
+
+    private Handler handler;
 
     public serarch_Fragment(){
         seq = 0;
@@ -84,6 +87,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
         mLockListView = true;
         mLockBtn = true;
+        mSendLock = false;
 
         // 푸터를 등록. setAdapter 이전에 해야함.
         mInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -104,12 +108,12 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                 mMyAdapte.notifyDataSetChanged();
                 seq = 0;
 
+                mLockBtn = false;
                 DoSearch(v);
 
                 // 임시 데이터 등록
-                addItems(3);
+                //addItems(3);
 
-                mLockBtn = false;
             }
         });
          
@@ -237,8 +241,8 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         };
         // 속도의 딜레이를 구현하기 위한 꼼수
 
-        Handler handler = new Handler();
-        handler.postDelayed(run, 1000);
+        handler = new Handler();
+        handler.postDelayed(run, 100);
 
     }
 
@@ -254,35 +258,38 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         // 전체의 숫자와 동일해지면 가장 아래로 스크롤 되었다고 가정합니다.
         int count = totalItemCount - visibleItemCount;
 
-        if(firstVisibleItem >= count && totalItemCount != 0 && mLockListView == false && mLockBtn == false)
-        {
+        if(firstVisibleItem >= count && totalItemCount != 0 && mLockListView == false && mLockBtn == false && mSendLock == false) {
             Log.i("list", "Loading next items");
             DoSearch(v);
 
-            addItems(3);
+           // addItems(3);
         }
 
     }
 
     public void DoSearch(View v) {
-        RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();
+        if(mSendLock == false) {
+            mSendLock = true;
 
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("target", searchhash.getText().toString());
-            obj.put("more",seq);
-            Log.v("searchmap 보내기", obj.toString());
-        } catch (JSONException e) {
-            Log.v("제이손", "에러");
+            RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();
+
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("target", searchhash.getText().toString());
+                obj.put("more", seq);
+                Log.v("searchmap 보내기", obj.toString());
+            } catch (JSONException e) {
+                Log.v("제이손", "에러");
+            }
+
+            JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                    SystemMain.SERVER_MAPSEARCH_URL,
+                    obj,
+                    createMyReqSuccessListener(),
+                    createMyReqErrorListener()) {
+            };
+            queue.add(myReq);
         }
-
-        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
-                SystemMain.SERVER_MAPSEARCH_URL,
-                obj,
-                createMyReqSuccessListener(),
-                createMyReqErrorListener()) {
-        };
-        queue.add(myReq);
     }
 
 
@@ -297,6 +304,8 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                         getArray = response.getJSONArray("map_search");
                         seq++;
 
+                        addItems(3);
+
                         Log.v("searchmap 받기", response.toString());
 
                     }else if(state == 502){
@@ -306,6 +315,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                 }catch (JSONException e){
 
                 }
+                mSendLock = false;
             }
         };
     }

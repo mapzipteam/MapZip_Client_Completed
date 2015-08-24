@@ -18,8 +18,8 @@ import java.util.ArrayList;
  */
 public class review_register extends Activity {
 
-    SeekBar seekbar;
-    ImageView emotion;
+    private SeekBar seekbar;
+    private ImageView emotion;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
