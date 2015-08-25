@@ -10,6 +10,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -18,8 +21,10 @@ import java.util.ArrayList;
  */
 public class review_register extends Activity {
 
+    private EditText directEdit;
     private SeekBar seekbar;
     private ImageView emotion;
+    private TextView oneText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,7 @@ public class review_register extends Activity {
         ImageAdapter imageadapter = new ImageAdapter(this);
         viewPager.setAdapter(imageadapter);
 
+        oneText = (TextView) findViewById(R.id.spinner_text_review_regi);
         seekbar = (SeekBar) findViewById(R.id.emotionBar_review_regi);
         emotion = (ImageView) findViewById(R.id.emotion_review_regi);
         emotion.setImageResource(R.drawable.sample_emotion0);
@@ -38,11 +44,11 @@ public class review_register extends Activity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (progress < 20)
                     emotion.setImageResource(R.drawable.sample_emotion);
-                else if((20 <= progress) && (progress <40))
+                else if ((20 <= progress) && (progress < 40))
                     emotion.setImageResource(R.drawable.sample_emotion2);
-                else if((40 <= progress) && (progress <60))
+                else if ((40 <= progress) && (progress < 60))
                     emotion.setImageResource(R.drawable.sample_emotion3);
-                else if((60 <= progress) && (progress <80))
+                else if ((60 <= progress) && (progress < 80))
                     emotion.setImageResource(R.drawable.sample_emotion4);
                 else
                     emotion.setImageResource(R.drawable.sample_emotion5);
@@ -59,7 +65,7 @@ public class review_register extends Activity {
             }
         });
 
-        final EditText directEdit = (EditText) findViewById(R.id.editeval_review_regi);
+        directEdit = (EditText) findViewById(R.id.editeval_review_regi);
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner_review_regi);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.spinner_review_regi));
@@ -69,11 +75,14 @@ public class review_register extends Activity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 3) // 流立涝仿
+                if (position == 3) // 流立涝仿
+                {
                     directEdit.setVisibility(View.VISIBLE);
-                else
+                    oneText.setVisibility(View.GONE);
+                } else {
                     directEdit.setVisibility(View.GONE);
-
+                    oneText.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override

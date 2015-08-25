@@ -92,6 +92,7 @@ public class review_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), review_register.class);
+                intent.putExtra("mapid", mapid);
                 startActivity(intent);
             }
         });
