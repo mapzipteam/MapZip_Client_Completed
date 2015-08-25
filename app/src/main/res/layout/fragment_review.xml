@@ -2,32 +2,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
-    <TextView
-        android:id="@+id/txtLabel"
-         android:layout_width="wrap_content"
+
+    <Button
+        android:id="@+id/searchBtn_review"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textSize="16dp"
-        android:text="review fragment"/>
-    
-    <ImageView android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:text="검색"/>
+
+    <EditText
+        android:id="@+id/searchText_review"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtLabel"
-        android:src="@drawable/ic_photos"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:id="@+id/imageView" />
+        android:layout_toLeftOf="@id/searchBtn_review"
+        android:layout_margin="10dp"
+        android:hint="가게이름으로 검색"
+        />
+
+    <Spinner
+        android:id="@+id/spinner_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchText_review" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/registerBtn_review"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/imageView"
-        android:layout_toStartOf="@+id/imageView"
-        android:layout_marginTop="80dp" />
-
+        android:text="등록"
+        android:layout_below="@+id/spinner_review"
+        android:id="@+id/registerBtn_review" />
 
 </RelativeLayout>

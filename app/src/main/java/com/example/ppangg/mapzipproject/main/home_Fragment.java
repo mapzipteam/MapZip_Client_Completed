@@ -44,8 +44,8 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
     private String mapid; // 현재 지도 pid값
 
     private ArrayList<String> sppinerList; // map name
-    Spinner spinner;
-    ArrayAdapter adapter;
+    private Spinner spinner;
+    private ArrayAdapter adapter;
     private int mapnum; // map num
 
     private Button mapsetting;
