@@ -61,8 +61,8 @@ public class review_register extends Activity {
 
     // 보낼 정보
     private String mapid;
-    private double store_x;
-    private double store_y;
+    private int store_x;
+    private int store_y;
     private String store_name;
     private String store_address;
     private String store_contact;
@@ -86,9 +86,9 @@ public class review_register extends Activity {
         user = UserData.getInstance();
 
         mapid = getIntent().getStringExtra("mapid");
-        store_x = 126.9783881;
-        store_y = 32.1352251;
-        store_name = "가게이름";
+        store_x = 123456;
+        store_y = 234567;
+        store_name = "storename";
         store_address = "주소";
         store_contact = "010-3061-0134";
         review_text = "";
@@ -352,13 +352,11 @@ public class review_register extends Activity {
         params.put("map_id", mapid);
         params.put("store_name", store_name);
 
-        double x = store_x * 10000000;
-        double y = store_y * 10000000;
-        Log.v("x",String.valueOf(x));
-        Log.v("x", String.valueOf(y));
+        //double x = store_x * 10000000;
+        //double y = store_y * 10000000;
 
-        params.put("store_x", String.valueOf(x));
-        params.put("store_y", String.valueOf(y));
+        params.put("store_x", String.valueOf(store_x));
+        params.put("store_y", String.valueOf(store_y));
 
         RequestQueue queue = MyVolley.getInstance(getApplicationContext()).getRequestQueue();
         MultipartRequest mRequest = new MultipartRequest(SystemMain.SERVER_REVIEWENROLL3_URL,
