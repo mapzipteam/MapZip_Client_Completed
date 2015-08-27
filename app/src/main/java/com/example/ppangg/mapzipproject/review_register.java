@@ -50,6 +50,7 @@ public class review_register extends Activity {
     final int REQ_CODE_SELECT_IMAGE = 100;
     private Button findImage;
     private Button enrollBtn;
+    private Button cancelBtn;
 
     private EditText directEdit;
     private SeekBar seekbar;
@@ -158,13 +159,10 @@ public class review_register extends Activity {
                 {
                     directEdit.setVisibility(View.VISIBLE);
                     oneText.setVisibility(View.GONE);
-                }
-                else if(position == 0)
-                {
+                } else if (position == 0) {
                     directEdit.setVisibility(View.GONE);
                     oneText.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     directEdit.setVisibility(View.GONE);
                     oneText.setVisibility(View.VISIBLE);
                     review_text = getResources().getStringArray(R.array.spinner_review_regi)[position];
@@ -181,8 +179,16 @@ public class review_register extends Activity {
         enrollBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DoReviewset(v);
                 thisview = v;
+                DoReviewset(v);
+            }
+        });
+
+        cancelBtn = (Button) findViewById(R.id.cancelBtn_review_regi);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -371,7 +377,9 @@ public class review_register extends Activity {
             @Override
             public void onResponse(String response) {
                 Toast.makeText(getApplicationContext(),"이미지가 서버에 전송되었습니다",Toast.LENGTH_SHORT).show();
-                Log.d("volley",response);
+                Log.d("volley", response);
+
+                finish();
 
             }
         },mfile,params);

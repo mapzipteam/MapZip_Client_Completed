@@ -51,6 +51,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     private MyListAdapter 	  mMyAdapte;
     private ListView mListView;
     private MyItem items;
+    private  View footer;
 
     // 스크롤 로딩
     private LayoutInflater mInflater;
@@ -91,7 +92,8 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
         // 푸터를 등록. setAdapter 이전에 해야함.
         mInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mListView.addFooterView(mInflater.inflate(R.layout.listview_footer, null));
+        footer = mInflater.inflate(R.layout.listview_footer, null);
+        //mListView.addFooterView(footer);
 
         // 스크롤 리스너 등록
         mListView.setOnScrollListener(this);
@@ -105,6 +107,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                 marItem.clear();
                 mMyAdapte = new MyListAdapter(getActivity(), R.layout.custom_listview, marItem);
                 mListView.setAdapter(mMyAdapte);
+                mListView.addFooterView(footer);
                 mMyAdapte.notifyDataSetChanged();
                 seq = 0;
 
@@ -313,6 +316,9 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
                     }else if(state == 502){
                         mLockBtn = true;
+                        mListView.removeFooterView(footer);
+
+                        Log.v("searchmap 받기", response.toString());
                     }
 
                 }catch (JSONException e){
