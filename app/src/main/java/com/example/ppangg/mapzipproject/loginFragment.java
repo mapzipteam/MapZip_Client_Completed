@@ -191,6 +191,7 @@ public class loginFragment extends Fragment {
                 toast.show();
 
                 Log.e("로그인", error.getMessage());
+                /* something change */
             }
         };
     }
