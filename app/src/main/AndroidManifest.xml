@@ -7,10 +7,11 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
 
     <application
+        android:name=".FontApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppBaseTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">

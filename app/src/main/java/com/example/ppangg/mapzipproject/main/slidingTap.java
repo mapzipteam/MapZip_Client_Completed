@@ -69,8 +69,7 @@ public class slidingTap extends FragmentActivity {
         // Pages
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
         // What's hot, We  will add a counter here
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
-
+        Log.e("owl", "" + navDrawerItems.size());
 
         // Recycle the typed array
         navMenuIcons.recycle();
@@ -167,18 +166,15 @@ public class slidingTap extends FragmentActivity {
                 fragment = new home_Fragment();
                 break;
             case 1:
-                fragment = new myZip_Fragment();
-                break;
-            case 2:
                 fragment = new review_Fragment();
                 break;
-            case 3:
+            case 2:
                 fragment = new serarch_Fragment();
                 break;
-            case 4:
+            case 3:
                 fragment = new friend_Fragment();
                 break;
-            case 5:
+            case 4:
                 fragment = new setting_Fragment();
                 break;
 

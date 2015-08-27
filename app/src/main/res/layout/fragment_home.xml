@@ -17,20 +17,23 @@
 
     <Button
         android:id="@+id/mapsetting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
-        android:background="@color/transparent"
-        android:text="지도설정" />
+        android:background="@drawable/map"
+
+        />
 
     <TextView
         android:id="@+id/mapstate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_below="@+id/topstate"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:text="지도 선택: " />
+        android:text="지도 선택: "
+        android:layout_alignBottom="@+id/spinner" />
 
     <Spinner
         android:id="@+id/spinner"
