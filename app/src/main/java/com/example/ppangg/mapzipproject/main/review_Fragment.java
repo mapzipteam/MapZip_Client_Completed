@@ -106,6 +106,7 @@ public class review_Fragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
     //
+    // ¤Ð¤Ð
 
 }
 
