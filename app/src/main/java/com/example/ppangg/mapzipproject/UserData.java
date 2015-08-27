@@ -1,5 +1,8 @@
 package com.example.ppangg.mapzipproject;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.json.JSONArray;
 
 /**
@@ -14,6 +17,8 @@ public class UserData {
     private String UserName; // ����� �̸�
     private JSONArray mapmetaArray;
     private int testnum=0;
+    private Bitmap[] GalImages = new Bitmap[] {
+    };
 
     public static UserData getInstance() {
         if(ourInstance == null) {
@@ -63,4 +68,8 @@ public class UserData {
     public void inputTestnum(int i){ testnum=i; }
 
     public int getTestnum(){ return testnum; }
+
+    public Bitmap[] getGalImages(){ return GalImages; };
+
+    public void inputGalImages(Bitmap[] Images){ GalImages = Images; };
 }

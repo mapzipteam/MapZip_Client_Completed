@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MapZip_Client.iml" filepath="$PROJECT_DIR$/MapZip_Client.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/httpcore-4.4.1/httpcore-4.4.1.iml" filepath="$PROJECT_DIR$/httpcore-4.4.1/httpcore-4.4.1.iml" />
       <module fileurl="file://$PROJECT_DIR$/nmaps/nmaps.iml" filepath="$PROJECT_DIR$/nmaps/nmaps.iml" />
     </modules>
   </component>

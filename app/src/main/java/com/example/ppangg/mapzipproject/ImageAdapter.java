@@ -13,19 +13,15 @@ import android.widget.ImageView;
 
 public class ImageAdapter extends PagerAdapter {
     Context context;
-
-    private int[] GalImages = new int[] {
-            R.drawable.p9,
-            R.drawable.p10,
-            R.drawable.p11
-    };
+    private UserData user;
 
     ImageAdapter(Context context){
         this.context=context;
+        user = UserData.getInstance();
     }
     @Override
     public int getCount() {
-        return GalImages.length;
+        return user.getGalImages().length;
     }
 
     @Override
@@ -42,7 +38,7 @@ public class ImageAdapter extends PagerAdapter {
 //        imageView.setPadding(padding, padding, padding, padding);
         //imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageView.setImageResource(GalImages[position]);
+        imageView.setImageBitmap(user.getGalImages()[position]);
 
         ((ViewPager) container).addView(imageView, 0);
 

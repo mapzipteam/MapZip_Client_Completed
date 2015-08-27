@@ -36,7 +36,6 @@ public class loginFragment extends Fragment {
     private EditText inputPW;
 
     private int mPageNumber;
-    private Context cont;
 
     private Button LoginBtn;
 
@@ -55,8 +54,6 @@ public class loginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPageNumber = getArguments().getInt("page");
-
-        cont = getActivity();
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         layout = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
@@ -84,7 +81,7 @@ public class loginFragment extends Fragment {
     }
 
     public void DoLogin(View v) {
-        RequestQueue queue = MyVolley.getInstance(cont).getRequestQueue();
+        RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();
 
         final String userid = inputID.getText().toString();
         final String userpw = inputPW.getText().toString();
@@ -148,7 +145,7 @@ public class loginFragment extends Fragment {
                     if (response.get("login").toString().equals("1")) {
                         // toast
                         text.setText("환영합니다!");
-                        Toast toast = new Toast(cont);
+                        Toast toast = new Toast(getActivity());
                         toast.setDuration(Toast.LENGTH_LONG);
                         toast.setView(layout);
                         toast.show();
@@ -164,13 +161,13 @@ public class loginFragment extends Fragment {
 
                         user.setMapmetaArray(response.getJSONArray("mapmeta_info"));
 
-                        Intent intent = new Intent(cont, slidingTap.class);
+                        Intent intent = new Intent(getActivity(), slidingTap.class);
                         startActivity(intent);
                         getActivity().finish();
                     } else {
                         // toast
                         text.setText("존재하지 않는 계정정보입니다.");
-                        Toast toast = new Toast(cont);
+                        Toast toast = new Toast(getActivity());
                         toast.setDuration(Toast.LENGTH_LONG);
                         toast.setView(layout);
                         toast.show();
@@ -188,7 +185,7 @@ public class loginFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 // toast
                 text.setText("인터넷 연결이 필요합니다.");
-                Toast toast = new Toast(cont);
+                Toast toast = new Toast(getActivity());
                 toast.setDuration(Toast.LENGTH_LONG);
                 toast.setView(layout);
                 toast.show();
