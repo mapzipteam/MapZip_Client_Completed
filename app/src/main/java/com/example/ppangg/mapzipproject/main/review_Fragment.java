@@ -30,7 +30,7 @@ public class review_Fragment extends Fragment {
     private Spinner spinner;
     private ArrayAdapter adapter;
     private int mapnum; // map num
-    private String mapid; // ÇöÀç Áöµµ pid°ª
+    private String mapid; // í˜„ì¬ ì§€ë„ pidê°’
 
     private Button review_regi;
 
@@ -106,7 +106,7 @@ public class review_Fragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
     //
-    // ¤Ğ¤Ğ
+    // ã… ã… 
 
 }
 

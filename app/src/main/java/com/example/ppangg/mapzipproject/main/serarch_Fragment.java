@@ -52,7 +52,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     private ListView mListView;
     private MyItem items;
 
-    // Ω∫≈©∑— ∑Œµ˘
+    // Ïä§ÌÅ¨Î°§ Î°úÎî©
     private LayoutInflater mInflater;
     private boolean mLockListView;
 
@@ -89,11 +89,11 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         mLockBtn = true;
         mSendLock = false;
 
-        // «™≈Õ∏¶ µÓ∑œ. setAdapter ¿Ã¿¸ø° «ÿæﬂ«‘.
+        // Ìë∏ÌÑ∞Î•º Îì±Î°ù. setAdapter Ïù¥Ï†ÑÏóê Ìï¥ÏïºÌï®.
         mInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mListView.addFooterView(mInflater.inflate(R.layout.listview_footer, null));
 
-        // Ω∫≈©∑— ∏ÆΩ∫≥  µÓ∑œ
+        // Ïä§ÌÅ¨Î°§ Î¶¨Ïä§ÎÑà Îì±Î°ù
         mListView.setOnScrollListener(this);
 /*
         mMyAdapte = new MyListAdapter(getActivity(), R.layout.custom_listview, marItem);
@@ -111,7 +111,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                 mLockBtn = false;
                 DoSearch(v);
 
-                // ¿”Ω√ µ•¿Ã≈Õ µÓ∑œ
+                // ÏûÑÏãú Îç∞Ïù¥ÌÑ∞ Îì±Î°ù
                 //addItems(3);
 
             }
@@ -125,7 +125,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
     }
-    // ∏ÆΩ∫∆Æ∫‰ √‚∑¬ «◊∏Ò
+    // Î¶¨Ïä§Ìä∏Î∑∞ Ï∂úÎ†• Ìï≠Î™©
     class MyItem
     {
         MyItem(String _coustId, String name, String category, String hashtag)
@@ -142,7 +142,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
     }
 
-    // æÓ¥≈Õ ≈¨∑°Ω∫
+    // Ïñ¥ÎåëÌÑ∞ ÌÅ¥ÎûòÏä§
     class MyListAdapter extends BaseAdapter
     {
         Context cContext;
@@ -192,7 +192,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         }
 
 
-        // ∞¢ ∫‰¿« «◊∏Ò ª˝º∫
+        // Í∞Å Î∑∞Ïùò Ìï≠Î™© ÏÉùÏÑ±
         @Override
         public View getView(int position, View convertView, ViewGroup parent)
         {
@@ -205,7 +205,10 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
             final String getCustId = alSrc.get(pos).sCustId;
 
             TextView nameText_search = (TextView)convertView.findViewById(R.id.nameText_search);
-            nameText_search.setText(getName(pos)+getCategory(pos));
+            if(Integer.parseInt(getCategory(pos)) == SystemMain.SEOUL_MAP_NUM)
+                nameText_search.setText(getName(pos)+" (ÏÑúÏö∏)");
+            else
+                nameText_search.setText(getName(pos));
             TextView hashText_search = (TextView)convertView.findViewById(R.id.hashText_search);
             hashText_search.setText(getHash(pos));
 
@@ -213,10 +216,10 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         }
     }
 
-    // ¥ıπÃ æ∆¿Ã≈€ √ﬂ∞°
+    // ÎçîÎØ∏ ÏïÑÏù¥ÌÖú Ï∂îÍ∞Ä
     private void addItems(final int size)
     {
-        // æ∆¿Ã≈€¿ª √ﬂ∞°«œ¥¬ µøæ» ¡ﬂ∫π ø‰√ª¿ª πÊ¡ˆ«œ±‚ ¿ß«ÿ ∂Ù¿ª ∞…æÓµ”¥œ¥Ÿ.
+        // ÏïÑÏù¥ÌÖúÏùÑ Ï∂îÍ∞ÄÌïòÎäî ÎèôÏïà Ï§ëÎ≥µ ÏöîÏ≤≠ÏùÑ Î∞©ÏßÄÌïòÍ∏∞ ÏúÑÌï¥ ÎùΩÏùÑ Í±∏Ïñ¥Îë°ÎãàÎã§.
         mLockListView = true;
         Runnable run = new Runnable()
         {
@@ -232,14 +235,14 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                     } catch (JSONException e) {
 
                     }
-                    // ∏µÁ µ•¿Ã≈Õ∏¶ ∑ŒµÂ«œø© ¿˚øÎ«œø¥¥Ÿ∏È æÓ¥≈Õø° æÀ∏Æ∞Ì
-                    // ∏ÆΩ∫∆Æ∫‰¿« ∂Ù¿ª «ÿ¡¶«’¥œ¥Ÿ.
+                    // Î™®Îì† Îç∞Ïù¥ÌÑ∞Î•º Î°úÎìúÌïòÏó¨ Ï†ÅÏö©ÌïòÏòÄÎã§Î©¥ Ïñ¥ÎåëÌÑ∞Ïóê ÏïåÎ¶¨Í≥†
+                    // Î¶¨Ïä§Ìä∏Î∑∞Ïùò ÎùΩÏùÑ Ìï¥Ï†úÌï©ÎãàÎã§.
                     mMyAdapte.notifyDataSetChanged();
                     mLockListView = false;
                 }
             }
         };
-        // º”µµ¿« µÙ∑π¿Ã∏¶ ±∏«ˆ«œ±‚ ¿ß«— ≤ƒºˆ
+        // ÏÜçÎèÑÏùò ÎîúÎ†àÏù¥Î•º Íµ¨ÌòÑÌïòÍ∏∞ ÏúÑÌïú ÍººÏàò
 
         handler = new Handler();
         handler.postDelayed(run, 100);
@@ -254,8 +257,8 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-        // «ˆ¿Á ∞°¿Â √≥¿Ωø° ∫∏¿Ã¥¬ ºøπ¯»£øÕ ∫∏ø©¡ˆ¥¬ ºøπ¯»£∏¶ ¥ı«—∞™¿Ã
-        // ¿¸√º¿« º˝¿⁄øÕ µø¿œ«ÿ¡ˆ∏È ∞°¿Â æ∆∑°∑Œ Ω∫≈©∑— µ«æ˙¥Ÿ∞Ì ∞°¡§«’¥œ¥Ÿ.
+        // ÌòÑÏû¨ Í∞ÄÏû• Ï≤òÏùåÏóê Î≥¥Ïù¥Îäî ÏÖÄÎ≤àÌò∏ÏôÄ Î≥¥Ïó¨ÏßÄÎäî ÏÖÄÎ≤àÌò∏Î•º ÎçîÌïúÍ∞íÏù¥
+        // Ï†ÑÏ≤¥Ïùò Ïà´ÏûêÏôÄ ÎèôÏùºÌï¥ÏßÄÎ©¥ Í∞ÄÏû• ÏïÑÎûòÎ°ú Ïä§ÌÅ¨Î°§ ÎêòÏóàÎã§Í≥† Í∞ÄÏ†ïÌï©ÎãàÎã§.
         int count = totalItemCount - visibleItemCount;
 
         if(firstVisibleItem >= count && totalItemCount != 0 && mLockListView == false && mLockBtn == false && mSendLock == false) {
@@ -277,9 +280,9 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
             try {
                 obj.put("target", searchhash.getText().toString());
                 obj.put("more", seq);
-                Log.v("searchmap ∫∏≥ª±‚", obj.toString());
+                Log.v("searchmap Î≥¥ÎÇ¥Í∏∞", obj.toString());
             } catch (JSONException e) {
-                Log.v("¡¶¿Ãº’", "ø°∑Ø");
+                Log.v("Ï†úÏù¥ÏÜê", "ÏóêÎü¨");
             }
 
             JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
@@ -306,7 +309,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
                         addItems(3);
 
-                        Log.v("searchmap πﬁ±‚", response.toString());
+                        Log.v("searchmap Î∞õÍ∏∞", response.toString());
 
                     }else if(state == 502){
                         mLockBtn = true;
@@ -325,7 +328,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
             @Override
             public void onErrorResponse(VolleyError error) {
                 // toast
-                text.setText("¿Œ≈Õ≥› ø¨∞·¿Ã « ø‰«’¥œ¥Ÿ.");
+                text.setText("Ïù∏ÌÑ∞ÎÑ∑ Ïó∞Í≤∞Ïù¥ ÌïÑÏöîÌï©ÎãàÎã§.");
                 Toast toast = new Toast(getActivity());
                 toast.setDuration(Toast.LENGTH_LONG);
                 toast.setView(layout);

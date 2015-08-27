@@ -12,9 +12,8 @@
     <TextView
         android:id="@+id/tv_list_footer"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:gravity="center"
-        android:text="더보기"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:text="더보기"/>
 
 </LinearLayout>
