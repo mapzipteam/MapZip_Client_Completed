@@ -48,10 +48,10 @@ import java.util.Map;
  * Created by ppangg on 2015-08-22.
  */
 public class review_register extends Activity {
+    final int REQ_CODE_SELECT_IMAGE = 100;
 
     private UserData user;
 
-    final int REQ_CODE_SELECT_IMAGE = 100;
     private Button findImage;
     private Button enrollBtn;
     private Button cancelBtn;
@@ -75,6 +75,7 @@ public class review_register extends Activity {
     private String store_contact;
     private int review_emotion;
     private String review_text;
+
     private int imagenum = 0;
 
     private File mfile;
@@ -401,9 +402,6 @@ public class review_register extends Activity {
         params.put("userid", user.getUserID());
         params.put("map_id", mapid);
         params.put("store_name", store_name);
-
-        //double x = store_x * 10000000;
-        //double y = store_y * 10000000;
 
         params.put("store_x", String.valueOf(store_x));
         params.put("store_y", String.valueOf(store_y));

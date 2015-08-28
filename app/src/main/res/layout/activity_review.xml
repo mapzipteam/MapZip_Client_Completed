@@ -1,45 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-   <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-    android:id="@+id/review">
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="돌아가기"
-        android:id="@+id/button1"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="31dp"
-        android:onClick="onButton1Clicked" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView1"
-        android:layout_below="@+id/button1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="49dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="맛집 리뷰하는 공간"
-        android:id="@+id/textView2"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_alignStart="@+id/button1"
-        android:layout_alignTop="@+id/textView1" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView"
-        android:layout_above="@+id/textView1"
-        android:layout_toRightOf="@+id/textView2"
-        android:layout_toEndOf="@+id/textView2" />
+        android:id="@+id/scrollView_review_regi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent">
+
+        <RelativeLayout
+            android:id="@+id/parentlayout_review_regi"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager_review_regi"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+
+            <ImageView
+                android:id="@+id/emotion_review_regi"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/pager_review_regi"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="10dp" />
+
+            <TextView
+                android:id="@+id/name_review_regi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/emotion_review_regi"
+                android:gravity="center"
+                android:padding="10dp"
+                android:singleLine="false"
+                android:text="가게이름"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+            <TextView
+                android:id="@+id/spinner_text_review_regi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name_review_regi"
+                android:layout_marginLeft="10dp"
+                android:padding="5dp"
+                android:text="평가   " />
+
+            <TextView
+                android:id="@+id/spinner_review_regi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spinner_text_review_regi"
+                android:layout_marginLeft="10dp"
+                android:padding="5dp"
+                android:text="평가가 쓰여집니다." />
+
+            <EditText
+                android:id="@+id/editeval_review_regi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spinner_review_regi"
+                android:layout_marginTop="10dp"
+                android:background="#fffff9"
+                android:hint="평가를 입력해주세요"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:padding="15dp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/address_review_regi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editeval_review_regi"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="2"
+                    android:padding="5dp"
+                    android:text="주소    " />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:padding="5dp"
+                    android:singleLine="false"
+                    android:text="서울특별시 동작구 상도1동 숭실대학교 지하1층 티맥스" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/contact_review_regi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/address_review_regi"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="2"
+                    android:padding="5dp"
+                    android:text="연락처    " />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:padding="5dp"
+                    android:singleLine="false"
+                    android:text="02-1234-5678" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
 
 </RelativeLayout>

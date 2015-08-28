@@ -40,8 +40,8 @@
 
             <ImageView
                 android:id="@+id/emotion_review_regi"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_below="@+id/pager_review_regi"
                 android:layout_centerHorizontal="true"
                 android:paddingTop="10dp" />

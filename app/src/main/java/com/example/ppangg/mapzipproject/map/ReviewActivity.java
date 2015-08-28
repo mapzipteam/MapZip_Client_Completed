@@ -19,10 +19,6 @@ public class ReviewActivity extends Activity
         setContentView(R.layout.activity_review);
     }
 
-    public void onButton1Clicked(View v)
-    {
-        Toast.makeText(getApplicationContext(), "리뷰 끝났으면 돌아가라라", Toast.LENGTH_LONG).show();
 
-        finish();
-   }
+
 }

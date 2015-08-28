@@ -72,4 +72,6 @@ public class UserData {
     public Bitmap[] getGalImages(){ return GalImages; };
 
     public void inputGalImages(Bitmap[] Images){ GalImages = Images; };
+
+
 }
