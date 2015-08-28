@@ -190,7 +190,7 @@ public class loginFragment extends Fragment {
                 toast.setView(layout);
                 toast.show();
 
-                Log.e("로그인", error.getMessage());
+                //Log.e("로그인", error.getMessage());
                 /* something change */
             }
         };

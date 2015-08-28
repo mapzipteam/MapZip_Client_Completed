@@ -178,7 +178,7 @@ public class joinFragment extends Fragment {
                 toast.setView(layout);
                 toast.show();
 
-                Log.e("회원가입", error.getMessage());
+               // Log.e("회원가입", error.getMessage());
                 //state.setText("인터넷 연결이 필요합니다.");
             }
         };

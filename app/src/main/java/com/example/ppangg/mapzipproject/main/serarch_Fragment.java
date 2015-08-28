@@ -106,8 +106,8 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
             public void onClick(View v) {
                 marItem.clear();
                 mMyAdapte = new MyListAdapter(getActivity(), R.layout.custom_listview, marItem);
-                mListView.setAdapter(mMyAdapte);
                 mListView.addFooterView(footer);
+                mListView.setAdapter(mMyAdapte);
                 mMyAdapte.notifyDataSetChanged();
                 seq = 0;
 
@@ -315,10 +315,11 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                         Log.v("searchmap 받기", response.toString());
 
                     }else if(state == 502){
+                        Log.v("searchmap 받기", response.toString());
+
                         mLockBtn = true;
                         mListView.removeFooterView(footer);
 
-                        Log.v("searchmap 받기", response.toString());
                     }
 
                 }catch (JSONException e){

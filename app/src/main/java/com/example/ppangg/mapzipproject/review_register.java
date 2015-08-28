@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -56,6 +60,8 @@ public class review_register extends Activity {
     private SeekBar seekbar;
     private ImageView emotion;
     private TextView oneText;
+    private List<Uri> Uriarr;
+    private Uri uriarray[];
     private Uri image_uri;
     private List<Bitmap> oPerlishArray;
     private int arrnum = 0;
@@ -69,6 +75,7 @@ public class review_register extends Activity {
     private String store_contact;
     private int review_emotion;
     private String review_text;
+    private int imagenum = 0;
 
     private File mfile;
 
@@ -79,6 +86,11 @@ public class review_register extends Activity {
     private View thisview;
 
     private ImageAdapter imageadapter;
+    private Bitmap noimage;
+    private  Bitmap[] bitarr;
+    private ViewPager viewPager;
+
+    private boolean oncreatelock = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,11 +105,28 @@ public class review_register extends Activity {
         store_address = "주소";
         store_contact = "010-3061-0134";
         review_text = "";
+        imagenum = 0;
 
         arrnum = 0;
 
-        oPerlishArray = new ArrayList<Bitmap>();
+        Uriarr = new ArrayList<Uri>();
 
+        noimage = drawableToBitmap(getResources().getDrawable(R.drawable.noimage));
+        oPerlishArray = new ArrayList<Bitmap>();
+        oPerlishArray.add(noimage);
+
+        viewPager = (ViewPager) findViewById(R.id.pager_review_regi);
+
+        bitarr = new Bitmap[oPerlishArray.size()];
+        oPerlishArray.toArray(bitarr); // fill the array
+        user.inputGalImages(bitarr);
+        imageadapter = new ImageAdapter(this);
+        viewPager.setAdapter(imageadapter);
+
+        /*
+        user.inputGalImages(noimagearr);
+        imageadapter.notifyDataSetChanged();
+*/
         findImage = (Button) findViewById(R.id.findImage_review_regi);
         findImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,10 +138,6 @@ public class review_register extends Activity {
             }
         });
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager_review_regi);
-        imageadapter = new ImageAdapter(this);
-        viewPager.setAdapter(imageadapter);
-
         oneText = (TextView) findViewById(R.id.spinner_text_review_regi);
         seekbar = (SeekBar) findViewById(R.id.emotionBar_review_regi);
         emotion = (ImageView) findViewById(R.id.emotion_review_regi);
@@ -123,15 +148,15 @@ public class review_register extends Activity {
                 review_emotion = progress;
 
                 if (progress < 20)
-                    emotion.setImageResource(R.drawable.sample_emotion);
+                    emotion.setImageResource(R.drawable.emotion1);
                 else if ((20 <= progress) && (progress < 40))
-                    emotion.setImageResource(R.drawable.sample_emotion2);
+                    emotion.setImageResource(R.drawable.emotion2);
                 else if ((40 <= progress) && (progress < 60))
-                    emotion.setImageResource(R.drawable.sample_emotion3);
+                    emotion.setImageResource(R.drawable.emotion3);
                 else if ((60 <= progress) && (progress < 80))
-                    emotion.setImageResource(R.drawable.sample_emotion4);
+                    emotion.setImageResource(R.drawable.emotion4);
                 else
-                    emotion.setImageResource(R.drawable.sample_emotion5);
+                    emotion.setImageResource(R.drawable.emotion5);
             }
 
             @Override
@@ -188,6 +213,11 @@ public class review_register extends Activity {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+/*
+                user.inputGalImages(noimagearr);
+                imageadapter.notifyDataSetChanged();
+*/
+
                 finish();
             }
         });
@@ -227,14 +257,23 @@ public class review_register extends Activity {
                     //String name_Str = getImageNameToUri(data.getData());
 
                     //이미지 데이터를 비트맵으로 받아온다.
+
                     Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
                     Log.d("image", "data.getData() : " + data.getData());
                     image_uri = data.getData();
+                    Uriarr.add(image_uri);
 
+                    if(oncreatelock == false) {
+                        oPerlishArray.clear();
+                        oncreatelock = true;
+                    }
                     oPerlishArray.add(image_bitmap);
-                    Bitmap[] bitarr = new Bitmap[oPerlishArray.size()];
+                    bitarr = new Bitmap[oPerlishArray.size()];
                     oPerlishArray.toArray(bitarr); // fill the array
                     user.inputGalImages(bitarr);
+
+                    imageadapter = new ImageAdapter(this);
+                    viewPager.setAdapter(imageadapter);
 
                     imageadapter.notifyDataSetChanged();
 
@@ -258,19 +297,19 @@ public class review_register extends Activity {
 
         JSONObject obj = new JSONObject();
         try {
-            if(review_text.isEmpty())
+            if (review_text.isEmpty())
                 review_text = directEdit.getText().toString();
-            Log.v("직접입력",directEdit.getText().toString());
+            Log.v("직접입력", directEdit.getText().toString());
 
-            obj.put("userid",user.getUserID());
+            obj.put("userid", user.getUserID());
             obj.put("map_id", mapid);
-            obj.put("store_x",store_x);
-            obj.put("store_y",store_y);
-            obj.put("store_name",store_name);
-            obj.put("store_address",store_address);
-            obj.put("store_contact",store_contact);
-            obj.put("review_emotion",review_emotion);
-            obj.put("review_text",review_text);
+            obj.put("store_x", store_x);
+            obj.put("store_y", store_y);
+            obj.put("store_name", store_name);
+            obj.put("store_address", store_address);
+            obj.put("store_contact", store_contact);
+            obj.put("review_emotion", review_emotion);
+            obj.put("review_text", review_text);
 
             Log.v("review 등록 보내기", obj.toString());
         } catch (JSONException e) {
@@ -291,11 +330,11 @@ public class review_register extends Activity {
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("userid",user.getUserID());
+            obj.put("userid", user.getUserID());
             obj.put("map_id", mapid);
-            obj.put("store_name",store_name);
-            obj.put("store_x",store_x);
-            obj.put("store_y",store_y);
+            obj.put("store_name", store_name);
+            obj.put("store_x", store_x);
+            obj.put("store_y", store_y);
 
             Log.v("review 등록2 보내기", obj.toString());
         } catch (JSONException e) {
@@ -312,7 +351,6 @@ public class review_register extends Activity {
     }
 
 
-
     private Response.Listener<JSONObject> createMyReqSuccessListener() {
         return new Response.Listener<JSONObject>() {
             @Override
@@ -327,10 +365,16 @@ public class review_register extends Activity {
                     if (response.get("state").toString().equals("601")) {
                         Log.v("리뷰저장", "OK");
                         DoReviewset2(thisview);
-                    } else if (response.get("state").toString().equals("602")) {
+                    } else if (response.get("state").toString().equals("602") || response.get("state").toString().equals("621")) {
                         Log.v("리뷰저장2", "OK");
-                        DoUpload(thisview);
+
+                        uriarray = new Uri[Uriarr.size()];
+                        Uriarr.toArray(uriarray);
+
+                        for(int i = 0; i < Uriarr.size(); i++)
+                            DoUpload(thisview, i);
                     }
+                        finish();
 
                 } catch (JSONException ex) {
 
@@ -339,21 +383,21 @@ public class review_register extends Activity {
         };
     }
 
-    public void DoUpload(View v){
-        mfile = getImageFile(image_uri);
-        if(mfile==null){
-            Toast.makeText(getApplicationContext(),"이미지가 선택되지 않았습니다",Toast.LENGTH_SHORT).show();
+    public void DoUpload(View v, int i) {
+        mfile = getImageFile(uriarray[i]);
+        if (mfile == null) {
+            Toast.makeText(getApplicationContext(), "이미지가 선택되지 않았습니다", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Log.d("mfile",mfile.toString());
+        Log.d("mfile", mfile.toString());
 
 //        String sdString = Environment.getExternalStorageDirectory().getPath();
 //        sdString += "/DCIM/Camera/20150818_130908.jpg";
 //
 //        mfile = new File(sdString);
 
-        Map<String,String> params = new HashMap<String,String>();
+        Map<String, String> params = new HashMap<String, String>();
         params.put("userid", user.getUserID());
         params.put("map_id", mapid);
         params.put("store_name", store_name);
@@ -363,28 +407,32 @@ public class review_register extends Activity {
 
         params.put("store_x", String.valueOf(store_x));
         params.put("store_y", String.valueOf(store_y));
+        params.put("image_name", "image" + String.valueOf(imagenum));
+        imagenum++;
 
         RequestQueue queue = MyVolley.getInstance(getApplicationContext()).getRequestQueue();
         MultipartRequest mRequest = new MultipartRequest(SystemMain.SERVER_REVIEWENROLL3_URL,
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(),"네트워크에 문제가 있습니다",Toast.LENGTH_SHORT).show();
-                        Log.d("volley",error.getMessage());
+                        Toast.makeText(getApplicationContext(), "네트워크에 문제가 있습니다", Toast.LENGTH_SHORT).show();
+                        //Log.d("volley",error.getMessage());
 
                     }
                 }, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(),"이미지가 서버에 전송되었습니다",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "이미지가 서버에 전송되었습니다", Toast.LENGTH_SHORT).show();
                 Log.d("volley", response);
-
-                finish();
+/*
+                user.inputGalImages(noimagearr);
+                imageadapter.notifyDataSetChanged();
+*/
 
             }
-        },mfile,params);
+        }, mfile, params);
 
-        Log.v("사진 보내기",mRequest.toString());
+        Log.v("사진 보내기", mRequest.toString());
 
         queue.add(mRequest);
 
@@ -399,5 +447,18 @@ public class review_register extends Activity {
                 Log.v("리뷰저장", "에러");
             }
         };
+    }
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 }
