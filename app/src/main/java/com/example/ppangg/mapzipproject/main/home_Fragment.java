@@ -110,9 +110,10 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
 
         topstate = (TextView) v.findViewById(R.id.topstate);
         topstate.setText(user.getUserName());
-        topstate.append(" (");
+       /*topstate.append(" (");
         topstate.append(user.getUserID());
-        topstate.append(")");
+        topstate.append(")");*/
+        topstate.append("의 지도");
 
         imageview = (ImageView) v.findViewById(R.id.mapimage);
         hashstate = (TextView) v.findViewById(R.id.tagText);

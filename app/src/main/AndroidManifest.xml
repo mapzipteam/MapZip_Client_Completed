@@ -11,7 +11,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppBaseTheme" >
+        android:theme="@style/AppBaseTheme"
+android:largeHeap="true" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -26,6 +27,7 @@
         <activity android:name=".map.ReviewActivity"/>
         <activity android:name=".map_setting"/>
         <activity android:name=".review_register"/>
+        <activity android:name=".addfriend"/>
     </application>
 
 </manifest>
