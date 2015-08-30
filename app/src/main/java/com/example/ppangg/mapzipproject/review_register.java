@@ -30,6 +30,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.ppangg.mapzipproject.model.MapData;
 import com.example.ppangg.mapzipproject.network.MyVolley;
 
 import org.json.JSONException;
@@ -67,14 +68,7 @@ public class review_register extends Activity {
     private int arrnum = 0;
 
     // 보낼 정보
-    private String mapid;
-    private int store_x;
-    private int store_y;
-    private String store_name;
-    private String store_address;
-    private String store_contact;
-    private int review_emotion;
-    private String review_text;
+    private MapData mapData = new MapData();
 
     private int imagenum = 0;
 
@@ -99,13 +93,13 @@ public class review_register extends Activity {
         setContentView(R.layout.activity_review_regi);
         user = UserData.getInstance();
 
-        mapid = getIntent().getStringExtra("mapid");
-        store_x = 123456;
-        store_y = 234567;
-        store_name = "storename";
-        store_address = "주소";
-        store_contact = "010-3061-0134";
-        review_text = "";
+        mapData.setMapid(getIntent().getStringExtra("mapid"));
+        mapData.setStore_x(135790);
+        mapData.setStore_y(246809);
+        mapData.setStore_name("gagename");
+        mapData.setStore_address("gageaddress");
+        mapData.setStore_contact("02-1234-5678");
+
         imagenum = 0;
 
         arrnum = 0;
@@ -146,7 +140,7 @@ public class review_register extends Activity {
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                review_emotion = progress;
+                mapData.setReview_emotion(progress);
 
                 if (progress < 20)
                     emotion.setImageResource(R.drawable.emotion1);
@@ -191,7 +185,7 @@ public class review_register extends Activity {
                 } else {
                     directEdit.setVisibility(View.GONE);
                     oneText.setVisibility(View.VISIBLE);
-                    review_text = getResources().getStringArray(R.array.spinner_review_regi)[position];
+                    mapData.setReview_text(getResources().getStringArray(R.array.spinner_review_regi)[position]);
                 }
             }
 
@@ -298,19 +292,19 @@ public class review_register extends Activity {
 
         JSONObject obj = new JSONObject();
         try {
-            if (review_text.isEmpty())
-                review_text = directEdit.getText().toString();
+            if (mapData.getReview_text().isEmpty())
+                mapData.setReview_text(directEdit.getText().toString());
             Log.v("직접입력", directEdit.getText().toString());
 
             obj.put("userid", user.getUserID());
-            obj.put("map_id", mapid);
-            obj.put("store_x", store_x);
-            obj.put("store_y", store_y);
-            obj.put("store_name", store_name);
-            obj.put("store_address", store_address);
-            obj.put("store_contact", store_contact);
-            obj.put("review_emotion", review_emotion);
-            obj.put("review_text", review_text);
+            obj.put("map_id", mapData.getMapid());
+            obj.put("store_x", mapData.getStore_x());
+            obj.put("store_y", mapData.getStore_y());
+            obj.put("store_name", mapData.getStore_name());
+            obj.put("store_address", mapData.getStore_address());
+            obj.put("store_contact", mapData.getStore_contact());
+            obj.put("review_emotion", mapData.getReview_emotion());
+            obj.put("review_text", mapData.getReview_text());
 
             Log.v("review 등록 보내기", obj.toString());
         } catch (JSONException e) {
@@ -332,10 +326,10 @@ public class review_register extends Activity {
         JSONObject obj = new JSONObject();
         try {
             obj.put("userid", user.getUserID());
-            obj.put("map_id", mapid);
-            obj.put("store_name", store_name);
-            obj.put("store_x", store_x);
-            obj.put("store_y", store_y);
+            obj.put("map_id", mapData.getMapid());
+            obj.put("store_name", mapData.getStore_name());
+            obj.put("store_x", mapData.getStore_x());
+            obj.put("store_y", mapData.getStore_y());
 
             Log.v("review 등록2 보내기", obj.toString());
         } catch (JSONException e) {
@@ -400,11 +394,11 @@ public class review_register extends Activity {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("userid", user.getUserID());
-        params.put("map_id", mapid);
-        params.put("store_name", store_name);
+        params.put("map_id", mapData.getMapid());
+        params.put("store_name", mapData.getStore_name());
 
-        params.put("store_x", String.valueOf(store_x));
-        params.put("store_y", String.valueOf(store_y));
+        params.put("store_x", String.valueOf(mapData.getStore_x()));
+        params.put("store_y", String.valueOf(mapData.getStore_y()));
         params.put("image_name", "image" + String.valueOf(imagenum));
         imagenum++;
 
