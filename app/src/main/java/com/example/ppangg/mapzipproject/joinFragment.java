@@ -41,12 +41,12 @@ public class joinFragment extends Fragment {
     private EditText inputPW;
 
     private int mPageNumber;
-    private Context cont;
 
     private Button JoinBtn;
 
-    private View layout;
-    private TextView text;
+    // toast
+    private View layout_toast;
+    private TextView text_toast;
 
     public static joinFragment create(int pageNumber) {
         joinFragment fragment = new joinFragment();
@@ -60,17 +60,15 @@ public class joinFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPageNumber = getArguments().getInt("page");
-
-        cont=getActivity();
-
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        layout = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
-        text = (TextView)layout.findViewById(R.id.textToShow);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
+        text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
+
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.join_layout, container, false);
 
         state = (TextView) rootView.findViewById(R.id.TextState2);
@@ -96,7 +94,7 @@ public class joinFragment extends Fragment {
         }
     */
     public void DoJoin(View v) {
-        RequestQueue queue = MyVolley.getInstance(cont).getRequestQueue();
+        RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();
         String url = SystemMain.SERVER_JOIN_URL;
         final String userid = inputID.getText().toString();
         final String userpw = inputPW.getText().toString();
@@ -141,20 +139,20 @@ public class joinFragment extends Fragment {
                 try {
                     if (response.get("join").toString().equals("1")) {
                         // toast
-                        text.setText("회원가입에 성공하였습니다.");
-                        Toast toast = new Toast(cont);
+                        text_toast.setText("회원가입에 성공하였습니다.");
+                        Toast toast = new Toast(getActivity());
                         toast.setDuration(Toast.LENGTH_LONG);
-                        toast.setView(layout);
+                        toast.setView(layout_toast);
                         toast.show();
 
                         //state.setText("회원가입에 성공하였습니다.");
                         Log.v("회원가입", "성공");
                     } else {
                         // toast
-                        text.setText("이미 존재하는 계정정보입니다.");
-                        Toast toast = new Toast(cont);
+                        text_toast.setText("이미 존재하는 계정정보입니다.");
+                        Toast toast = new Toast(getActivity());
                         toast.setDuration(Toast.LENGTH_LONG);
-                        toast.setView(layout);
+                        toast.setView(layout_toast);
                         toast.show();
 
                         //state.setText("이미 존재하는 계정입니다.");
@@ -171,15 +169,19 @@ public class joinFragment extends Fragment {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // toast
-                text.setText("인터넷 연결이 필요합니다.");
-                Toast toast = new Toast(cont);
-                toast.setDuration(Toast.LENGTH_LONG);
-                toast.setView(layout);
-                toast.show();
+                try {
+                    // toast
+                    text_toast.setText("인터넷 연결이 필요합니다.");
+                    Toast toast = new Toast(getActivity());
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout_toast);
+                    toast.show();
 
-               // Log.e("회원가입", error.getMessage());
-                //state.setText("인터넷 연결이 필요합니다.");
+                    Log.e("searchmap", error.getMessage());
+                }catch (NullPointerException ex){
+                    // toast
+                    Log.e("searchmap", "nullpointexception");
+                }
             }
         };
     }

@@ -20,6 +20,8 @@
             android:layout_weight="8"
             android:background="#ffffff"
             android:padding="10dp"
+            android:singleLine="true"
+            android:maxLength="13"
             android:hint="해쉬태그로 검색" />
 
         <Button

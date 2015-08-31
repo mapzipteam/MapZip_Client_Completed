@@ -3,6 +3,8 @@ package com.example.ppangg.mapzipproject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -45,8 +47,8 @@ public class map_setting extends Activity {
     private int mapkindnum;
 
     // toast
-    private View layout;
-    private TextView text;
+    private View layout_toast;
+    private TextView text_toast;
 
     private Button saveBtn;
     private Button cancelBtn;
@@ -57,8 +59,8 @@ public class map_setting extends Activity {
         user = UserData.getInstance();
 
         LayoutInflater inflater = this.getLayoutInflater();
-        layout = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
-        text = (TextView) layout.findViewById(R.id.textToShow);
+        layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
+        text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
         mapname = (TextView) findViewById(R.id.maptext);
         hashtag1 = (TextView) findViewById(R.id.hashtext1);
@@ -118,6 +120,23 @@ public class map_setting extends Activity {
     }
 
     public void saveOnclick(View v) {
+
+        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if(!(mobile.isConnected() || wifi.isConnected()))
+        {
+            // toast
+            text_toast.setText("인터넷 연결이 필요합니다.");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout_toast);
+            toast.show();
+
+            return;
+        }
+
         if (!hashtag1.getText().toString().trim().isEmpty())
             hashtag_send += "#" + hashtag1.getText().toString();
 
@@ -188,10 +207,10 @@ public class map_setting extends Activity {
 
                 user.inputTestnum(1);
 
-                text.setText("저장되었습니다.");
+                text_toast.setText("저장되었습니다.");
                 Toast toast = new Toast(getApplicationContext());
                 toast.setDuration(Toast.LENGTH_LONG);
-                toast.setView(layout);
+                toast.setView(layout_toast);
                 toast.show();
 
                 finish();
@@ -203,16 +222,20 @@ public class map_setting extends Activity {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // toast
-                text.setText("인터넷 연결이 필요합니다.");
-                Toast toast = new Toast(getApplicationContext());
-                toast.setDuration(Toast.LENGTH_LONG);
-                toast.setView(layout);
-                toast.show();
+                try {
+                    // toast
+                    text_toast.setText("인터넷 연결이 필요합니다.");
+                    Toast toast = new Toast(getApplicationContext());
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout_toast);
+                    toast.show();
 
-                Log.e("로그인", error.getMessage());
+                    Log.e("map_setting", error.getMessage());
+                }catch (NullPointerException ex){
+                    // toast
+                    Log.e("map_setting", "nullpointexception");
+                }
             }
         };
     }
-
 }

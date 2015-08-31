@@ -39,8 +39,9 @@ public class loginFragment extends Fragment {
 
     private Button LoginBtn;
 
-    private View layout;
-    private TextView text;
+    // toast
+    private View layout_toast;
+    private TextView text_toast;
 
     public static loginFragment create(int pageNumber) {
         loginFragment fragment = new loginFragment();
@@ -54,15 +55,14 @@ public class loginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPageNumber = getArguments().getInt("page");
-
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        layout = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
-        text = (TextView) layout.findViewById(R.id.textToShow);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
+        text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
+
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.login_layout, container, false);
 
         state = (TextView) rootView.findViewById(R.id.TextState);
@@ -143,13 +143,6 @@ public class loginFragment extends Fragment {
 
                 try {
                     if (response.get("login").toString().equals("1")) {
-                        // toast
-                        text.setText("환영합니다!");
-                        Toast toast = new Toast(getActivity());
-                        toast.setDuration(Toast.LENGTH_LONG);
-                        toast.setView(layout);
-                        toast.show();
-
                         UserData user = UserData.getInstance();
                         user.LoginOK();
                         user.inputID(inputID.getText().toString());
@@ -164,12 +157,19 @@ public class loginFragment extends Fragment {
                         Intent intent = new Intent(getActivity(), slidingTap.class);
                         startActivity(intent);
                         getActivity().finish();
+
+                        // toast
+                        text_toast.setText("환영합니다!");
+                        Toast toast = new Toast(getActivity());
+                        toast.setDuration(Toast.LENGTH_SHORT);
+                        toast.setView(layout_toast);
+                        toast.show();
                     } else {
                         // toast
-                        text.setText("존재하지 않는 계정정보입니다.");
+                        text_toast.setText("존재하지 않는 계정정보입니다.");
                         Toast toast = new Toast(getActivity());
                         toast.setDuration(Toast.LENGTH_LONG);
-                        toast.setView(layout);
+                        toast.setView(layout_toast);
                         toast.show();
                     }
                 } catch (JSONException e) {
@@ -183,15 +183,19 @@ public class loginFragment extends Fragment {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // toast
-                text.setText("인터넷 연결이 필요합니다.");
-                Toast toast = new Toast(getActivity());
-                toast.setDuration(Toast.LENGTH_LONG);
-                toast.setView(layout);
-                toast.show();
+                try {
+                    // toast
+                    text_toast.setText("인터넷 연결이 필요합니다.");
+                    Toast toast = new Toast(getActivity());
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout_toast);
+                    toast.show();
 
-                //Log.e("로그인", error.getMessage());
-                /* something change */
+                    Log.e("loginFragment", error.getMessage());
+                }catch (NullPointerException ex){
+                    // toast
+                    Log.e("loginFragment", "nullpointexception");
+                }
             }
         };
     }

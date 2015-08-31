@@ -14,7 +14,9 @@ import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.text.method.BaseKeyListener;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -75,14 +77,14 @@ public class review_register extends Activity {
     private File mfile;
 
     // toast
-    private View layout;
-    private TextView text;
+    private View layout_toast;
+    private TextView text_toast;
 
     private View thisview;
 
     private ImageAdapter imageadapter;
     private Bitmap noimage;
-    private  Bitmap[] bitarr;
+    private Bitmap[] bitarr;
     private ViewPager viewPager;
 
     private boolean oncreatelock = false;
@@ -92,6 +94,10 @@ public class review_register extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_regi);
         user = UserData.getInstance();
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
+        text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
         mapData.setMapid(getIntent().getStringExtra("mapid"));
         mapData.setStore_x(135790);
@@ -243,7 +249,8 @@ public class review_register extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 
-        Toast.makeText(getBaseContext(), "resultCode : " + resultCode, Toast.LENGTH_SHORT).show();
+        Log.v("resultCode",String.valueOf(resultCode));
+        //Toast.makeText(getBaseContext(), "resultCode : " + resultCode, Toast.LENGTH_SHORT).show();
 
         if (requestCode == REQ_CODE_SELECT_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
@@ -258,7 +265,7 @@ public class review_register extends Activity {
                     image_uri = data.getData();
                     Uriarr.add(image_uri);
 
-                    if(oncreatelock == false) {
+                    if (oncreatelock == false) {
                         oPerlishArray.clear();
                         oncreatelock = true;
                     }
@@ -366,10 +373,16 @@ public class review_register extends Activity {
                         uriarray = new Uri[Uriarr.size()];
                         Uriarr.toArray(uriarray);
 
-                        for(int i = 0; i < Uriarr.size(); i++)
+                        for (int i = 0; i < Uriarr.size(); i++)
                             DoUpload(thisview, i);
                     }
-                        finish();
+                    // toast
+                    text_toast.setText("리뷰가 등록되었습니다.");
+                    Toast toast = new Toast(getApplicationContext());
+                    toast.setDuration(Toast.LENGTH_SHORT);
+                    toast.setView(layout_toast);
+                    toast.show();
+                    finish();
 
                 } catch (JSONException ex) {
 
@@ -407,14 +420,19 @@ public class review_register extends Activity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "네트워크에 문제가 있습니다", Toast.LENGTH_SHORT).show();
+                        // toast
+                        text_toast.setText("인터넷 연결이 필요합니다.");
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setDuration(Toast.LENGTH_LONG);
+                        toast.setView(layout_toast);
+                        toast.show();
                         //Log.d("volley",error.getMessage());
 
                     }
                 }, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(), "이미지가 서버에 전송되었습니다", Toast.LENGTH_SHORT).show();
+
                 Log.d("volley", response);
 /*
                 user.inputGalImages(noimagearr);
@@ -434,9 +452,19 @@ public class review_register extends Activity {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                try {
+                    // toast
+                    text_toast.setText("인터넷 연결이 필요합니다.");
+                    Toast toast = new Toast(getApplicationContext());
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout_toast);
+                    toast.show();
 
-
-                Log.v("리뷰저장", "에러");
+                    Log.e("review_register", error.getMessage());
+                } catch (NullPointerException ex) {
+                    // toast
+                    Log.e("review_register", "nullpointexception");
+                }
             }
         };
     }

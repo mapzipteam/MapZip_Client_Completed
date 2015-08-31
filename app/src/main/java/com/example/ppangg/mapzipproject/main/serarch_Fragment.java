@@ -13,6 +13,7 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import com.example.ppangg.mapzipproject.network.MyVolley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -43,8 +45,8 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     private int seq;
 
     // toast
-    private View layout;
-    private TextView text;
+    private View layout_toast;
+    private TextView text_toast;
 
     // list
     private ArrayList<MyItem> marItem;
@@ -78,6 +80,9 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
+        layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
+        text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
+
        v = inflater.inflate(R.layout.fragment_search, container, false);
 
         searchhash = (EditText)v.findViewById(R.id.searchText);
@@ -104,6 +109,9 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(searchhash.getText().toString().trim().isEmpty())
+                    return;
+
                 marItem.clear();
                 mMyAdapte = new MyListAdapter(getActivity(), R.layout.custom_listview, marItem);
                 mListView.addFooterView(footer);
@@ -334,14 +342,19 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // toast
-                text.setText("인터넷 연결이 필요합니다.");
-                Toast toast = new Toast(getActivity());
-                toast.setDuration(Toast.LENGTH_LONG);
-                toast.setView(layout);
-                toast.show();
+                try {
+                    // toast
+                    text_toast.setText("인터넷 연결이 필요합니다.");
+                    Toast toast = new Toast(getActivity());
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout_toast);
+                    toast.show();
 
-                Log.e("searchmap", error.getMessage());
+                    Log.e("searchmap", error.getMessage());
+                }catch (NullPointerException ex){
+                    // toast
+                    Log.e("searchmap", "nullpointexception");
+                }
             }
         };
     }
