@@ -65,10 +65,33 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <LinearLayout
-                android:id="@+id/eval_layout_review_regi"
+                android:id="@+id/mapselect_review_regi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/name_review_regi"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/spinner_text_review"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:padding="5dp"
+                    android:text="지도선택   " />
+
+                <Spinner
+                    android:id="@+id/spinner_review"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/eval_layout_review_regi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mapselect_review_regi"
                 android:gravity="center"
                 android:orientation="horizontal">
 

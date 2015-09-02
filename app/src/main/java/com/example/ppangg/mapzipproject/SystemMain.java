@@ -18,7 +18,7 @@ public class SystemMain {
     public static final String SERVER_MAPSEARCH_URL = SERVER_ROOT_URL+"/map_search/map_search.php";
     public static final String SERVER_REVIEWENROLL_URL = SERVER_ROOT_URL+"/client_data/client_review_enroll.php";
     public static final String SERVER_REVIEWENROLL2_URL = SERVER_ROOT_URL+"/client_data/client_mkdir.php";
-    public static final String SERVER_REVIEWENROLL3_URL = SERVER_ROOT_URL+"/client_data/get_image.php";
+    public static final String SERVER_REVIEWENROLL3_URL = SERVER_ROOT_URL+"/client_data/save_image.php";
 
     // 지도 갯수 디폴트값
     public static final int DEFAULT_MAP_COUNT = 2;

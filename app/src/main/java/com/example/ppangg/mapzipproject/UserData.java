@@ -19,6 +19,7 @@ public class UserData {
     private int testnum=0;
     private Bitmap[] GalImages = new Bitmap[] {
     };
+    private boolean reviewListlock;
 
     public static UserData getInstance() {
         if(ourInstance == null) {
@@ -62,6 +63,11 @@ public class UserData {
     }
 
     public JSONArray getMapmetaArray(){ return mapmetaArray; }
+
+    public boolean getReviewListlock(){ return reviewListlock; }
+
+
+    public void setReviewListlock(boolean rlock){ reviewListlock = rlock; }
 
     public void setMapmetaArray(JSONArray jarray){ mapmetaArray = jarray; }
 

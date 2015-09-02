@@ -69,6 +69,11 @@ public class review_register extends Activity {
     private List<Bitmap> oPerlishArray;
     private int arrnum = 0;
 
+    // map spinner
+    private ArrayList<String> mapsppinerList; // map name
+    private Spinner mapspinner;
+    private ArrayAdapter mapadapter;
+
     // 보낼 정보
     private MapData mapData = new MapData();
 
@@ -99,12 +104,14 @@ public class review_register extends Activity {
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
-        mapData.setMapid(getIntent().getStringExtra("mapid"));
-        mapData.setStore_x(135790);
-        mapData.setStore_y(246809);
+        mapData.setStore_x(13.12345);
+        mapData.setStore_y(23.24312);
+        mapData.setStore_cx(135790);
+        mapData.setStore_cy(246809);
         mapData.setStore_name("gagename");
         mapData.setStore_address("gageaddress");
         mapData.setStore_contact("02-1234-5678");
+        mapData.setGu_num(1);
 
         imagenum = 0;
 
@@ -128,6 +135,41 @@ public class review_register extends Activity {
         user.inputGalImages(noimagearr);
         imageadapter.notifyDataSetChanged();
 */
+        mapsppinerList = new ArrayList<String>();
+        try {
+            for (int i = 0; i < user.getMapmetaArray().length(); i++) {
+                mapsppinerList.add(user.getMapmetaArray().getJSONObject(i).getString("title"));
+            }
+        }catch (JSONException ex){
+
+        }
+
+        // map name
+        mapspinner = (Spinner) findViewById(R.id.spinner_review);
+        mapadapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, mapsppinerList);
+        mapadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mapspinner.setAdapter(mapadapter);
+
+        // map select
+        mapspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    JSONObject mapmeta = null;
+                    mapmeta = user.getMapmetaArray().getJSONObject(position);
+                    mapData.setMapid(mapmeta.get("map_id").toString());
+                    Log.v("mappid", mapData.getMapid());
+
+                } catch (JSONException ex) {
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         findImage = (Button) findViewById(R.id.findImage_review_regi);
         findImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -307,11 +349,15 @@ public class review_register extends Activity {
             obj.put("map_id", mapData.getMapid());
             obj.put("store_x", mapData.getStore_x());
             obj.put("store_y", mapData.getStore_y());
+            obj.put("store_cx", mapData.getStore_cx());
+            obj.put("store_cy", mapData.getStore_cy());
             obj.put("store_name", mapData.getStore_name());
             obj.put("store_address", mapData.getStore_address());
             obj.put("store_contact", mapData.getStore_contact());
             obj.put("review_emotion", mapData.getReview_emotion());
             obj.put("review_text", mapData.getReview_text());
+            obj.put("image_num",Uriarr.size());
+            obj.put("gu_num",mapData.getGu_num());
 
             Log.v("review 등록 보내기", obj.toString());
         } catch (JSONException e) {
@@ -335,8 +381,8 @@ public class review_register extends Activity {
             obj.put("userid", user.getUserID());
             obj.put("map_id", mapData.getMapid());
             obj.put("store_name", mapData.getStore_name());
-            obj.put("store_x", mapData.getStore_x());
-            obj.put("store_y", mapData.getStore_y());
+            obj.put("store_cx", mapData.getStore_cx());
+            obj.put("store_cy", mapData.getStore_cy());
 
             Log.v("review 등록2 보내기", obj.toString());
         } catch (JSONException e) {
@@ -410,8 +456,8 @@ public class review_register extends Activity {
         params.put("map_id", mapData.getMapid());
         params.put("store_name", mapData.getStore_name());
 
-        params.put("store_x", String.valueOf(mapData.getStore_x()));
-        params.put("store_y", String.valueOf(mapData.getStore_y()));
+        params.put("store_cx", String.valueOf(mapData.getStore_cx()));
+        params.put("store_cy", String.valueOf(mapData.getStore_cy()));
         params.put("image_name", "image" + String.valueOf(imagenum));
         imagenum++;
 

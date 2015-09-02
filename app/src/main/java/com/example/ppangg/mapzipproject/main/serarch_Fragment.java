@@ -34,7 +34,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class serarch_Fragment extends Fragment implements AbsListView.OnScrollListener{
+public class serarch_Fragment extends Fragment implements AbsListView.OnScrollListener {
 
 
     private View v;
@@ -50,10 +50,10 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
     // list
     private ArrayList<MyItem> marItem;
-    private MyListAdapter 	  mMyAdapte;
+    private MyListAdapter mMyAdapte;
     private ListView mListView;
     private MyItem items;
-    private  View footer;
+    private View footer;
 
     // 스크롤 로딩
     private LayoutInflater mInflater;
@@ -66,7 +66,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
     private Handler handler;
 
-    public serarch_Fragment(){
+    public serarch_Fragment() {
         seq = 0;
     }
 
@@ -78,17 +78,17 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
 
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
-       v = inflater.inflate(R.layout.fragment_search, container, false);
+        v = inflater.inflate(R.layout.fragment_search, container, false);
 
-        searchhash = (EditText)v.findViewById(R.id.searchText);
-        searchBtn = (Button)v.findViewById(R.id.searchBtn);
+        searchhash = (EditText) v.findViewById(R.id.searchText);
+        searchBtn = (Button) v.findViewById(R.id.searchBtn);
 
-        mListView = (ListView)v.findViewById(R.id.searchList);
+        mListView = (ListView) v.findViewById(R.id.searchList);
         marItem = new ArrayList<MyItem>();
 
         mLockListView = true;
@@ -96,7 +96,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         mSendLock = false;
 
         // 푸터를 등록. setAdapter 이전에 해야함.
-        mInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         footer = mInflater.inflate(R.layout.listview_footer, null);
         //mListView.addFooterView(footer);
 
@@ -109,7 +109,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(searchhash.getText().toString().trim().isEmpty())
+                if (searchhash.getText().toString().trim().isEmpty())
                     return;
 
                 marItem.clear();
@@ -127,7 +127,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
             }
         });
-         
+
         return v;
     }
 
@@ -136,16 +136,16 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
     }
+
     // 리스트뷰 출력 항목
-    class MyItem
-    {
-        MyItem(String _coustId, String name, String category, String hashtag)
-        {
+    class MyItem {
+        MyItem(String _coustId, String name, String category, String hashtag) {
             sCustId = _coustId;
             name_s = name;
             category_s = category;
             hashtag_s = hashtag;
         }
+
         String sCustId;
         String name_s;
         String category_s;
@@ -154,73 +154,63 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     }
 
     // 어댑터 클래스
-    class MyListAdapter extends BaseAdapter
-    {
+    class MyListAdapter extends BaseAdapter {
         Context cContext;
         LayoutInflater lInflater;
         ArrayList<MyItem> alSrc;
         int layout;
 
-        public MyListAdapter(Context _context, int _layout, ArrayList<MyItem> _arrayList)
-        {
-            cContext  = _context;
-            lInflater = (LayoutInflater)_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            alSrc	  = _arrayList;
-            layout    = _layout;
+        public MyListAdapter(Context _context, int _layout, ArrayList<MyItem> _arrayList) {
+            cContext = _context;
+            lInflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            alSrc = _arrayList;
+            layout = _layout;
         }
 
         @Override
-        public int getCount()
-        {
+        public int getCount() {
             return alSrc.size();
         }
 
         @Override
-        public Object getItem(int position)
-        {
+        public Object getItem(int position) {
             return alSrc.get(position).sCustId;
         }
 
         @Override
-        public long getItemId(int position)
-        {
+        public long getItemId(int position) {
             return position;
         }
 
-        public String getName(int position)
-        {
+        public String getName(int position) {
             return alSrc.get(position).name_s;
         }
 
-        public String getCategory(int position)
-        {
+        public String getCategory(int position) {
             return alSrc.get(position).category_s;
         }
 
-        public String getHash(int position)
-        {
+        public String getHash(int position) {
             return alSrc.get(position).hashtag_s;
         }
 
 
         // 각 뷰의 항목 생성
         @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
+        public View getView(int position, View convertView, ViewGroup parent) {
             final int pos = position;
-            if(convertView == null)
-            {
+            if (convertView == null) {
                 convertView = lInflater.inflate(layout, parent, false);
             }
 
             final String getCustId = alSrc.get(pos).sCustId;
 
-            TextView nameText_search = (TextView)convertView.findViewById(R.id.nameText_search);
-            if(Integer.parseInt(getCategory(pos)) == SystemMain.SEOUL_MAP_NUM)
-                nameText_search.setText(getName(pos)+" (서울)");
+            TextView nameText_search = (TextView) convertView.findViewById(R.id.nameText_search);
+            if (Integer.parseInt(getCategory(pos)) == SystemMain.SEOUL_MAP_NUM)
+                nameText_search.setText(getName(pos) + " (서울)");
             else
                 nameText_search.setText(getName(pos));
-            TextView hashText_search = (TextView)convertView.findViewById(R.id.hashText_search);
+            TextView hashText_search = (TextView) convertView.findViewById(R.id.hashText_search);
             hashText_search.setText(getHash(pos));
 
             return convertView;
@@ -228,16 +218,13 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     }
 
     // 더미 아이템 추가
-    private void addItems(final int size)
-    {
+    private void addItems(final int size) {
         // 아이템을 추가하는 동안 중복 요청을 방지하기 위해 락을 걸어둡니다.
         mLockListView = true;
-        Runnable run = new Runnable()
-        {
+        Runnable run = new Runnable() {
             @Override
-            public void run()
-            {
-                if(mLockBtn == false) {
+            public void run() {
+                if (mLockBtn == false) {
                     try {
                         for (int i = 0; i < size; i++) {
                             items = new MyItem(String.valueOf(i), getArray.getJSONObject(i).getString("user_name"), getArray.getJSONObject(i).getString("category"), getArray.getJSONObject(i).getString("hash_tag"));
@@ -272,17 +259,17 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         // 전체의 숫자와 동일해지면 가장 아래로 스크롤 되었다고 가정합니다.
         int count = totalItemCount - visibleItemCount;
 
-        if(firstVisibleItem >= count && totalItemCount != 0 && mLockListView == false && mLockBtn == false && mSendLock == false) {
+        if (firstVisibleItem >= count && totalItemCount != 0 && mLockListView == false && mLockBtn == false && mSendLock == false) {
             Log.i("list", "Loading next items");
             DoSearch(v);
 
-           // addItems(3);
+            // addItems(3);
         }
 
     }
 
     public void DoSearch(View v) {
-        if(mSendLock == false) {
+        if (mSendLock == false) {
             mSendLock = true;
 
             RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();
@@ -314,7 +301,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
                 try {
                     int state = response.getInt("state");
-                    if( state == 501) {
+                    if (state == 501) {
                         getArray = response.getJSONArray("map_search");
                         seq++;
 
@@ -322,7 +309,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
                         Log.v("searchmap 받기", response.toString());
 
-                    }else if(state == 502){
+                    } else if (state == 502) {
                         Log.v("searchmap 받기", response.toString());
 
                         mLockBtn = true;
@@ -330,7 +317,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
                     }
 
-                }catch (JSONException e){
+                } catch (JSONException e) {
 
                 }
                 mSendLock = false;
@@ -351,7 +338,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                     toast.show();
 
                     Log.e("searchmap", error.getMessage());
-                }catch (NullPointerException ex){
+                } catch (NullPointerException ex) {
                     // toast
                     Log.e("searchmap", "nullpointexception");
                 }

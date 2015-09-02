@@ -40,7 +40,8 @@
         android:id="@+id/searchList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/search_layout"></ListView>
+        android:layout_below="@+id/search_layout"
+        android:listSelector="@color/mainOrange"></ListView>
 
 
 </RelativeLayout>

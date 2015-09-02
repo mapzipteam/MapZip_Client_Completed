@@ -8,44 +8,70 @@
         android:id="@+id/search_layout_review"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/mainYellow">
+        android:background="@color/mainYellow"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/searchText_review"
             android:layout_width="0dp"
             android:layout_height="45dp"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="8"
             android:background="#ffffff"
-            android:padding="10dp"
-            android:hint="가게이름으로 검색" />
+            android:hint="가게이름으로 검색"
+            android:padding="10dp" />
 
         <Button
             android:id="@+id/searchBtn_review"
             android:layout_width="0dp"
             android:layout_height="45dp"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="2"
             android:background="@drawable/searchbtn" />
 
     </LinearLayout>
 
-    <Spinner
-        android:id="@+id/spinner_review"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/search_layout_review" />
+        android:orientation="vertical"
+        android:layout_below="@+id/search_layout_review">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="등록"
-        android:layout_below="@+id/spinner_review"
-        android:id="@+id/registerBtn_review" />
+        <ListView
+            android:id="@+id/searchList_review"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="8"
+            android:listSelector="@color/mainOrange">
+
+        </ListView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:layout_below="@+id/search_layout_review"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/registerBtn_review"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:text="등록" />
+
+            <Button
+                android:id="@+id/mapviewBtn_review"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:text="지도보기" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>
