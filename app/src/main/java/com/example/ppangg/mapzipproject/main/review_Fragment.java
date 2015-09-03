@@ -64,8 +64,8 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
 
     // 스크롤 로딩
     private LayoutInflater mInflater;
-    //private boolean mLockListView;
 
+    private boolean mLockListView;
     private boolean mLockBtn;
     private boolean mSendLock;
 
@@ -97,7 +97,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         marItem = new ArrayList<MyItem>();
 
         user.setReviewListlock(false);
-        //mLockListView = true;
+        mLockListView = false;
         mLockBtn = true;
         mSendLock = false;
 
@@ -243,8 +243,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
     // 더미 아이템 추가
     private void addItems(final int size) {
         // 아이템을 추가하는 동안 중복 요청을 방지하기 위해 락을 걸어둡니다.
-        user.setReviewListlock(true);
-        //mLockListView = true;
+        mLockListView = true;
         Runnable run = new Runnable() {
             @Override
             public void run() {
@@ -269,15 +268,16 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
                     // 모든 데이터를 로드하여 적용하였다면 어댑터에 알리고
                     // 리스트뷰의 락을 해제합니다.
                     mMyAdapte.notifyDataSetChanged();
-                    user.setReviewListlock(false);
-                    //mLockListView = false;
                 }
             }
         };
+
         // 속도의 딜레이를 구현하기 위한 꼼수
 
         handler = new Handler();
         handler.postDelayed(run, 1000);
+
+        mLockListView = false;
 
     }
 
@@ -292,7 +292,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         int count = totalItemCount - visibleItemCount;
         Log.v("리뷰 리스트뷰락",String.valueOf(user.getReviewListlock()));
 
-        if (firstVisibleItem >= count && totalItemCount != 0 && (mLockBtn == false) && (user.getReviewListlock() == false)) {
+        if (firstVisibleItem >= count && totalItemCount != 0 && (mLockBtn == false) && (user.getReviewListlock() == false) && (mLockListView == false)) {
             Log.i("list", "Loading next items");
             addItems(5);
         }
