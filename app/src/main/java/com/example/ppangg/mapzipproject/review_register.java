@@ -59,6 +59,10 @@ public class review_register extends Activity {
     private Button enrollBtn;
     private Button cancelBtn;
 
+    private TextView titleText;
+    private TextView addressText;
+    private TextView contactText;
+
     private EditText directEdit;
     private SeekBar seekbar;
     private ImageView emotion;
@@ -104,14 +108,22 @@ public class review_register extends Activity {
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
-        mapData.setStore_x(13.12345);
-        mapData.setStore_y(23.24312);
-        mapData.setStore_cx(135790);
-        mapData.setStore_cy(246809);
-        mapData.setStore_name("gagename");
-        mapData.setStore_address("gageaddress");
-        mapData.setStore_contact("02-1234-5678");
-        mapData.setGu_num(1);
+        mapData.setStore_x(getIntent().getDoubleExtra("store_x",0));
+        mapData.setStore_y(getIntent().getDoubleExtra("store_y", 0));
+        mapData.setStore_cx(getIntent().getIntExtra("store_cx", 0));
+        mapData.setStore_cy(getIntent().getIntExtra("store_cy", 0));
+        mapData.setStore_name(getIntent().getStringExtra("store_name"));
+        mapData.setStore_address(getIntent().getStringExtra("store_address"));
+        mapData.setStore_contact(getIntent().getStringExtra("store_contact"));
+        mapData.setGu_num(getGunum());
+
+        titleText = (TextView) findViewById(R.id.name_review_regi);
+        addressText = (TextView) findViewById(R.id.address_txt_review_regi);
+        contactText = (TextView) findViewById(R.id.contact_txt_review_regi);
+
+        titleText.setText(mapData.getStore_name());
+        addressText.setText(mapData.getStore_address());
+        contactText.setText(mapData.getStore_contact());
 
         imagenum = 0;
 
@@ -526,5 +538,61 @@ public class review_register extends Activity {
         drawable.draw(canvas);
 
         return bitmap;
+    }
+
+    public int getGunum() {
+        int gunum = -1;
+        if (mapData.getStore_address().contains("서울특별시 도봉구"))
+            gunum = SystemMain.DoBong;
+        else if (mapData.getStore_address().contains("서울특별시 노원구"))
+            gunum = SystemMain.NoWon;
+        else if (mapData.getStore_address().contains("서울특별시 강북구"))
+            gunum = SystemMain.GangBuk;
+        else if (mapData.getStore_address().contains("서울특별시 성북구"))
+            gunum = SystemMain.SungBuk;
+        else if (mapData.getStore_address().contains("서울특별시 중랑구"))
+            gunum = SystemMain.ZongRang;
+        else if (mapData.getStore_address().contains("서울특별시 은평구"))
+            gunum = SystemMain.EunPhung;
+        else if (mapData.getStore_address().contains("서울특별시 종로구"))
+            gunum = SystemMain.ZongRo;
+        else if (mapData.getStore_address().contains("서울특별시 동대문구"))
+            gunum = SystemMain.DongDaeMon;
+        else if (mapData.getStore_address().contains("서울특별시 서대문구"))
+            gunum = SystemMain.SuDaeMon;
+        else if (mapData.getStore_address().contains("서울특별시 중구"))
+            gunum = SystemMain.Zhong;
+        else if (mapData.getStore_address().contains("서울특별시 성동구"))
+            gunum = SystemMain.SungDong;
+        else if (mapData.getStore_address().contains("서울특별시 광진구"))
+            gunum = SystemMain.GangZin;
+        else if (mapData.getStore_address().contains("서울특별시 강동구"))
+            gunum = SystemMain.GangDong;
+        else if (mapData.getStore_address().contains("서울특별시 마포구"))
+            gunum = SystemMain.MaPho;
+        else if (mapData.getStore_address().contains("서울특별시 용산구"))
+            gunum = SystemMain.YongSan;
+        else if (mapData.getStore_address().contains("서울특별시 강서구"))
+            gunum = SystemMain.GangSue;
+        else if (mapData.getStore_address().contains("서울특별시 양천구"))
+            gunum = SystemMain.YangChen;
+        else if (mapData.getStore_address().contains("서울특별시 구로구"))
+            gunum = SystemMain.GuRo;
+        else if (mapData.getStore_address().contains("서울특별시 영등포구"))
+            gunum = SystemMain.YongDengPo;
+        else if (mapData.getStore_address().contains("서울특별시 동작구"))
+            gunum = SystemMain.DongJack;
+        else if (mapData.getStore_address().contains("서울특별시 금천구"))
+            gunum = SystemMain.GemChun;
+        else if (mapData.getStore_address().contains("서울특별시 관악구"))
+            gunum = SystemMain.GanAk;
+        else if (mapData.getStore_address().contains("서울특별시 서초구"))
+            gunum = SystemMain.SeoCho;
+        else if (mapData.getStore_address().contains("서울특별시 강남구"))
+            gunum = SystemMain.GangNam;
+        else if (mapData.getStore_address().contains("서울특별시 송파구"))
+            gunum = SystemMain.SongPa;
+
+        return gunum;
     }
 }

@@ -38,7 +38,7 @@ public class RestaurantSearcher {
     private static final String API_KEY = "9d62aa9c56b4ed922537ad43a5d29004";
     private static final String TARGET = "local";
     private static final int START = 1;
-    private static final int DISPLAY = 10;
+    private static final int DISPLAY = 30;
 
     private static final class PARAM {
         private static final String API_KEY = "key=";

@@ -123,49 +123,49 @@ public class RestaurantParsing {
 
                         if (tagId_TITLE == true) {
 
-                            restaurant.setTitle(parser.getText().trim());
+                            restaurant.setTitle(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
                             setTagIdFalse();
                             //Log.d("volley", "0~>: " + parser.getText().trim());
 
                         } else if (tagId_LINK == true) {
 
-                            restaurant.setLink(parser.getText().trim());
+                            restaurant.setLink(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
                             setTagIdFalse();
                             //Log.d("volley", "1: " + parser.getText().trim());
 
                         } else if (tagId_CATEGORY == true) {
 
-                            restaurant.setCategory(parser.getText().trim());
+                            restaurant.setCategory(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
                             setTagIdFalse();
                             //Log.d("volley", "2: " + parser.getText().trim());
 
                         } else if (tagId_DESCRIPTION == true) {
 
-                            restaurant.setDescription(parser.getText().trim());
+                            restaurant.setDescription(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
                             setTagIdFalse();
                             //Log.d("volley", "3: " + parser.getText().trim());
 
                         } else if (tagId_TELEPHONE == true) {
 
-                            restaurant.setTelephone(parser.getText().trim());
+                            restaurant.setTelephone(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
                             setTagIdFalse();
                             //Log.d("volley", "4: " + parser.getText().trim());
 
                         } else if (tagId_ADRESS == true) {
 
-                            restaurant.setAdress(parser.getText().trim());
+                            restaurant.setAdress(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
                             setTagIdFalse();
                             //Log.d("volley", "5: " + parser.getText().trim());
 
                         } else if (tagId_ROADADRESS == true) {
 
-                            restaurant.setRoadadress(parser.getText().trim());
+                            restaurant.setRoadadress(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
                             setTagIdFalse();
                             //Log.d("volley", "6: " + parser.getText().trim());
 
                         } else if (tagId_KATECX == true) {
 
-                            katecX = Integer.parseInt(parser.getText());
+                            katecX = Integer.parseInt(parser.getText().trim().replaceAll("<b>","").replaceAll("</b>", ""));
 
                             restaurant.setKatecX(katecX);
                             setTagIdFalse();
@@ -173,7 +173,7 @@ public class RestaurantParsing {
 
                         } else if (tagId_KATECY == true) {
 
-                            katecY = Integer.parseInt(parser.getText());
+                            katecY = Integer.parseInt(parser.getText().trim().replaceAll("<b>","").replaceAll("</b>" ,""));
 
                             restaurant.setKatecY(katecY);
                             setTagIdFalse();

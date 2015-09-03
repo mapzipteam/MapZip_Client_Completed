@@ -17,13 +17,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.ppangg.mapzipproject.map_setting;
 import com.example.ppangg.mapzipproject.map.MapActivity;
 import com.example.ppangg.mapzipproject.R;
 import com.example.ppangg.mapzipproject.SystemMain;
 import com.example.ppangg.mapzipproject.UserData;
 import com.example.ppangg.mapzipproject.map.Location;
+import com.example.ppangg.mapzipproject.network.MyVolley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,10 +38,14 @@ import org.json.JSONObject;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-public class home_Fragment extends Fragment implements View.OnClickListener{
+public class home_Fragment extends Fragment implements View.OnClickListener {
 
     private View v;
     private UserData user;
+
+    // toast
+    private View layout_toast;
+    private TextView text_toast;
 
     private int fix_x = 0;
     private int fix_y = 0;
@@ -42,7 +53,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
     private TextView topstate; // user info
     private ImageView imageview; // map image
     private TextView hashstate; // hashtag
-    private String mapcurname=""; // 현재 지도 이름
+    private String mapcurname = ""; // 현재 지도 이름
     private String mapkindnum; // 현재 지도 속성 번호
     private String mapid; // 현재 지도 pid값
 
@@ -97,7 +108,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
             for (int i = 0; i < mapnum; i++) {
                 sppinerList.add(user.getMapmetaArray().getJSONObject(i).getString("title"));
             }
-        }catch (JSONException ex){
+        } catch (JSONException ex) {
 
         }
     }
@@ -107,6 +118,9 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
 
         v = inflater.inflate(R.layout.fragment_home, container, false);
+
+        layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
+        text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
         topstate = (TextView) v.findViewById(R.id.topstate);
         topstate.setText(user.getUserName());
@@ -119,7 +133,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         hashstate = (TextView) v.findViewById(R.id.tagText);
         mapsetting = (Button) v.findViewById(R.id.mapsetting);
 
-     // Seoul Btn init
+        // Seoul Btn init
         DoBong = (Button) v.findViewById(R.id.DoBong);
         NoWon = (Button) v.findViewById(R.id.NoWon);
         GangBuk = (Button) v.findViewById(R.id.GangBuk);
@@ -157,11 +171,11 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    RelativeLayout.LayoutParams imageLayout = new RelativeLayout.LayoutParams(realWidth, realHeight/5*3); // width, height
+                    RelativeLayout.LayoutParams imageLayout = new RelativeLayout.LayoutParams(realWidth, realHeight / 5 * 3); // width, height
                     imageLayout.setMargins(0, realHeight / 6, 0, 0);
                     imageview.setLayoutParams(imageLayout);
-                    RelativeLayout.LayoutParams tagLayout = new RelativeLayout.LayoutParams(realWidth, realHeight/18);// width, height
-                    tagLayout.setMargins(0,(int)realHeight/24*19,0,0);
+                    RelativeLayout.LayoutParams tagLayout = new RelativeLayout.LayoutParams(realWidth, realHeight / 18);// width, height
+                    tagLayout.setMargins(0, (int) realHeight / 24 * 19, 0, 0);
                     hashstate.setLayoutParams(tagLayout);
 
                     JSONObject mapmeta = null;
@@ -217,9 +231,9 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), map_setting.class);
-                intent.putExtra("mapcurname",mapcurname);
-                intent.putExtra("hashtag",hashstate.getText().toString());
-                intent.putExtra("mapkindnum",mapkindnum);
+                intent.putExtra("mapcurname", mapcurname);
+                intent.putExtra("hashtag", hashstate.getText().toString());
+                intent.putExtra("mapkindnum", mapkindnum);
                 intent.putExtra("mapid", mapid);
                 startActivity(intent);
             }
@@ -243,88 +257,87 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
                     Log.e("check", "ok");
                     fix_x = 47;
                     fix_y = -40;
-                }
-                else
+                } else
                     Log.e("check", "No");
 
                 RelativeLayout.LayoutParams layoutParms1 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms1.setMargins((realWidth / 100 * 33)+fix_x, realHeight / 100 * 36+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms1.setMargins((realWidth / 100 * 33) + fix_x, realHeight / 100 * 36 + fix_y, 0, 0); // left, top, 0, 0
                 EunPhung.setLayoutParams(layoutParms1);
-                RelativeLayout.LayoutParams layoutParms2 = new RelativeLayout.LayoutParams(90+fix_x, 50); // width, height
-                layoutParms2.setMargins(realWidth / 100 * 34+fix_x, realHeight / 100 * 45+fix_y, 0, 0); // left, top, 0, 0
+                RelativeLayout.LayoutParams layoutParms2 = new RelativeLayout.LayoutParams(90 + fix_x, 50); // width, height
+                layoutParms2.setMargins(realWidth / 100 * 34 + fix_x, realHeight / 100 * 45 + fix_y, 0, 0); // left, top, 0, 0
                 SuDaeMon.setLayoutParams(layoutParms2);
                 RelativeLayout.LayoutParams layoutParms3 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms3.setMargins(realWidth / 100 * 45+fix_x, realHeight / 100 * 43+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms3.setMargins(realWidth / 100 * 45 + fix_x, realHeight / 100 * 43 + fix_y, 0, 0); // left, top, 0, 0
                 ZongRo.setLayoutParams(layoutParms3);
                 RelativeLayout.LayoutParams layoutParms4 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms4.setMargins(realWidth / 100 * 54+fix_x, realHeight / 100 * 40+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms4.setMargins(realWidth / 100 * 54 + fix_x, realHeight / 100 * 40 + fix_y, 0, 0); // left, top, 0, 0
                 SungBuk.setLayoutParams(layoutParms4);
                 RelativeLayout.LayoutParams layoutParms5 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms5.setMargins(realWidth / 100 * 52+fix_x,realHeight / 100 * 32+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms5.setMargins(realWidth / 100 * 52 + fix_x, realHeight / 100 * 32 + fix_y, 0, 0); // left, top, 0, 0
                 GangBuk.setLayoutParams(layoutParms5);
 
                 RelativeLayout.LayoutParams layoutParms6 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms6.setMargins(realWidth / 100 * 58+fix_x, realHeight / 100 * 27+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms6.setMargins(realWidth / 100 * 58 + fix_x, realHeight / 100 * 27 + fix_y, 0, 0); // left, top, 0, 0
                 DoBong.setLayoutParams(layoutParms6);
                 RelativeLayout.LayoutParams layoutParms7 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms7.setMargins(realWidth / 100 * 68+fix_x, realHeight / 100 * 33+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms7.setMargins(realWidth / 100 * 68 + fix_x, realHeight / 100 * 33 + fix_y, 0, 0); // left, top, 0, 0
                 NoWon.setLayoutParams(layoutParms7);
                 RelativeLayout.LayoutParams layoutParms8 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms8.setMargins(realWidth / 100 * 72+fix_x, realHeight / 100 * 40+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms8.setMargins(realWidth / 100 * 72 + fix_x, realHeight / 100 * 40 + fix_y, 0, 0); // left, top, 0, 0
                 ZongRang.setLayoutParams(layoutParms8);
-                RelativeLayout.LayoutParams layoutParms9 = new RelativeLayout.LayoutParams(90+fix_x, 50); // width, height
-                layoutParms9.setMargins(realWidth / 100 * 62+fix_x, realHeight / 100 * 44+fix_y, 0, 0); // left, top, 0, 0
+                RelativeLayout.LayoutParams layoutParms9 = new RelativeLayout.LayoutParams(90 + fix_x, 50); // width, height
+                layoutParms9.setMargins(realWidth / 100 * 62 + fix_x, realHeight / 100 * 44 + fix_y, 0, 0); // left, top, 0, 0
                 DongDaeMon.setLayoutParams(layoutParms9);
                 RelativeLayout.LayoutParams layoutParms10 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms10.setMargins(realWidth / 100 * 9+fix_x, realHeight / 100 * 47+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms10.setMargins(realWidth / 100 * 9 + fix_x, realHeight / 100 * 47 + fix_y, 0, 0); // left, top, 0, 0
                 GangSue.setLayoutParams(layoutParms10);
 
                 RelativeLayout.LayoutParams layoutParms11 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms11.setMargins(realWidth / 100 * 17+fix_x, realHeight / 100 * 56+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms11.setMargins(realWidth / 100 * 17 + fix_x, realHeight / 100 * 56 + fix_y, 0, 0); // left, top, 0, 0
                 YangChen.setLayoutParams(layoutParms11);
                 RelativeLayout.LayoutParams layoutParms12 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms12.setMargins(realWidth / 100 * 13+fix_x, realHeight / 100 * 62+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms12.setMargins(realWidth / 100 * 13 + fix_x, realHeight / 100 * 62 + fix_y, 0, 0); // left, top, 0, 0
                 GuRo.setLayoutParams(layoutParms12);
                 RelativeLayout.LayoutParams layoutParms13 = new RelativeLayout.LayoutParams(90, 50);// width, height
-                layoutParms13.setMargins(realWidth / 100 * 26+fix_x, realHeight / 100 * 68+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms13.setMargins(realWidth / 100 * 26 + fix_x, realHeight / 100 * 68 + fix_y, 0, 0); // left, top, 0, 0
                 GemChun.setLayoutParams(layoutParms13);
                 RelativeLayout.LayoutParams layoutParms14 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms14.setMargins(realWidth / 100 * 29+fix_x, realHeight / 100 * 49+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms14.setMargins(realWidth / 100 * 29 + fix_x, realHeight / 100 * 49 + fix_y, 0, 0); // left, top, 0, 0
                 MaPho.setLayoutParams(layoutParms14);
-                RelativeLayout.LayoutParams layoutParms15 = new RelativeLayout.LayoutParams(90+fix_x, 50); // width, height
-                layoutParms15.setMargins(realWidth / 100 * 29+fix_x, realHeight / 100 * 56+fix_y, 0, 0); // left, top, 0, 0
+                RelativeLayout.LayoutParams layoutParms15 = new RelativeLayout.LayoutParams(90 + fix_x, 50); // width, height
+                layoutParms15.setMargins(realWidth / 100 * 29 + fix_x, realHeight / 100 * 56 + fix_y, 0, 0); // left, top, 0, 0
                 YongDengPo.setLayoutParams(layoutParms15);
 
                 RelativeLayout.LayoutParams layoutParms16 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms16.setMargins(realWidth / 100 * 37+fix_x, realHeight / 100 * 67+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms16.setMargins(realWidth / 100 * 37 + fix_x, realHeight / 100 * 67 + fix_y, 0, 0); // left, top, 0, 0
                 GanAk.setLayoutParams(layoutParms16);
                 RelativeLayout.LayoutParams layoutParms17 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms17.setMargins((realWidth / 100 * 39)+fix_x, realHeight / 100 * 59+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms17.setMargins((realWidth / 100 * 39) + fix_x, realHeight / 100 * 59 + fix_y, 0, 0); // left, top, 0, 0
                 DongJack.setLayoutParams(layoutParms17);
                 RelativeLayout.LayoutParams layoutParms18 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms18.setMargins(realWidth / 100 * 45+fix_x, realHeight / 100 * 53+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms18.setMargins(realWidth / 100 * 45 + fix_x, realHeight / 100 * 53 + fix_y, 0, 0); // left, top, 0, 0
                 YongSan.setLayoutParams(layoutParms18);
                 RelativeLayout.LayoutParams layoutParms19 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms19.setMargins(realWidth / 100 * 49+fix_x, realHeight / 100 * 48+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms19.setMargins(realWidth / 100 * 49 + fix_x, realHeight / 100 * 48 + fix_y, 0, 0); // left, top, 0, 0
                 Zhong.setLayoutParams(layoutParms19);
                 RelativeLayout.LayoutParams layoutParms20 = new RelativeLayout.LayoutParams(90, 50);// width, height
-                layoutParms20.setMargins(realWidth / 100 * 60+fix_x, realHeight / 100 * 50+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms20.setMargins(realWidth / 100 * 60 + fix_x, realHeight / 100 * 50 + fix_y, 0, 0); // left, top, 0, 0
                 SungDong.setLayoutParams(layoutParms20);
 
                 RelativeLayout.LayoutParams layoutParms21 = new RelativeLayout.LayoutParams(90, 50);// width, height
-                layoutParms21.setMargins(realWidth / 100 * 53+fix_x, realHeight / 100 * 64+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms21.setMargins(realWidth / 100 * 53 + fix_x, realHeight / 100 * 64 + fix_y, 0, 0); // left, top, 0, 0
                 SeoCho.setLayoutParams(layoutParms21);
                 RelativeLayout.LayoutParams layoutParms22 = new RelativeLayout.LayoutParams(90, 50);// width, height
-                layoutParms22.setMargins(realWidth / 100 * 63+fix_x, realHeight / 100 * 61+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms22.setMargins(realWidth / 100 * 63 + fix_x, realHeight / 100 * 61 + fix_y, 0, 0); // left, top, 0, 0
                 GangNam.setLayoutParams(layoutParms22);
                 RelativeLayout.LayoutParams layoutParms23 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms23.setMargins(realWidth / 100 * 70+fix_x, realHeight / 100 * 51+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms23.setMargins(realWidth / 100 * 70 + fix_x, realHeight / 100 * 51 + fix_y, 0, 0); // left, top, 0, 0
                 GangZin.setLayoutParams(layoutParms23);
                 RelativeLayout.LayoutParams layoutParms24 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms24.setMargins(realWidth / 100 * 75+fix_x, realHeight / 100 * 58+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms24.setMargins(realWidth / 100 * 75 + fix_x, realHeight / 100 * 58 + fix_y, 0, 0); // left, top, 0, 0
                 SongPa.setLayoutParams(layoutParms24);
                 RelativeLayout.LayoutParams layoutParms25 = new RelativeLayout.LayoutParams(90, 50); // width, height
-                layoutParms25.setMargins(realWidth / 100 * 83+fix_x, realHeight / 100 * 49+fix_y, 0, 0); // left, top, 0, 0
+                layoutParms25.setMargins(realWidth / 100 * 83 + fix_x, realHeight / 100 * 49 + fix_y, 0, 0); // left, top, 0, 0
                 GangDong.setLayoutParams(layoutParms25);
 
                 //  SungBuk.setLayoutParams(layoutParms5);
@@ -406,8 +419,8 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         double loc_LNG = 0;
         double loc_LAT = 0;
-        switch (v.getId()){
-           // select location (SEOUL)
+        switch (v.getId()) {
+            // select location (SEOUL)
             case R.id.DoBong:
                 loc_LNG = Location.DOBONGGU_LNG;
                 loc_LAT = Location.DOBONGGU_LAT;
@@ -509,21 +522,23 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
                 loc_LAT = Location.SONGPAGU_LAT;
                 break;
         }
+        GetStorearrary(v);
+
         Intent intent = new Intent(getActivity(), MapActivity.class);
         intent.putExtra("LNG", loc_LNG);
         intent.putExtra("LAT", loc_LAT);
         startActivity(intent);
     }
 
-    public void refresh(){
-        Log.v("리프레쉬","확인");
+    public void refresh() {
+        Log.v("리프레쉬", "확인");
         mapnum = user.getMapmetaArray().length();
         sppinerList = new ArrayList<String>();
         try {
             for (int i = 0; i < mapnum; i++) {
                 sppinerList.add(user.getMapmetaArray().getJSONObject(i).getString("title"));
             }
-        }catch (JSONException ex){
+        } catch (JSONException ex) {
 
         }
 
@@ -538,17 +553,16 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
     public void onResume() {
         super.onResume();
         user = UserData.getInstance();
-        if(user.getTestnum() == 1)
+        if (user.getTestnum() == 1)
             refresh();
     }
 
 
-    public void ScreenSize()
-    {
+    public void ScreenSize() {
         Display display = getActivity().getWindowManager().getDefaultDisplay();
 
 
-        if (Build.VERSION.SDK_INT >= 17){
+        if (Build.VERSION.SDK_INT >= 17) {
             //new pleasant way to get real metrics
             DisplayMetrics realMetrics = new DisplayMetrics();
             display.getRealMetrics(realMetrics);
@@ -577,6 +591,59 @@ public class home_Fragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    public void GetStorearrary(View v) {
+        RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("userid", user.getUserID());
+            obj.put("map_id", mapid);
+            Log.v("제이손 보내기", obj.toString());
+        } catch (JSONException e) {
+            Log.v("제이손", "에러");
+        }
+
+        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                SystemMain.SERVER_HOMETOMAP_URL,
+                obj,
+                createMyReqSuccessListener(),
+                createMyReqErrorListener()) {
+        };
+        queue.add(myReq);
+
+    }
+
+
+    private Response.Listener<JSONObject> createMyReqSuccessListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                Log.v("홈 가게", response.toString());
+            }
+        };
+    }
+
+    private Response.ErrorListener createMyReqErrorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    // toast
+                    text_toast.setText("인터넷 연결이 필요합니다.");
+                    Toast toast = new Toast(getActivity());
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout_toast);
+                    toast.show();
+
+                    Log.e("homeFragment", error.getMessage());
+                }catch (NullPointerException ex){
+                    // toast
+                    Log.e("homeFragment", "nullpointexception");
+                }
+            }
+        };
+    }
 
 
 }

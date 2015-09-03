@@ -71,6 +71,9 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
 
     private Handler handler;
 
+    // 선택 이벤트
+    private int selectNum;
+
     public review_Fragment(){}
 	
 
@@ -81,6 +84,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         super.onCreate(savedInstanceState);
         user = UserData.getInstance();
         arrsize = 0;
+        selectNum = -1;
     }
 
     @Override
@@ -93,6 +97,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
         mListView = (ListView) v.findViewById(R.id.searchList_review);
+        mListView.setOnItemClickListener(new ListViewItemClickListener());
 
         marItem = new ArrayList<MyItem>();
 
@@ -138,6 +143,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
 
                 marItem.clear();
                 arrsize = 0;
+                selectNum = -1;
                 mMyAdapte = new MyListAdapter(getActivity(), R.layout.custom_listview, marItem);
                 mListView.addFooterView(footer);
                 mListView.setAdapter(mMyAdapte);
@@ -151,7 +157,25 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         review_regi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(selectNum == -1)
+                {
+                    // toast
+                    text_toast.setText("가게를 선택해주세요.");
+                    Toast toast = new Toast(getActivity());
+                    toast.setDuration(Toast.LENGTH_SHORT);
+                    toast.setView(layout_toast);
+                    toast.show();
+                    return;
+                }
+
                 Intent intent = new Intent(getActivity(), review_register.class);
+                intent.putExtra("store_name", restaurants.get(selectNum).getTitle());
+                intent.putExtra("store_address", restaurants.get(selectNum).getAdress());
+                intent.putExtra("store_contact", restaurants.get(selectNum).getTelephone());
+                intent.putExtra("store_x", restaurants.get(selectNum).getLngX());
+                intent.putExtra("store_y", restaurants.get(selectNum).getLatY());
+                intent.putExtra("store_cx", restaurants.get(selectNum).getKatecX());
+                intent.putExtra("store_cy", restaurants.get(selectNum).getKatecY());
                 startActivity(intent);
             }
         });
@@ -298,6 +322,18 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         }
 
     }
+
+    private class ListViewItemClickListener implements AdapterView.OnItemClickListener
+    {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        {
+            selectNum = position;
+            Log.v("리스트뷰 셀렉트",String.valueOf(position));
+
+        }
+    }
+
 }
 
 
