@@ -1,7 +1,6 @@
 package com.example.ppangg.mapzipproject;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 import org.json.JSONArray;
 
@@ -16,7 +15,9 @@ public class UserData {
     private String UserID; // ����� ���̵�
     private String UserName; // ����� �̸�
     private JSONArray mapmetaArray;
-    private int testnum=0;
+    private JSONArray[] mapforpinArray;
+    private int[] mapforpinNum = {0,0,0,0,0};
+    private int mapmetaNum;
     private Bitmap[] GalImages = new Bitmap[] {
     };
     private boolean reviewListlock;
@@ -36,6 +37,7 @@ public class UserData {
         LoginPermission = false; // ó�� instanceȭ �Ҷ��� �α����㰡 false
         UserID = null;
         UserName = null;
+        mapforpinArray = new JSONArray[5];
     }
 
     public void LoginOK(){
@@ -64,6 +66,8 @@ public class UserData {
 
     public JSONArray getMapmetaArray(){ return mapmetaArray; }
 
+    public JSONArray getMapforpinArray(int mapid){ return mapforpinArray[mapid]; }
+
     public boolean getReviewListlock(){ return reviewListlock; }
 
 
@@ -71,9 +75,15 @@ public class UserData {
 
     public void setMapmetaArray(JSONArray jarray){ mapmetaArray = jarray; }
 
-    public void inputTestnum(int i){ testnum=i; }
+    public void setMapforpinArray(JSONArray jarray, int mapid){ mapforpinArray[mapid] = jarray; }
 
-    public int getTestnum(){ return testnum; }
+    public void setMapmetaNum(int i){ mapmetaNum =i; }
+
+    public int getMapmetaNum(){ return mapmetaNum; }
+
+    public void setMapforpinNum(int mapid, int i){ mapforpinNum[mapid] =i; }
+
+    public int getMapforpinNum(int mapid){ return mapforpinNum[mapid]; }
 
     public Bitmap[] getGalImages(){ return GalImages; };
 

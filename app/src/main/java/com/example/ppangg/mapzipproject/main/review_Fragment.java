@@ -26,6 +26,8 @@ import android.widget.Toast;
 import com.example.ppangg.mapzipproject.R;
 import com.example.ppangg.mapzipproject.SystemMain;
 import com.example.ppangg.mapzipproject.UserData;
+import com.example.ppangg.mapzipproject.map.Location;
+import com.example.ppangg.mapzipproject.map.MapActivity;
 import com.example.ppangg.mapzipproject.map.Restaurant;
 import com.example.ppangg.mapzipproject.map.RestaurantResult;
 import com.example.ppangg.mapzipproject.map.RestaurantSearcher;
@@ -47,6 +49,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
 
     private Button review_regi;
     private Button review_search;
+    private Button map_viewBtn;
     private EditText searchedit;
 
     private RestaurantResult restaurants;
@@ -150,6 +153,17 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
                 mMyAdapte.notifyDataSetChanged();
 
                 mLockBtn = false;
+            }
+        });
+
+        map_viewBtn = (Button) v.findViewById(R.id.mapviewBtn_review);
+        map_viewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MapActivity.class);
+                intent.putExtra("LNG", Location.SEOUL_LNG);
+                intent.putExtra("LAT", Location.SEOUL_LAT);
+                startActivity(intent);
             }
         });
 

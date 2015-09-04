@@ -261,6 +261,7 @@ public class review_register extends Activity {
             public void onClick(View v) {
                 thisview = v;
                 DoReviewset(v);
+                user.setMapforpinNum(Integer.parseInt(mapData.getMapid()),0);
             }
         });
 

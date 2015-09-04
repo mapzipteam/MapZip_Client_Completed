@@ -50,6 +50,9 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
     private int fix_x = 0;
     private int fix_y = 0;
 
+    private double loc_LNG = 0;
+    private double loc_LAT = 0;
+
     private TextView topstate; // user info
     private ImageView imageview; // map image
     private TextView hashstate; // hashtag
@@ -417,8 +420,6 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
     // 버튼 클릭 리스너
     @Override
     public void onClick(View v) {
-        double loc_LNG = 0;
-        double loc_LAT = 0;
         switch (v.getId()) {
             // select location (SEOUL)
             case R.id.DoBong:
@@ -522,12 +523,19 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                 loc_LAT = Location.SONGPAGU_LAT;
                 break;
         }
-        GetStorearrary(v);
 
+        if(user.getMapforpinNum(Integer.parseInt(mapid)) == 0) {
+            GetStorearrary(v);
+            user.setMapforpinNum(Integer.parseInt(mapid),1);
+        }
+        else {
         Intent intent = new Intent(getActivity(), MapActivity.class);
         intent.putExtra("LNG", loc_LNG);
         intent.putExtra("LAT", loc_LAT);
+        intent.putExtra("mapid",mapid);
         startActivity(intent);
+
+        }
     }
 
     public void refresh() {
@@ -546,14 +554,14 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        user.inputTestnum(0);
+        user.setMapmetaNum(0);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         user = UserData.getInstance();
-        if (user.getTestnum() == 1)
+        if (user.getMapmetaNum() == 1)
             refresh();
     }
 
@@ -620,6 +628,20 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
             public void onResponse(JSONObject response) {
 
                 Log.v("홈 가게", response.toString());
+                try {
+                    if (response.get("state").toString().equals("701")) {
+                        user.setMapforpinArray(response.getJSONArray("map_meta"), Integer.parseInt(response.getJSONArray("map_meta").getJSONObject(0).get("map_id").toString()));
+                        Log.v("홈에서 맵 어레이", user.getMapforpinArray(Integer.parseInt(mapid)).toString());
+
+                        Intent intent = new Intent(getActivity(), MapActivity.class);
+                        intent.putExtra("LNG", loc_LNG);
+                        intent.putExtra("LAT", loc_LAT);
+                        intent.putExtra("mapid",mapid);
+                        startActivity(intent);
+                    }
+                } catch (JSONException ex) {
+
+                }
             }
         };
     }
@@ -637,7 +659,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                     toast.show();
 
                     Log.e("homeFragment", error.getMessage());
-                }catch (NullPointerException ex){
+                } catch (NullPointerException ex) {
                     // toast
                     Log.e("homeFragment", "nullpointexception");
                 }

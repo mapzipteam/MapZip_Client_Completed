@@ -2,16 +2,13 @@ package com.example.ppangg.mapzipproject;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,8 +21,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.ppangg.mapzipproject.main.home_Fragment;
-import com.example.ppangg.mapzipproject.main.slidingTap;
 import com.example.ppangg.mapzipproject.network.MyVolley;
 
 import org.json.JSONException;
@@ -205,7 +200,7 @@ public class map_setting extends Activity {
                 //home_Fragment hf = (home_Fragment) getFragmentManager().findFragmentByTag("home_fragment");
                 //hf.refresh();
 
-                user.inputTestnum(1);
+                user.setMapmetaNum(1);
 
                 text_toast.setText("저장되었습니다.");
                 Toast toast = new Toast(getApplicationContext());
