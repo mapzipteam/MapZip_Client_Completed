@@ -57,10 +57,6 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
     private View layout_toast;
     private TextView text_toast;
 
-    // image
-    private List<Bitmap> oPerlishArray;
-    private Bitmap[] bitarr;
-
     private NMapView mMapView = null;
 
     private UserData user;
@@ -328,27 +324,9 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
                         user.initMapData();
                         user.setMapData(obj.getString("store_id"), obj.getString("map_id"), obj.getString("store_contact"), obj.getString("review_text"), obj.getString("review_emotion"), obj.getString("store_address"), obj.getString("store_name"));
 
-                        ImageLoader imageLoader = MyVolley.getInstance(getApplicationContext()).getImageLoader();
-                        imageLoader.get(SystemMain.SERVER_ROOT_URL + "/client_data/client_nn_1_5/image0.jpg", new ImageLoader.ImageListener() {
-                            @Override
-                            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-
-                                oPerlishArray = new ArrayList<Bitmap>();
-                                oPerlishArray.add(response.getBitmap());
-
-                                bitarr = new Bitmap[oPerlishArray.size()];
-                                oPerlishArray.toArray(bitarr); // fill the array
-                                user.inputGalImages(bitarr);
-
-                                Intent intent = new Intent(getApplicationContext(), ReviewActivity.class);
-                                startActivity(intent);
-                            }
-
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-
-                            }
-                        });
+                        Intent intent = new Intent(getApplicationContext(), ReviewActivity.class);
+                        intent.putExtra("image_num",obj.getString("image_num"));
+                        startActivity(intent);
 
                     }
                 } catch (JSONException e) {

@@ -2,24 +2,33 @@ package com.example.ppangg.mapzipproject;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.example.ppangg.mapzipproject.ImageAdapter;
 import com.example.ppangg.mapzipproject.R;
 import com.example.ppangg.mapzipproject.UserData;
 import com.example.ppangg.mapzipproject.model.MapData;
+import com.example.ppangg.mapzipproject.network.MyVolley;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * Created by Song  Ji won on 2015-07-31.
  */
-public class ReviewActivity extends Activity
-{
+public class ReviewActivity extends Activity {
     private UserData user;
 
     // 리뷰 데이타
@@ -32,9 +41,12 @@ public class ReviewActivity extends Activity
     // image
     private ImageAdapter imageadapter;
     private ViewPager viewPager;
+    private Bitmap noimage;
+    private List<Bitmap> oPerlishArray;
+    private Bitmap[] bitarr;
+    private Bitmap[] bitarrfornone;
 
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
         user = UserData.getInstance();
@@ -62,13 +74,80 @@ public class ReviewActivity extends Activity
         else
             review_emotion.setImageResource(R.drawable.emotion5);
 
+        noimage = drawableToBitmap(getResources().getDrawable(R.drawable.noimage));
+        oPerlishArray = new ArrayList<Bitmap>();
+        oPerlishArray.add(noimage);
+
+        bitarrfornone = new Bitmap[oPerlishArray.size()];
+        oPerlishArray.toArray(bitarrfornone); // fill the array
+        user.inputGalImages(bitarrfornone);
 
         viewPager = (ViewPager) findViewById(R.id.pager_review);
-        imageadapter = new ImageAdapter(this);
+
+        int image_num = Integer.parseInt(getIntent().getStringExtra("image_num"));
+        if (image_num != 0) {
+            for (int i = 0; i < image_num; i++) {
+                Log.v("imagenum", String.valueOf(i));
+                imageLoad(i, SystemMain.SERVER_ROOT_URL + "/client_data/client_" + user.getUserID() + "_" + mapData.getMapid() + "_" + mapData.getStore_id() + "/image" + String.valueOf(i) + ".jpg");
+            }
+
+        } else {
+            user.inputGalImages(bitarrfornone);
+        }
+
+        imageadapter = new ImageAdapter(getApplicationContext());
         viewPager.setAdapter(imageadapter);
+        imageadapter.notifyDataSetChanged();
+    }
+
+    public void imageLoad(final int nownum, String imageURL) {
+        Log.v("imageLoader", "함수진입");
+        if (nownum == 0)
+            oPerlishArray.clear();
+
+        ImageLoader imageLoader = MyVolley.getInstance(getApplicationContext()).getImageLoader();
+
+        imageLoader.get(imageURL, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+
+                if (response != null && response.getBitmap() != null) {
+                    oPerlishArray.add(response.getBitmap());
+
+                    bitarr = new Bitmap[oPerlishArray.size()];
+                    oPerlishArray.toArray(bitarr); // fill the array
+                    user.inputGalImages(bitarr);
+
+                    imageadapter = new ImageAdapter(getApplicationContext());
+                    viewPager.setAdapter(imageadapter);
+                    imageadapter.notifyDataSetChanged();
+
+                    Log.v("imageLoader", String.valueOf(nownum));
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.v("imageLoader", "에러");
+
+            }
+        });
 
     }
 
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
 
 
 }
