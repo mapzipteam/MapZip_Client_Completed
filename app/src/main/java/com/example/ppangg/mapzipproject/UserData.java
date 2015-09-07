@@ -2,6 +2,8 @@ package com.example.ppangg.mapzipproject;
 
 import android.graphics.Bitmap;
 
+import com.example.ppangg.mapzipproject.model.MapData;
+
 import org.json.JSONArray;
 
 /**
@@ -21,6 +23,7 @@ public class UserData {
     private Bitmap[] GalImages = new Bitmap[] {
     };
     private boolean reviewListlock;
+    private MapData mapData;
 
     public static UserData getInstance() {
         if(ourInstance == null) {
@@ -38,6 +41,7 @@ public class UserData {
         UserID = null;
         UserName = null;
         mapforpinArray = new JSONArray[5];
+        mapData = new MapData();
     }
 
     public void LoginOK(){
@@ -89,5 +93,18 @@ public class UserData {
 
     public void inputGalImages(Bitmap[] Images){ GalImages = Images; };
 
+    public void initMapData(){ mapData = new MapData(); }
+
+    public void setMapData(String s_id, String m_id, String s_contact, String r_text, String r_emotion, String s_address, String s_name){
+        mapData.setStore_id(s_id);
+        mapData.setMapid(m_id);
+        mapData.setStore_contact(s_contact);
+        mapData.setReview_text(r_text);
+        mapData.setReview_emotion(Integer.parseInt(r_emotion));
+        mapData.setStore_address(s_address);
+        mapData.setStore_name(s_name);
+    }
+
+    public MapData getMapData(){ return mapData; }
 
 }

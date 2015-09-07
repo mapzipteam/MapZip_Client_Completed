@@ -110,8 +110,6 @@ public class review_register extends Activity {
 
         mapData.setStore_x(getIntent().getDoubleExtra("store_x",0));
         mapData.setStore_y(getIntent().getDoubleExtra("store_y", 0));
-        mapData.setStore_cx(getIntent().getIntExtra("store_cx", 0));
-        mapData.setStore_cy(getIntent().getIntExtra("store_cy", 0));
         mapData.setStore_name(getIntent().getStringExtra("store_name"));
         mapData.setStore_address(getIntent().getStringExtra("store_address"));
         mapData.setStore_contact(getIntent().getStringExtra("store_contact"));
@@ -362,8 +360,6 @@ public class review_register extends Activity {
             obj.put("map_id", mapData.getMapid());
             obj.put("store_x", mapData.getStore_x());
             obj.put("store_y", mapData.getStore_y());
-            obj.put("store_cx", mapData.getStore_cx());
-            obj.put("store_cy", mapData.getStore_cy());
             obj.put("store_name", mapData.getStore_name());
             obj.put("store_address", mapData.getStore_address());
             obj.put("store_contact", mapData.getStore_contact());
@@ -393,9 +389,7 @@ public class review_register extends Activity {
         try {
             obj.put("userid", user.getUserID());
             obj.put("map_id", mapData.getMapid());
-            obj.put("store_name", mapData.getStore_name());
-            obj.put("store_cx", mapData.getStore_cx());
-            obj.put("store_cy", mapData.getStore_cy());
+            obj.put("store_id", mapData.getStore_id());
 
             Log.v("review 등록2 보내기", obj.toString());
         } catch (JSONException e) {
@@ -425,7 +419,9 @@ public class review_register extends Activity {
                 try {
                     if (response.get("state").toString().equals("601")) {
                         Log.v("리뷰저장", "OK");
-                        DoReviewset2(thisview);
+                        mapData.setStore_id(response.getString("store_id"));
+                        if(Uriarr.size() != 0)
+                           DoReviewset2(thisview);
                     } else if (response.get("state").toString().equals("602") || response.get("state").toString().equals("621")) {
                         Log.v("리뷰저장2", "OK");
 
@@ -467,10 +463,7 @@ public class review_register extends Activity {
         Map<String, String> params = new HashMap<String, String>();
         params.put("userid", user.getUserID());
         params.put("map_id", mapData.getMapid());
-        params.put("store_name", mapData.getStore_name());
-
-        params.put("store_cx", String.valueOf(mapData.getStore_cx()));
-        params.put("store_cy", String.valueOf(mapData.getStore_cy()));
+        params.put("store_id",mapData.getStore_id());
         params.put("image_name", "image" + String.valueOf(imagenum));
         imagenum++;
 

@@ -5,8 +5,7 @@ package com.example.ppangg.mapzipproject.model;
  */
 public class MapData {
     private String mapid;
-    private int store_cx;
-    private int store_cy;
+    private String store_id;
     private double store_x;
     private double store_y;
     private String store_name;
@@ -20,9 +19,7 @@ public class MapData {
 
     public String getMapid() { return mapid; }
 
-    public int getStore_cx() { return store_cx; }
-
-    public int getStore_cy() { return store_cy; }
+    public String getStore_id() { return store_id; }
 
     public double getStore_x() {
         return store_x;
@@ -54,21 +51,15 @@ public class MapData {
 
     public int getGu_num() { return gu_num; }
 
+    public void setStore_id(String store_id) { this.store_id = store_id; }
+
     public void setMapid(String mapid) {
         this.mapid = mapid;
     }
 
     public void setStore_x(double store_x) { this.store_x = store_x; }
 
-    public void setStore_y(double store_y) {
-        this.store_y = store_y;
-    }
-
-    public void setStore_cx(int store_cx) { this.store_cx = store_cx; }
-
-    public void setStore_cy(int store_cy) {
-        this.store_cy = store_cy;
-    }
+    public void setStore_y(double store_y) { this.store_y = store_y; }
 
     public void setStore_name(String store_name) {
         this.store_name = store_name;

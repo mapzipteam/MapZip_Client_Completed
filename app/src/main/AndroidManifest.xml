@@ -24,7 +24,7 @@
         </activity>
         <activity android:name=".main.slidingTap" />
         <activity android:name=".map.MapActivity" />
-        <activity android:name=".map.ReviewActivity" />
+        <activity android:name=".ReviewActivity" />
         <activity android:name=".map_setting" />
         <activity android:name=".review_register" />
         <activity android:name=".addfriend" />

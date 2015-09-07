@@ -20,6 +20,7 @@ public class SystemMain {
     public static final String SERVER_REVIEWENROLL2_URL = SERVER_ROOT_URL+"/client_data/client_mkdir.php";
     public static final String SERVER_REVIEWENROLL3_URL = SERVER_ROOT_URL+"/client_data/save_image.php";
     public static final String SERVER_HOMETOMAP_URL = SERVER_ROOT_URL+"/client_data/map_meta.php";
+    public static final String SERVER_MAPTOREVIEW_URL = SERVER_ROOT_URL+"/client_data/map_detail.php";
 
     // 지도 갯수 디폴트값
     public static final int DEFAULT_MAP_COUNT = 2;
