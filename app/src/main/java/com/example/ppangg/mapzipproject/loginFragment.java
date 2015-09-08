@@ -21,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.ppangg.mapzipproject.main.slidingTap;
 import com.example.ppangg.mapzipproject.network.MyVolley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -153,6 +154,20 @@ public class loginFragment extends Fragment {
                         Log.v("테스트 이름", user.getUserName());
 
                         user.setMapmetaArray(response.getJSONArray("mapmeta_info"));
+
+                        JSONObject jar = response.getJSONObject("gu_enroll_num");
+                        int gunumber = 1;
+                        for(gunumber=1; gunumber<=25; gunumber++)
+                        {
+                            if(jar.has(String.valueOf(gunumber)))
+                            {
+                                Log.v("구넘버12", jar.get("12").toString());
+                                //배열에 추가
+                            }
+                            else{
+                                //배열에 0 추가
+                            }
+                        }
 
                         Intent intent = new Intent(getActivity(), slidingTap.class);
                         startActivity(intent);

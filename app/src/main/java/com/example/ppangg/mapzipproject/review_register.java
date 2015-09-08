@@ -55,6 +55,8 @@ public class review_register extends Activity {
 
     private UserData user;
 
+    private boolean reviewLock;
+
     private Button findImage;
     private Button enrollBtn;
     private Button cancelBtn;
@@ -108,7 +110,7 @@ public class review_register extends Activity {
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
-        mapData.setStore_x(getIntent().getDoubleExtra("store_x",0));
+        mapData.setStore_x(getIntent().getDoubleExtra("store_x", 0));
         mapData.setStore_y(getIntent().getDoubleExtra("store_y", 0));
         mapData.setStore_name(getIntent().getStringExtra("store_name"));
         mapData.setStore_address(getIntent().getStringExtra("store_address"));
@@ -150,7 +152,7 @@ public class review_register extends Activity {
             for (int i = 0; i < user.getMapmetaArray().length(); i++) {
                 mapsppinerList.add(user.getMapmetaArray().getJSONObject(i).getString("title"));
             }
-        }catch (JSONException ex){
+        } catch (JSONException ex) {
 
         }
 
@@ -235,12 +237,15 @@ public class review_register extends Activity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 3) // 직접입력
                 {
+                    reviewLock = false;
                     directEdit.setVisibility(View.VISIBLE);
                     oneText.setVisibility(View.GONE);
                 } else if (position == 0) {
+                    reviewLock = true;
                     directEdit.setVisibility(View.GONE);
                     oneText.setVisibility(View.VISIBLE);
                 } else {
+                    reviewLock = false;
                     directEdit.setVisibility(View.GONE);
                     oneText.setVisibility(View.VISIBLE);
                     mapData.setReview_text(getResources().getStringArray(R.array.spinner_review_regi)[position]);
@@ -257,9 +262,18 @@ public class review_register extends Activity {
         enrollBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                thisview = v;
-                DoReviewset(v);
-                user.setMapforpinNum(Integer.parseInt(mapData.getMapid()),0);
+                if (reviewLock == true) {
+                    // toast
+                    text_toast.setText("리뷰를 작성해주세요.");
+                    Toast toast = new Toast(getApplicationContext());
+                    toast.setDuration(Toast.LENGTH_SHORT);
+                    toast.setView(layout_toast);
+                    toast.show();
+                } else {
+                    thisview = v;
+                    DoReviewset(v);
+                    user.setMapforpinNum(Integer.parseInt(mapData.getMapid()), 0);
+                }
             }
         });
 
@@ -302,7 +316,7 @@ public class review_register extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 
-        Log.v("resultCode",String.valueOf(resultCode));
+        Log.v("resultCode", String.valueOf(resultCode));
         //Toast.makeText(getBaseContext(), "resultCode : " + resultCode, Toast.LENGTH_SHORT).show();
 
         if (requestCode == REQ_CODE_SELECT_IMAGE) {
@@ -365,8 +379,8 @@ public class review_register extends Activity {
             obj.put("store_contact", mapData.getStore_contact());
             obj.put("review_emotion", mapData.getReview_emotion());
             obj.put("review_text", mapData.getReview_text());
-            obj.put("image_num",Uriarr.size());
-            obj.put("gu_num",mapData.getGu_num());
+            obj.put("image_num", Uriarr.size());
+            obj.put("gu_num", mapData.getGu_num());
 
             Log.v("review 등록 보내기", obj.toString());
         } catch (JSONException e) {
@@ -420,8 +434,8 @@ public class review_register extends Activity {
                     if (response.get("state").toString().equals("601")) {
                         Log.v("리뷰저장", "OK");
                         mapData.setStore_id(response.getString("store_id"));
-                        if(Uriarr.size() != 0)
-                           DoReviewset2(thisview);
+                        if (Uriarr.size() != 0)
+                            DoReviewset2(thisview);
                     } else if (response.get("state").toString().equals("602") || response.get("state").toString().equals("621")) {
                         Log.v("리뷰저장2", "OK");
 
@@ -431,13 +445,23 @@ public class review_register extends Activity {
                         for (int i = 0; i < Uriarr.size(); i++)
                             DoUpload(thisview, i);
                     }
-                    // toast
-                    text_toast.setText("리뷰가 등록되었습니다.");
-                    Toast toast = new Toast(getApplicationContext());
-                    toast.setDuration(Toast.LENGTH_SHORT);
-                    toast.setView(layout_toast);
-                    toast.show();
-                    finish();
+
+                    if (response.get("state").toString().equals("612")) {
+                        // toast
+                        text_toast.setText("이미 등록 된 가게입니다.");
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setDuration(Toast.LENGTH_SHORT);
+                        toast.setView(layout_toast);
+                        toast.show();
+                    } else {
+                        // toast
+                        text_toast.setText("리뷰가 등록되었습니다.");
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setDuration(Toast.LENGTH_SHORT);
+                        toast.setView(layout_toast);
+                        toast.show();
+                        finish();
+                    }
 
                 } catch (JSONException ex) {
 
@@ -463,7 +487,7 @@ public class review_register extends Activity {
         Map<String, String> params = new HashMap<String, String>();
         params.put("userid", user.getUserID());
         params.put("map_id", mapData.getMapid());
-        params.put("store_id",mapData.getStore_id());
+        params.put("store_id", mapData.getStore_id());
         params.put("image_name", "image" + String.valueOf(imagenum));
         imagenum++;
 
