@@ -2,6 +2,7 @@ package com.example.ppangg.mapzipproject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -54,7 +55,7 @@ public class review_register extends Activity {
     final int REQ_CODE_SELECT_IMAGE = 100;
 
     private UserData user;
-
+    private Resources res;
     private boolean reviewLock;
 
     private Button findImage;
@@ -105,6 +106,7 @@ public class review_register extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_regi);
         user = UserData.getInstance();
+        res= getResources();
 
         LayoutInflater inflater = this.getLayoutInflater();
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
@@ -273,6 +275,14 @@ public class review_register extends Activity {
                     thisview = v;
                     DoReviewset(v);
                     user.setMapforpinNum(Integer.parseInt(mapData.getMapid()), 0);
+                    //수정부분
+                    int[] kk = new int[25];
+                    for(int i = 0; i<25;i++) {
+                        kk[i] = 9;
+                    }
+                    user.setPingCount(kk);
+                    //수정부분끝
+                    user.setMapImage(res);
                 }
             }
         });

@@ -2,6 +2,7 @@ package com.example.ppangg.mapzipproject.main;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -189,7 +190,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
 
                     // category select (SEOUL)
                     if (Integer.parseInt(mapmeta.get("category").toString()) == SystemMain.SEOUL_MAP_NUM) {
-                        imageview.setImageResource(R.drawable.seoul2);
+
                         seoulBtnVisibility("visible");
                         hashstate.setText(mapmeta.get("hash_tag").toString());
                     }
@@ -242,6 +243,8 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
             }
         });
 
+        Bitmap result = user.getResult();
+        imageview.setImageBitmap(result);
 
         imageview.post(new Runnable() {
 

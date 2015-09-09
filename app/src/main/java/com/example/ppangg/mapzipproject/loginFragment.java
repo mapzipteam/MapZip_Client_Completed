@@ -2,6 +2,7 @@ package com.example.ppangg.mapzipproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -32,7 +33,7 @@ public class loginFragment extends Fragment {
 
 
     private TextView state;
-
+    private Resources res;
     private EditText inputID;
     private EditText inputPW;
 
@@ -56,6 +57,7 @@ public class loginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPageNumber = getArguments().getInt("page");
+        res = getResources();
     }
 
     @Override
@@ -154,7 +156,10 @@ public class loginFragment extends Fragment {
                         Log.v("테스트 이름", user.getUserName());
 
                         user.setMapmetaArray(response.getJSONArray("mapmeta_info"));
+                        user.setReviewCount();
+                        user.setMapImage(res);
 
+/*
                         JSONObject jar = response.getJSONObject("gu_enroll_num");
                         int gunumber = 1;
                         for(gunumber=1; gunumber<=25; gunumber++)
@@ -168,7 +173,7 @@ public class loginFragment extends Fragment {
                                 //배열에 0 추가
                             }
                         }
-
+*/
                         Intent intent = new Intent(getActivity(), slidingTap.class);
                         startActivity(intent);
                         getActivity().finish();
