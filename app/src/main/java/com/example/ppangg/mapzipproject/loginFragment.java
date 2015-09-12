@@ -156,24 +156,29 @@ public class loginFragment extends Fragment {
                         Log.v("테스트 이름", user.getUserName());
 
                         user.setMapmetaArray(response.getJSONArray("mapmeta_info"));
-                        user.setReviewCount();
-                        user.setMapImage(res);
 
-/*
                         JSONObject jar = response.getJSONObject("gu_enroll_num");
-                        int gunumber = 1;
-                        for(gunumber=1; gunumber<=25; gunumber++)
-                        {
-                            if(jar.has(String.valueOf(gunumber)))
-                            {
-                                Log.v("구넘버12", jar.get("12").toString());
-                                //배열에 추가
-                            }
-                            else{
-                                //배열에 0 추가
+                        Log.v("구넘버",String.valueOf(jar));
+
+                        if(!jar.getString("state").equals("0")) {
+                            int gunumber = 1;
+                            int reviewnum = 0;
+                            for (gunumber = 1; gunumber <= 25; gunumber++) {
+                                if (jar.has(String.valueOf(gunumber))) {
+                                    reviewnum = jar.getInt(String.valueOf(gunumber));
+                                    Log.v("구넘버o", jar.get(String.valueOf(gunumber)).toString());
+                                    //배열에 추가
+                                } else {
+                                    reviewnum = 0;
+                                    Log.v("구넘버x", String.valueOf(gunumber));
+                                    //배열에 0 추가
+                                }
+                                user.setReviewCount(gunumber,reviewnum);
                             }
                         }
-*/
+
+                        user.setMapImage(res);
+
                         Intent intent = new Intent(getActivity(), slidingTap.class);
                         startActivity(intent);
                         getActivity().finish();

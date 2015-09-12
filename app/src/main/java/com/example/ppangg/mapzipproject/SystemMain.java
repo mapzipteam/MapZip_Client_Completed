@@ -21,6 +21,8 @@ public class SystemMain {
     public static final String SERVER_REVIEWENROLL3_URL = SERVER_ROOT_URL+"/client_data/save_image.php";
     public static final String SERVER_HOMETOMAP_URL = SERVER_ROOT_URL+"/client_data/map_meta.php";
     public static final String SERVER_MAPTOREVIEW_URL = SERVER_ROOT_URL+"/client_data/map_detail.php";
+    public static final String SERVER_ADDFRIENDSEARCH_URL = SERVER_ROOT_URL+"/friend/friend_search.php";
+    public static final String SERVER_ADDFRIENDENROLL_URL = SERVER_ROOT_URL+"/friend/friend_enroll.php";
 
     // 지도 갯수 디폴트값
     public static final int DEFAULT_MAP_COUNT = 2;
@@ -28,6 +30,10 @@ public class SystemMain {
     // 지역 디폴트 넘버
     public static final int SEOUL_MAP_NUM = 1;
     public static final int INCHEUON_MAP_NUM = 2;
+
+    // 지도 색상 넘버
+    public static final int MAP_RED_NUM = 5;
+    public static final int MAP_YELLOW_NUM = 3;
 
     public static final int DoBong = 1;
     public static final int NoWon = 2;

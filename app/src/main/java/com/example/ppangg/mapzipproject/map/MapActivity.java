@@ -76,7 +76,7 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
 
     NMapPOIdataOverlay.OnStateChangeListener onPOIdataStateChangeListener = new NMapPOIdataOverlay.OnStateChangeListener() {
         public void onCalloutClick(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
-            GetMapDetail(item.getOrderId());
+            GetMapDetail(item.getId());
         }
 
         public void onFocusChanged(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
@@ -157,7 +157,7 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
             Log.v("맵 어레이", String.valueOf(user.getMapforpinArray(Integer.parseInt(mapid))));
             int arrnum = 0;
             for (arrnum = 0; arrnum < jarr.length(); arrnum++) {
-                poiData.addPOIitem(Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x")), Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y")), jarr.getJSONObject(arrnum).getString("store_name"), markerId, jarr.getJSONObject(arrnum).getString("store_id"));
+                poiData.addPOIitem(Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x")), Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y")), jarr.getJSONObject(arrnum).getString("store_name"), markerId, 0 ,Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id")));
             }
             poiData.endPOIdata();
         } catch (JSONException ex) {
