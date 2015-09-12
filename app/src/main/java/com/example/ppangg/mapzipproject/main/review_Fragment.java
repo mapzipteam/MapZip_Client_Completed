@@ -160,10 +160,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         map_viewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MapActivity.class);
-                intent.putExtra("LNG", Location.SEOUL_LNG);
-                intent.putExtra("LAT", Location.SEOUL_LAT);
-                startActivity(intent);
+
             }
         });
 
@@ -175,6 +172,16 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
                 {
                     // toast
                     text_toast.setText("가게를 선택해주세요.");
+                    Toast toast = new Toast(getActivity());
+                    toast.setDuration(Toast.LENGTH_SHORT);
+                    toast.setView(layout_toast);
+                    toast.show();
+                    return;
+                }
+
+                if(restaurants.get(selectNum).getLngX() == 0 || restaurants.get(selectNum).getLatY() == 0) {
+                    // toast
+                    text_toast.setText("다시 검색해주세요.");
                     Toast toast = new Toast(getActivity());
                     toast.setDuration(Toast.LENGTH_SHORT);
                     toast.setView(layout_toast);

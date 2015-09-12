@@ -1,6 +1,7 @@
 package com.example.ppangg.mapzipproject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -10,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
@@ -57,10 +59,12 @@ public class review_register extends Activity {
     private UserData user;
     private Resources res;
     private boolean reviewLock;
-
+    private LoadingTask loading;
     private Button findImage;
     private Button enrollBtn;
     private Button cancelBtn;
+
+    private int serverchoice;
 
     private TextView titleText;
     private TextView addressText;
@@ -93,7 +97,7 @@ public class review_register extends Activity {
     private TextView text_toast;
 
     private View thisview;
-
+    public  ProgressDialog asyncDialog ;
     private ImageAdapter imageadapter;
     private Bitmap noimage;
     private Bitmap[] bitarr;
@@ -106,7 +110,9 @@ public class review_register extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_regi);
         user = UserData.getInstance();
+        serverchoice = 0;
         res= getResources();
+        loading = new LoadingTask();
 
         LayoutInflater inflater = this.getLayoutInflater();
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
@@ -272,17 +278,11 @@ public class review_register extends Activity {
                     toast.setView(layout_toast);
                     toast.show();
                 } else {
+
+
                     thisview = v;
                     DoReviewset(v);
                     user.setMapforpinNum(Integer.parseInt(mapData.getMapid()), 0);
-                    //수정부분
-                    int[] kk = new int[25];
-                    for(int i = 0; i<25;i++) {
-                        kk[i] = 9;
-                    }
-                    user.setPingCount(kk);
-                    //수정부분끝
-                    user.setMapImage(res);
                 }
             }
         });
@@ -295,7 +295,6 @@ public class review_register extends Activity {
                 user.inputGalImages(noimagearr);
                 imageadapter.notifyDataSetChanged();
 */
-
                 finish();
             }
         });
@@ -321,6 +320,16 @@ public class review_register extends Activity {
         }
         return new File(path);
     }
+
+/*
+    @Override
+    public void onPause(){
+        super.onPause();
+        if(  asyncDialog != null) {
+            Log.e("ss", "success5555555");
+        }
+    }
+*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -442,35 +451,35 @@ public class review_register extends Activity {
 
                 try {
                     if (response.get("state").toString().equals("601")) {
+                        // 1번째 통신 성공
                         Log.v("리뷰저장", "OK");
                         mapData.setStore_id(response.getString("store_id"));
                         if (Uriarr.size() != 0)
                             DoReviewset2(thisview);
+                        else{
+                            serverchoice =1;
+                            loading.execute();
+                        }
+                        // 이미지있으면 2번째통신 시작
+
                     } else if (response.get("state").toString().equals("602") || response.get("state").toString().equals("621")) {
+                        // 2번째통신 성공
                         Log.v("리뷰저장2", "OK");
+                        serverchoice = 2;
+                        loading.execute();
 
-                        uriarray = new Uri[Uriarr.size()];
-                        Uriarr.toArray(uriarray);
 
-                        for (int i = 0; i < Uriarr.size(); i++)
-                            DoUpload(thisview, i);
+                        // 3번째통신 이미지갯수만큼 반복
                     }
-
                     if (response.get("state").toString().equals("612")) {
+                        //1번째 통신에서 중복가게 걸러내기
                         // toast
                         text_toast.setText("이미 등록 된 가게입니다.");
                         Toast toast = new Toast(getApplicationContext());
                         toast.setDuration(Toast.LENGTH_SHORT);
                         toast.setView(layout_toast);
                         toast.show();
-                    } else {
-                        // toast
-                        text_toast.setText("리뷰가 등록되었습니다.");
-                        Toast toast = new Toast(getApplicationContext());
-                        toast.setDuration(Toast.LENGTH_SHORT);
-                        toast.setView(layout_toast);
-                        toast.show();
-                        finish();
+
                     }
 
                 } catch (JSONException ex) {
@@ -480,7 +489,7 @@ public class review_register extends Activity {
         };
     }
 
-    public void DoUpload(View v, int i) {
+    public void DoUpload(View v, final int i) {
         mfile = getImageFile(uriarray[i]);
         if (mfile == null) {
             Toast.makeText(getApplicationContext(), "이미지가 선택되지 않았습니다", Toast.LENGTH_SHORT).show();
@@ -520,6 +529,10 @@ public class review_register extends Activity {
             public void onResponse(String response) {
 
                 Log.d("volley", response);
+
+
+
+
 /*
                 user.inputGalImages(noimagearr);
                 imageadapter.notifyDataSetChanged();
@@ -623,4 +636,63 @@ public class review_register extends Activity {
 
         return gunum;
     }
+    protected class LoadingTask extends AsyncTask<Void, Void, Void> {
+
+
+
+
+        @Override
+        protected void onPreExecute() {
+            asyncDialog = new ProgressDialog(review_register.this);
+            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            asyncDialog.setMessage("로딩중입니다..");
+            asyncDialog.setCanceledOnTouchOutside(false);
+            // show dialog
+            asyncDialog.show();
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            if(serverchoice ==1) {
+
+            }
+            else if (serverchoice==2){
+                uriarray = new Uri[Uriarr.size()];
+                Uriarr.toArray(uriarray);
+
+                for (int i = 0; i < Uriarr.size(); i++)
+                    DoUpload(thisview, i);
+            }
+
+            user.setMapImage(res);
+
+            Log.e("ss", "success");
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            if (asyncDialog != null) {
+                asyncDialog.dismiss();
+            }
+            Log.d("ss", "finish");
+            text_toast.setText("리뷰가 등록되었습니다.");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout_toast);
+            toast.show();
+            finish();
+            //removeDialog(PROGRESS_DIALOG);
+            super.onPostExecute(result);
+        }
+
+
+
+    }
+
 }
