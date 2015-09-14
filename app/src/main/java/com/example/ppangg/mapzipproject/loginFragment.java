@@ -158,26 +158,34 @@ public class loginFragment extends Fragment {
                         user.setMapmetaArray(response.getJSONArray("mapmeta_info"));
 
                         JSONObject jar = response.getJSONObject("gu_enroll_num");
-                        Log.v("구넘버",String.valueOf(jar));
+                        Log.v("구넘버", String.valueOf(jar));
 
                         if(!jar.getString("state").equals("0")) {
-                            int gunumber = 1;
-                            int reviewnum = 0;
-                            for (gunumber = 1; gunumber <= 25; gunumber++) {
-                                if (jar.has(String.valueOf(gunumber))) {
-                                    reviewnum = jar.getInt(String.valueOf(gunumber));
-                                    Log.v("구넘버o", jar.get(String.valueOf(gunumber)).toString());
-                                    //배열에 추가
-                                } else {
-                                    reviewnum = 0;
-                                    Log.v("구넘버x", String.valueOf(gunumber));
-                                    //배열에 0 추가
+                            Log.v("구넘버","진입");
+
+                            int mapcount = response.getJSONArray("mapmeta_info").length();
+
+                            for(int mapnum = 1; mapnum<=mapcount; mapnum++) {
+                                JSONObject tmp = jar.getJSONObject(String.valueOf(mapnum));
+
+                                int gunumber = 1;
+                                int reviewnum = 0;
+                                for (gunumber = 1; gunumber <= 25; gunumber++) {
+                                    if (tmp.has(String.valueOf(gunumber))) {
+                                        reviewnum = tmp.getInt(String.valueOf(gunumber));
+                                        Log.v("구넘버o", tmp.get(String.valueOf(gunumber)).toString());
+                                        //배열에 추가
+                                    } else {
+                                        reviewnum = 0;
+                                        Log.v("구넘버x", String.valueOf(gunumber));
+                                        //배열에 0 추가
+                                    }
+                                    user.setReviewCount(mapnum, gunumber, reviewnum);
                                 }
-                                user.setReviewCount(gunumber,reviewnum);
+
+                                user.setMapImage(mapnum, res);
                             }
                         }
-
-                        user.setMapImage(res);
 
                         Intent intent = new Intent(getActivity(), slidingTap.class);
                         startActivity(intent);

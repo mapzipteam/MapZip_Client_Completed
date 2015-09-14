@@ -54,9 +54,18 @@ public class addfriend extends Activity {
 
 
     public void addFriend_search(View v) {
-        if(user.getUserID() == searchText.getText().toString()){
+        if(user.getUserID().equals(searchText.getText().toString())){
             // toast
             text_toast.setText("자기자신은 검색할 수 없습니다.");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout_toast);
+            toast.show();
+
+            return;
+        } else if(searchText.getText().toString().trim().isEmpty()){
+            // toast
+            text_toast.setText("검색어를 입력해주세요.");
             Toast toast = new Toast(getApplicationContext());
             toast.setDuration(Toast.LENGTH_LONG);
             toast.setView(layout_toast);
@@ -117,11 +126,25 @@ public class addfriend extends Activity {
                 friendID = searchText.getText().toString();
 
                 try {
+
+                    friendinfo.setVisibility(View.GONE);
+                    friendadd.setVisibility(View.GONE);
+
                     friendinfo.setText(response.getString("friend_name") + " (" + friendID + ")\n리뷰수: " + response.get("total_review").toString());
                     if(response.getInt("is_friend")==1){
                         friendadd.setText("이미친구");
                         friendadd.setEnabled(false);
-                    }else {
+                    }else if(response.getString("total_review").equals("null")){
+                        // toast
+                        text_toast.setText("존재하지 않는 사용자입니다.");
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setDuration(Toast.LENGTH_LONG);
+                        toast.setView(layout_toast);
+                        toast.show();
+
+                        return;
+                    }
+                    else {
                         friendadd.setText("친구추가");
                         friendadd.setEnabled(true);
                     }

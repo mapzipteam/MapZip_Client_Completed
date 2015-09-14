@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 
 import com.example.ppangg.mapzipproject.model.MapData;
 
@@ -23,8 +24,8 @@ public class UserData {
     private JSONArray[] mapforpinArray;
     private int[] mapforpinNum = {0, 0, 0, 0, 0};
     private int mapmetaNum;
-    private int[] pingCount; //25개 지역별 핑 갯수(색 지정에 쓰임)
-    private Bitmap result; //map
+    private int[][] pingCount; //25개 지역별 핑 갯수(색 지정에 쓰임)
+    private Bitmap[] result; //map
     private Bitmap[] GalImages = new Bitmap[]{
     };
     private boolean reviewListlock;
@@ -47,19 +48,19 @@ public class UserData {
         UserName = null;
         mapforpinArray = new JSONArray[5];
         mapData = new MapData();
-        pingCount = new int[26];
+        pingCount = new int[5][26];
+        result = new Bitmap[5];
     }
 
     //서버에서 리뷰 갯슈 받아오기(지역별 index는 구글드라이브 지도번호 -1 하면 됨)
-    public void setReviewCount(int index, int num) {
-        pingCount[index] = num;
-    }
+    public void setReviewCount(int mapnum, int index, int num) { pingCount[mapnum][index] = num; }
 
-    public Bitmap getResult() {
-        return result;
-    }
+    public Bitmap getResult(int mapnum) {
+        Log.v("userdata","이미지가져오기");
+        return result[mapnum]; }
 
-    public void setMapImage(Resources res) {
+    public void setMapImage(int mapnum, Resources res) {
+        Log.v("userdata","이미지셋");
 
         BitmapDrawable bd;
         BitmapDrawable yd;
@@ -67,12 +68,12 @@ public class UserData {
         BitmapDrawable bd3 = (BitmapDrawable) res.getDrawable(R.drawable.seoul2);
         Bitmap bit3 = bd3.getBitmap();
 
-        result = bit3;
+        result[mapnum] = bit3;
 
-        for (int index = 1; index < pingCount.length; index++) {
+        for (int index = 1; index < pingCount[mapnum].length; index++) {
             boolean bitlock = true;
             bd = null;
-            if (pingCount[index] >= SystemMain.MAP_RED_NUM) {
+            if (pingCount[mapnum][index] >= SystemMain.MAP_RED_NUM) {
                 bitlock = false;
                 switch (index) {
                     case 1:
@@ -151,7 +152,7 @@ public class UserData {
                         bd = (BitmapDrawable) res.getDrawable(R.drawable.p24);
                         break;
                 }
-            } else if (pingCount[index] >= SystemMain.MAP_YELLOW_NUM) {
+            } else if (pingCount[mapnum][index] >= SystemMain.MAP_YELLOW_NUM) {
                 bitlock = false;
                 switch (index) {
                     case 1:
@@ -232,14 +233,20 @@ public class UserData {
                 }
             }
 
-            if (bitlock == false)
-                result = combineImage(result, bd.getBitmap());
+            Log.v("bitlock",String.valueOf(bitlock));
+
+            if (bitlock == false) {
+                Log.v("userdata","이미지셋에서 합치기");
+                result[mapnum] = combineImage(result[mapnum], bd.getBitmap(), mapnum);
+            }
         }
     }
 
-    public Bitmap combineImage(Bitmap bmp1, Bitmap bmp2) {
-        int x = result.getWidth();
-        int y = result.getHeight();
+    public Bitmap combineImage(Bitmap bmp1, Bitmap bmp2, int mapnum) {
+        Log.v("userdata","이미지합치기");
+
+        int x = result[mapnum].getWidth();
+        int y = result[mapnum].getHeight();
 
         Bitmap bmOverlay = Bitmap.createBitmap(bmp1.getWidth(), bmp1.getHeight(), bmp1.getConfig());
         Canvas canvas = new Canvas(bmOverlay);
@@ -273,9 +280,9 @@ public class UserData {
         return UserID;
     }
 
-    public void setPingCount(int[] ping) {
-        pingCount = ping;
-    }
+    public void setPingCount(int[][] ping) { pingCount = ping; }
+
+    public int getPingCount(int mapnum, int gunum){ return pingCount[mapnum][gunum]; }
 
     public String getUserName() {
         return UserName;

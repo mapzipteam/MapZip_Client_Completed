@@ -160,6 +160,14 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         map_viewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MapActivity.class);
+                intent.putExtra("LNG",restaurants.get(selectNum).getLngX());
+                intent.putExtra("LAT", restaurants.get(selectNum).getLatY());
+                intent.putExtra("fragment_id","review");
+                intent.putExtra("store_name", restaurants.get(selectNum).getTitle());
+                intent.putExtra("store_x", restaurants.get(selectNum).getLngX());
+                intent.putExtra("store_y", restaurants.get(selectNum).getLatY());
+                startActivity(intent);
 
             }
         });

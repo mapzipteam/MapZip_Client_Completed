@@ -188,6 +188,9 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                     mapkindnum = mapmeta.get("category").toString();
                     mapid = mapmeta.get("map_id").toString();
 
+                    Bitmap result = user.getResult(Integer.parseInt(mapid));
+                    imageview.setImageBitmap(result);
+
                     // category select (SEOUL)
                     if (Integer.parseInt(mapmeta.get("category").toString()) == SystemMain.SEOUL_MAP_NUM) {
 
@@ -242,9 +245,6 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
             }
         });
-
-        Bitmap result = user.getResult();
-        imageview.setImageBitmap(result);
 
         imageview.post(new Runnable() {
 
@@ -541,6 +541,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
 
             Log.v("홈", "맵인텐트");
             Intent intent = new Intent(getActivity(), MapActivity.class);
+            intent.putExtra("fragment_id","home");
             intent.putExtra("LNG", loc_LNG);
             intent.putExtra("LAT", loc_LAT);
             intent.putExtra("mapid", mapid);
@@ -647,6 +648,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
 
                         Log.v("홈", "맵인텐트");
                         Intent intent = new Intent(getActivity(), MapActivity.class);
+                        intent.putExtra("fragment_id","home");
                         intent.putExtra("LNG", loc_LNG);
                         intent.putExtra("LAT", loc_LAT);
                         intent.putExtra("mapid", mapid);

@@ -76,7 +76,8 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
 
     NMapPOIdataOverlay.OnStateChangeListener onPOIdataStateChangeListener = new NMapPOIdataOverlay.OnStateChangeListener() {
         public void onCalloutClick(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
-            GetMapDetail(item.getId());
+            if((getIntent().getStringExtra("fragment_id").equals("home")))
+                GetMapDetail(item.getId());
         }
 
         public void onFocusChanged(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
@@ -149,6 +150,7 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
 
         NMapPOIdata poiData = new NMapPOIdata(5, mMapViewerResourceProvider);
 
+        if(getIntent().getStringExtra("fragment_id").equals("home")){
         try {
             poiData.beginPOIdata(0);
             String mapid = getIntent().getStringExtra("mapid");
@@ -157,13 +159,19 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
             Log.v("맵 어레이", String.valueOf(user.getMapforpinArray(Integer.parseInt(mapid))));
             int arrnum = 0;
             for (arrnum = 0; arrnum < jarr.length(); arrnum++) {
-                poiData.addPOIitem(Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x")), Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y")), jarr.getJSONObject(arrnum).getString("store_name"), markerId, 0 ,Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id")));
+                poiData.addPOIitem(Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x")), Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y")), jarr.getJSONObject(arrnum).getString("store_name"), markerId, 0, Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id")));
             }
             poiData.endPOIdata();
         } catch (JSONException ex) {
             Log.v("맵액티비티", "JSONEX");
 
+        }}
+        else if(getIntent().getStringExtra("fragment_id").equals("review")){
+            poiData.beginPOIdata(0);
+            poiData.addPOIitem(getIntent().getDoubleExtra("store_x", 0.0), getIntent().getDoubleExtra("store_y", 0.0), getIntent().getStringExtra("store_name"), markerId, 0);
+            poiData.endPOIdata();
         }
+
         poiDataOverlay = /**/mOverlayManager.createPOIdataOverlay(poiData, null);
 
         //poiDataOverlay.showAllPOIdata(0);
@@ -325,7 +333,7 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
                         user.setMapData(obj.getString("store_id"), obj.getString("map_id"), obj.getString("store_contact"), obj.getString("review_text"), obj.getString("review_emotion"), obj.getString("store_address"), obj.getString("store_name"));
 
                         Intent intent = new Intent(getApplicationContext(), ReviewActivity.class);
-                        intent.putExtra("image_num",obj.getString("image_num"));
+                        intent.putExtra("image_num", obj.getString("image_num"));
                         startActivity(intent);
 
                     }

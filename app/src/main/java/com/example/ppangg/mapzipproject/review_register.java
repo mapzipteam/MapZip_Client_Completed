@@ -666,7 +666,7 @@ public class review_register extends Activity {
                     DoUpload(thisview, i);
             }
 
-            user.setMapImage(res);
+            user.setMapImage(Integer.parseInt(mapData.getMapid()),res);
 
             Log.e("ss", "success");
 
