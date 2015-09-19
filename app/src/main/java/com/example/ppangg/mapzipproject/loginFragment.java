@@ -99,7 +99,7 @@ public class loginFragment extends Fragment {
             try {
                 obj.put("userid", userid);
                 obj.put("userpw", userpw);
-                Log.v("제이손 보내기",obj.toString());
+                Log.v("제이손 보내기", obj.toString());
             } catch (JSONException e) {
                 Log.v("제이손", "에러");
             }
@@ -160,14 +160,14 @@ public class loginFragment extends Fragment {
                         JSONObject jar = response.getJSONObject("gu_enroll_num");
                         Log.v("구넘버", String.valueOf(jar));
 
-                        if(!jar.getString("state").equals("0")) {
-                            Log.v("구넘버","진입");
 
-                            int mapcount = response.getJSONArray("mapmeta_info").length();
+                        Log.v("구넘버", "진입");
 
-                            for(int mapnum = 1; mapnum<=mapcount; mapnum++) {
+                        int mapcount = response.getJSONArray("mapmeta_info").length();
+
+                        for (int mapnum = 1; mapnum <= mapcount; mapnum++) {
+                            if (jar.has(String.valueOf(mapnum))) {
                                 JSONObject tmp = jar.getJSONObject(String.valueOf(mapnum));
-
                                 int gunumber = 1;
                                 int reviewnum = 0;
                                 for (gunumber = 1; gunumber <= 25; gunumber++) {
@@ -182,9 +182,12 @@ public class loginFragment extends Fragment {
                                     }
                                     user.setReviewCount(mapnum, gunumber, reviewnum);
                                 }
-
-                                user.setMapImage(mapnum, res);
+                            } else {
+                                for (int gunumber = 1; gunumber <= 25; gunumber++)
+                                    user.setReviewCount(mapnum, gunumber, 0);
                             }
+
+                            user.setMapImage(mapnum, res);
                         }
 
                         Intent intent = new Intent(getActivity(), slidingTap.class);
@@ -225,7 +228,7 @@ public class loginFragment extends Fragment {
                     toast.show();
 
                     Log.e("loginFragment", error.getMessage());
-                }catch (NullPointerException ex){
+                } catch (NullPointerException ex) {
                     // toast
                     Log.e("loginFragment", "nullpointexception");
                 }

@@ -123,49 +123,49 @@ public class RestaurantParsing {
 
                         if (tagId_TITLE == true) {
 
-                            restaurant.setTitle(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
-                            setTagIdFalse();
+                            restaurant.setTitle(trimTitle(parser.getText()));
+                                    setTagIdFalse();
                             //Log.d("volley", "0~>: " + parser.getText().trim());
 
                         } else if (tagId_LINK == true) {
 
-                            restaurant.setLink(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
+                            restaurant.setLink(trimTitle(parser.getText()));
                             setTagIdFalse();
                             //Log.d("volley", "1: " + parser.getText().trim());
 
                         } else if (tagId_CATEGORY == true) {
 
-                            restaurant.setCategory(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
+                            restaurant.setCategory(trimTitle(parser.getText()));
                             setTagIdFalse();
                             //Log.d("volley", "2: " + parser.getText().trim());
 
                         } else if (tagId_DESCRIPTION == true) {
 
-                            restaurant.setDescription(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
+                            restaurant.setDescription(trimTitle(parser.getText()));
                             setTagIdFalse();
                             //Log.d("volley", "3: " + parser.getText().trim());
 
                         } else if (tagId_TELEPHONE == true) {
 
-                            restaurant.setTelephone(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
+                            restaurant.setTelephone(trimTitle(parser.getText()));
                             setTagIdFalse();
                             //Log.d("volley", "4: " + parser.getText().trim());
 
                         } else if (tagId_ADRESS == true) {
 
-                            restaurant.setAdress(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
+                            restaurant.setAdress(trimTitle(parser.getText()));
                             setTagIdFalse();
                             //Log.d("volley", "5: " + parser.getText().trim());
 
                         } else if (tagId_ROADADRESS == true) {
 
-                            restaurant.setRoadadress(parser.getText().trim().replaceAll("<b>", "").replaceAll("</b>", ""));
+                            restaurant.setRoadadress(trimTitle(parser.getText()));
                             setTagIdFalse();
                             //Log.d("volley", "6: " + parser.getText().trim());
 
                         } else if (tagId_KATECX == true) {
 
-                            katecX = Integer.parseInt(parser.getText().trim().replaceAll("<b>","").replaceAll("</b>", ""));
+                            katecX = Integer.parseInt(trimTitle(parser.getText()));
 
                             restaurant.setKatecX(katecX);
                             setTagIdFalse();
@@ -173,7 +173,7 @@ public class RestaurantParsing {
 
                         } else if (tagId_KATECY == true) {
 
-                            katecY = Integer.parseInt(parser.getText().trim().replaceAll("<b>","").replaceAll("</b>" ,""));
+                            katecY = Integer.parseInt(trimTitle(parser.getText()));
 
                             restaurant.setKatecY(katecY);
                             setTagIdFalse();
@@ -219,6 +219,25 @@ public class RestaurantParsing {
 
     public RestaurantResult getRestaurants() {
         return restaurants;
+    }
+
+
+
+    public String trimTitle(String originalName){
+
+        String returnString = originalName;
+
+        returnString = returnString.trim();
+        returnString = returnString.replaceAll("<b>", "");
+        returnString = returnString.replaceAll("</b>", "");
+        returnString = returnString.replaceAll("&amp;", "&");
+
+//        returnString = returnString.replaceAll("&nbsp;"," ");
+//        returnString = returnString.replaceAll("&quot;", "\"");
+//        returnString = returnString.replaceAll("&lt;", "<");
+//        returnString = returnString.replaceAll("&gt;", ">");
+
+      return  returnString;
     }
 
 }

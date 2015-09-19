@@ -666,6 +666,8 @@ public class review_register extends Activity {
                     DoUpload(thisview, i);
             }
 
+            int tmp = user.getPingCount(Integer.parseInt(mapData.getMapid()),mapData.getGu_num());
+            user.setReviewCount(Integer.parseInt(mapData.getMapid()),mapData.getGu_num(),tmp+1);
             user.setMapImage(Integer.parseInt(mapData.getMapid()),res);
 
             Log.e("ss", "success");
