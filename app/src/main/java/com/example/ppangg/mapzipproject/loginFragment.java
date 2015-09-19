@@ -1,14 +1,19 @@
 package com.example.ppangg.mapzipproject;
 
+import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,20 +37,23 @@ import org.json.JSONObject;
 public class loginFragment extends Fragment {
 
 
+    private LoadingTask Loading;
     private TextView state;
     private Resources res;
     private EditText inputID;
     private EditText inputPW;
-
     private int mPageNumber;
-
     private Button LoginBtn;
-
+    public  UserData user;
+    public int map;
+    public ProgressDialog  asyncDialog;
     // toast
     private View layout_toast;
     private TextView text_toast;
 
+
     public static loginFragment create(int pageNumber) {
+
         loginFragment fragment = new loginFragment();
         Bundle args = new Bundle();
         args.putInt("page", pageNumber);
@@ -56,13 +64,21 @@ public class loginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getActivity().getActionBar();
+        actionBar.hide();
         mPageNumber = getArguments().getInt("page");
         res = getResources();
+        asyncDialog = new ProgressDialog(this.getActivity());
+        user = UserData.getInstance();
+        Loading = new LoadingTask();
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
@@ -94,6 +110,10 @@ public class loginFragment extends Fragment {
             params.put("userid", userid);
             params.put("userpw",userpw);
             */
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(inputPW.getWindowToken(), 0);
+            InputMethodManager imm2 = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(inputID.getWindowToken(), 0);
 
             JSONObject obj = new JSONObject();
             try {
@@ -146,7 +166,7 @@ public class loginFragment extends Fragment {
 
                 try {
                     if (response.get("login").toString().equals("1")) {
-                        UserData user = UserData.getInstance();
+
                         user.LoginOK();
                         user.inputID(inputID.getText().toString());
                         user.inputName(response.get("username").toString());
@@ -161,9 +181,11 @@ public class loginFragment extends Fragment {
                         Log.v("구넘버", String.valueOf(jar));
 
 
+
                         Log.v("구넘버", "진입");
 
                         int mapcount = response.getJSONArray("mapmeta_info").length();
+                        map = mapcount;
 
                         for (int mapnum = 1; mapnum <= mapcount; mapnum++) {
                             if (jar.has(String.valueOf(mapnum))) {
@@ -186,13 +208,13 @@ public class loginFragment extends Fragment {
                                 for (int gunumber = 1; gunumber <= 25; gunumber++)
                                     user.setReviewCount(mapnum, gunumber, 0);
                             }
-
-                            user.setMapImage(mapnum, res);
                         }
 
+                           Loading.execute();
                         Intent intent = new Intent(getActivity(), slidingTap.class);
                         startActivity(intent);
                         getActivity().finish();
+
 
                         // toast
                         text_toast.setText("환영합니다!");
@@ -234,5 +256,43 @@ public class loginFragment extends Fragment {
                 }
             }
         };
+    }
+    protected class LoadingTask extends AsyncTask<Void, Void, Void> {
+
+
+
+
+        @Override
+        protected void onPreExecute() {
+
+            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            asyncDialog.setMessage("로딩중입니다..");
+            asyncDialog.setCanceledOnTouchOutside(false);
+            // show dialog
+            asyncDialog.show();
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            for (int mapnum = 1; mapnum <= map; mapnum++)
+            user.setMapImage(mapnum, res);
+         return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            if (asyncDialog != null) {
+                asyncDialog.dismiss();
+            }
+
+            super.onPostExecute(result);
+        }
+
+
+
     }
 }

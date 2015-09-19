@@ -4,17 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/topstate"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#fafab1"
-        android:paddingBottom="10dp"
-        android:paddingLeft="5dp"
-        android:paddingTop="10dp"
-        android:text="사용자"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
         android:id="@+id/mapsetting"
@@ -29,19 +18,17 @@
     <TextView
         android:id="@+id/mapstate"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:gravity="center"
-        android:layout_below="@+id/topstate"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:text="지도 선택: "
-        android:layout_alignBottom="@+id/spinner" />
+        android:layout_alignBottom="@+id/spinner"
+        android:layout_alignParentTop="true" />
 
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/topstate"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/mapstate"
@@ -51,9 +38,9 @@
     <ImageView
         android:id="@+id/mapimage"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_below="@+id/spinner"
-        android:layout_marginTop="5dp" />
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_below ="@id/spinner"/>
 
     <TextView
         android:id="@+id/tagText"

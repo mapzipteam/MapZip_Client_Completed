@@ -4,15 +4,7 @@
     android:layout_height="match_parent"
 >
     
-    <TextView
-        android:id="@+id/title_friend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="친구목록"
-        android:padding="10dp"
-        android:background="@color/mainYellow"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 
     <Button
         android:id="@+id/addBtn_friend"
@@ -25,7 +17,7 @@
         android:id="@+id/friendList_friend"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/title_friend"></ListView>
+        android:layout_below="@+id/addBtn_friend"></ListView>
 
     <Button
         android:layout_width="wrap_content"

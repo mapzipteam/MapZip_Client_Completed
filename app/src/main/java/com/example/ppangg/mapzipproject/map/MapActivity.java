@@ -1,5 +1,6 @@
 package com.example.ppangg.mapzipproject.map;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -95,7 +96,8 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        ActionBar actionBar =getActionBar();
+        actionBar.hide();
         user = UserData.getInstance();
 
         LayoutInflater inflater = this.getLayoutInflater();

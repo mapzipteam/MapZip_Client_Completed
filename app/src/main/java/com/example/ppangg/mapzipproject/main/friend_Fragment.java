@@ -43,6 +43,7 @@ public class friend_Fragment extends Fragment {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         user = UserData.getInstance();
+        getActivity().getActionBar().setTitle("친구목록");
     }
 
     @Override

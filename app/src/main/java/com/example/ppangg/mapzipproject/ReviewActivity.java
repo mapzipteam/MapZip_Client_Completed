@@ -1,5 +1,6 @@
 package com.example.ppangg.mapzipproject;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -50,7 +51,8 @@ public class ReviewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
         user = UserData.getInstance();
-
+        ActionBar actionBar = getActionBar();
+        actionBar.hide();
         review_emotion = (ImageView) findViewById(R.id.emotion_review);
         store_name = (TextView) findViewById(R.id.name_review);
         review_text = (TextView) findViewById(R.id.text_review);

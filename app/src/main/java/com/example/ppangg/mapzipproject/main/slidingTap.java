@@ -5,22 +5,27 @@ import com.example.ppangg.mapzipproject.adapter.NavDrawerListAdapter;
 import com.example.ppangg.mapzipproject.model.NavDrawerItem;
 import java.util.ArrayList;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-public class slidingTap extends FragmentActivity {
+public class slidingTap extends FragmentActivity{
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -38,6 +43,7 @@ public class slidingTap extends FragmentActivity {
     private ArrayList<NavDrawerItem> navDrawerItems;
     private NavDrawerListAdapter adapter;
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,8 +88,9 @@ public class slidingTap extends FragmentActivity {
         mDrawerList.setAdapter(adapter);
 
         // enabling action bar app icon and behaving it as toggle button
-        // getActionBar().setDisplayHomeAsUpEnabled(true);
-        //  getActionBar().setHomeButtonEnabled(true);
+         getActionBar().setDisplayHomeAsUpEnabled(true);
+          getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayShowHomeEnabled(false);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.drawable.ic_drawer, //nav menu toggle icon
@@ -91,13 +98,14 @@ public class slidingTap extends FragmentActivity {
                 R.string.app_name // nav drawer close - description for accessibility
         ) {
             public void onDrawerClosed(View view) {
-//                getActionBar().setTitle(mTitle);
+               // getActionBar().setTitle(mTitle);
                 // calling onPrepareOptionsMenu() to show action bar icons
                 invalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerView) {
-//                getActionBar().setTitle(mDrawerTitle);
+             //   getActionBar().setTitle(mDrawerTitle);
+
                 // calling onPrepareOptionsMenu() to hide action bar icons
                 invalidateOptionsMenu();
             }
@@ -201,7 +209,7 @@ public class slidingTap extends FragmentActivity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-//        getActionBar().setTitle(mTitle);
+        getActionBar().setTitle(mTitle);
     }
 
     /**

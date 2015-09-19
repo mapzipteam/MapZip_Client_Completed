@@ -1,10 +1,14 @@
 package com.example.ppangg.mapzipproject.main;
 
+
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+
+import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -106,6 +110,12 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         user = UserData.getInstance();
+        getActivity().getActionBar().setTitle(user.getUserName() + "의 지도");
+        getActivity().invalidateOptionsMenu();
+/*
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setCustomView(R.layout.actionbar_title);
+*/
         mapnum = user.getMapmetaArray().length();
         sppinerList = new ArrayList<String>();
         try {
@@ -126,12 +136,12 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
-        topstate = (TextView) v.findViewById(R.id.topstate);
-        topstate.setText(user.getUserName());
+      //  topstate = (TextView) v.findViewById(R.id.topstate);
+      //  topstate.setText(user.getUserName());
        /*topstate.append(" (");
         topstate.append(user.getUserID());
         topstate.append(")");*/
-        topstate.append("의 지도");
+      //  topstate.append("의 지도");
 
         imageview = (ImageView) v.findViewById(R.id.mapimage);
         hashstate = (TextView) v.findViewById(R.id.tagText);
@@ -176,10 +186,10 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     RelativeLayout.LayoutParams imageLayout = new RelativeLayout.LayoutParams(realWidth, realHeight / 5 * 3); // width, height
-                    imageLayout.setMargins(0, realHeight / 6, 0, 0);
+                    imageLayout.setMargins(0, realHeight / 10, 0, 0);
                     imageview.setLayoutParams(imageLayout);
                     RelativeLayout.LayoutParams tagLayout = new RelativeLayout.LayoutParams(realWidth, realHeight / 18);// width, height
-                    tagLayout.setMargins(0, (int) realHeight / 24 * 19, 0, 0);
+                    tagLayout.setMargins(0, (int) realHeight / 24 * 17, 0, 0);
                     hashstate.setLayoutParams(tagLayout);
 
                     JSONObject mapmeta = null;
@@ -262,10 +272,11 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                 if (Build.BRAND.equals("lge")) {
                     Log.e("check", "ok");
                     fix_x = 47;
-                    fix_y = -40;
-                } else
+                    fix_y = -40-(realHeight/18);
+                } else {
+                    fix_y=-(realHeight/18); //17~18
                     Log.e("check", "No");
-
+                }
                 RelativeLayout.LayoutParams layoutParms1 = new RelativeLayout.LayoutParams(90, 50); // width, height
                 layoutParms1.setMargins((realWidth / 100 * 33) + fix_x, realHeight / 100 * 36 + fix_y, 0, 0); // left, top, 0, 0
                 EunPhung.setLayoutParams(layoutParms1);

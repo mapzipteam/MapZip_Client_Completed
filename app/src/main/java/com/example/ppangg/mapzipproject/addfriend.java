@@ -1,5 +1,6 @@
 package com.example.ppangg.mapzipproject;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +41,8 @@ public class addfriend extends Activity {
     private String friendID;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getActionBar();
+        actionBar.hide();
         setContentView(R.layout.activity_addfriend);
         user = UserData.getInstance();
 

@@ -1,5 +1,6 @@
 package com.example.ppangg.mapzipproject;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -108,6 +109,8 @@ public class review_register extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getActionBar();
+        actionBar.hide();
         setContentView(R.layout.activity_review_regi);
         user = UserData.getInstance();
         serverchoice = 0;
