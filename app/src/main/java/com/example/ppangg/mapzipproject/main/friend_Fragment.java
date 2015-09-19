@@ -116,7 +116,7 @@ public class friend_Fragment extends Fragment {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                try {/*
+                try {
                     // toast
                     text_toast.setText("인터넷 연결이 필요합니다.");
                     Toast toast = new Toast(getActivity());
@@ -124,8 +124,7 @@ public class friend_Fragment extends Fragment {
                     toast.setView(layout_toast);
                     toast.show();
 
-                    Log.e("friendfragment", error.getMessage());*/
-                    Log.v("뭐가","문제");
+                    Log.e("friendfragment", error.getMessage());
                 } catch (NullPointerException ex) {
                     // toast
                     Log.e("friendfragment", "nullpointexception");

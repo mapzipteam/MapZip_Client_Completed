@@ -194,7 +194,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                     // category select (SEOUL)
                     if (Integer.parseInt(mapmeta.get("category").toString()) == SystemMain.SEOUL_MAP_NUM) {
 
-                        seoulBtnVisibility("visible");
+                        seoulBtnVisibility("visible",mapid);
                         hashstate.setText(mapmeta.get("hash_tag").toString());
                     }
                 } catch (JSONException ex) {
@@ -362,7 +362,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
     }
 
     // 서울 지도 버튼 Visibility
-    public void seoulBtnVisibility(String visible) {
+    public void seoulBtnVisibility(String visible, String mapid) {
         if (visible.equals("visible")) {
             // Seoul Btn can view
             DoBong.setVisibility(View.VISIBLE);
@@ -390,6 +390,83 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
             SeoCho.setVisibility(View.VISIBLE);
             GangNam.setVisibility(View.VISIBLE);
             SongPa.setVisibility(View.VISIBLE);
+
+            DoBong.setText("도봉구\n(");
+            DoBong.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.DoBong)));
+            DoBong.append(")");
+            NoWon.setText("노원구\n(");
+            NoWon.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.NoWon)));
+            NoWon.append(")");
+            GangBuk.setText("강북구\n(");
+            GangBuk.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GangBuk)));
+            GangBuk.append(")");
+            SungBuk.setText("성북구\n(");
+            SungBuk.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.SungBuk)));
+            SungBuk.append(")");
+            ZongRang.setText("중랑구\n(");
+            ZongRang.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.ZongRang)));
+            ZongRang.append(")");
+            EunPhung.setText("은평구\n(");
+            EunPhung.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.EunPhung)));
+            EunPhung.append(")");
+            ZongRo.setText("종로구\n(");
+            ZongRo.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.ZongRo)));
+            ZongRo.append(")");
+            DongDaeMon.setText("동대문구\n(");
+            DongDaeMon.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.DongDaeMon)));
+            DongDaeMon.append(")");
+            SuDaeMon.setText("서대문구\n(");
+            SuDaeMon.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.SuDaeMon)));
+            SuDaeMon.append(")");
+            Zhong.setText("중구\n(");
+            Zhong.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.Zhong)));
+            Zhong.append(")");
+            SungDong.setText("성동구\n(");
+            SungDong.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.SungDong)));
+            SungDong.append(")");
+            GangZin.setText("광진구\n(");
+            GangZin.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GangZin)));
+            GangZin.append(")");
+            GangDong.setText("강동구\n(");
+            GangDong.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GangDong)));
+            GangDong.append(")");
+            MaPho.setText("마포구\n(");
+            MaPho.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.MaPho)));
+            MaPho.append(")");
+            YongSan.setText("용산구\n(");
+            YongSan.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.YongSan)));
+            YongSan.append(")");
+            GangSue.setText("강서구\n(");
+            GangSue.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GangSue)));
+            GangSue.append(")");
+            YangChen.setText("양천구\n(");
+            YangChen.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.YangChen)));
+            YangChen.append(")");
+            GuRo.setText("구로구\n(");
+            GuRo.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GuRo)));
+            GuRo.append(")");
+            YongDengPo.setText("영등포구\n(");
+            YongDengPo.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.YongDengPo)));
+            YongDengPo.append(")");
+            DongJack.setText("동작구\n(");
+            DongJack.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.DongJack)));
+            DongJack.append(")");
+            GemChun.setText("금천구\n(");
+            GemChun.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GemChun)));
+            GemChun.append(")");
+            GanAk.setText("관악구\n(");
+            GanAk.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GanAk)));
+            GanAk.append(")");
+            SeoCho.setText("서초구\n(");
+            SeoCho.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.SeoCho)));
+            SeoCho.append(")");
+            GangNam.setText("강남구\n(");
+            GangNam.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GangNam)));
+            GangNam.append(")");
+            SongPa.setText("송파구\n(");
+            SongPa.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.SongPa)));
+            SongPa.append(")");
+
         } else if (visible.equals("gone")) {
             // Seoul Btn can not view
             DoBong.setVisibility(View.GONE);
