@@ -1,14 +1,11 @@
-package com.example.ppangg.mapzipproject.main;
+package com.example.ppangg.mapzipproject;
 
-
-import android.app.ActionBar;
-import android.app.Fragment;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 
-import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -44,10 +41,9 @@ import org.json.JSONObject;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-public class home_Fragment extends Fragment implements View.OnClickListener {
+public class friend_home  extends Activity implements View.OnClickListener {
 
-    private View v;
-    private UserData user;
+    private FriendData user;
 
     // toast
     private View layout_toast;
@@ -72,7 +68,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
     private int mapnum; // map num
 
     private Button mapsetting;
-
+    
     public int realWidth; //ScreenSize width
     public int realHeight;//ScreenSize height
 
@@ -103,20 +99,15 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
     private Button GangNam;
     private Button SongPa;
 
-    public home_Fragment() {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        user = UserData.getInstance();
-        getActivity().getActionBar().setTitle(user.getUserName() + "의 지도");
-        getActivity().invalidateOptionsMenu();
-/*
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setCustomView(R.layout.actionbar_title);
-*/
+        setContentView((R.layout.fragment_home));
+
+        user = FriendData.getInstance();
+        getActionBar().setTitle(user.getUserName() + "의 지도");
+        
         mapnum = user.getMapmetaArray().length();
         sppinerList = new ArrayList<String>();
         try {
@@ -126,58 +117,53 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
         } catch (JSONException ex) {
 
         }
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        v = inflater.inflate(R.layout.fragment_home, container, false);
-
-        layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
+        LayoutInflater inflater = this.getLayoutInflater();
+        layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
-      //  topstate = (TextView) v.findViewById(R.id.topstate);
-      //  topstate.setText(user.getUserName());
+        //  topstate = (TextView) findViewById(R.id.topstate);
+        //  topstate.setText(user.getUserName());
        /*topstate.append(" (");
         topstate.append(user.getUserID());
         topstate.append(")");*/
-      //  topstate.append("의 지도");
+        //  topstate.append("의 지도");
 
-        imageview = (ImageView) v.findViewById(R.id.mapimage);
-        hashstate = (TextView) v.findViewById(R.id.tagText);
-        mapsetting = (Button) v.findViewById(R.id.mapsetting);
+        imageview = (ImageView) findViewById(R.id.mapimage);
+        hashstate = (TextView) findViewById(R.id.tagText);
+        mapsetting = (Button) findViewById(R.id.mapsetting);
+        mapsetting.setVisibility(View.GONE);
 
         // Seoul Btn init
-        DoBong = (Button) v.findViewById(R.id.DoBong);
-        NoWon = (Button) v.findViewById(R.id.NoWon);
-        GangBuk = (Button) v.findViewById(R.id.GangBuk);
-        SungBuk = (Button) v.findViewById(R.id.SungBuk);
-        ZongRang = (Button) v.findViewById(R.id.ZongRang);
-        EunPhung = (Button) v.findViewById(R.id.EunPhung);
-        ZongRo = (Button) v.findViewById(R.id.ZongRo);
-        DongDaeMon = (Button) v.findViewById(R.id.DongDaeMon);
-        SuDaeMon = (Button) v.findViewById(R.id.SuDaeMon);
-        Zhong = (Button) v.findViewById(R.id.Zhong);
-        SungDong = (Button) v.findViewById(R.id.SungDong);
-        GangZin = (Button) v.findViewById(R.id.GangZin);
-        GangDong = (Button) v.findViewById(R.id.GangDong);
-        MaPho = (Button) v.findViewById(R.id.MaPho);
-        YongSan = (Button) v.findViewById(R.id.YongSan);
-        GangSue = (Button) v.findViewById(R.id.GangSue);
-        YangChen = (Button) v.findViewById(R.id.YangChen);
-        GuRo = (Button) v.findViewById(R.id.GuRo);
-        YongDengPo = (Button) v.findViewById(R.id.YongDengPo);
-        DongJack = (Button) v.findViewById(R.id.DongJack);
-        GemChun = (Button) v.findViewById(R.id.GemChun);
-        GanAk = (Button) v.findViewById(R.id.GanAk);
-        SeoCho = (Button) v.findViewById(R.id.SeoCho);
-        GangNam = (Button) v.findViewById(R.id.GangNam);
-        SongPa = (Button) v.findViewById(R.id.SongPa);
+        DoBong = (Button) findViewById(R.id.DoBong);
+        NoWon = (Button) findViewById(R.id.NoWon);
+        GangBuk = (Button) findViewById(R.id.GangBuk);
+        SungBuk = (Button) findViewById(R.id.SungBuk);
+        ZongRang = (Button) findViewById(R.id.ZongRang);
+        EunPhung = (Button) findViewById(R.id.EunPhung);
+        ZongRo = (Button) findViewById(R.id.ZongRo);
+        DongDaeMon = (Button) findViewById(R.id.DongDaeMon);
+        SuDaeMon = (Button) findViewById(R.id.SuDaeMon);
+        Zhong = (Button) findViewById(R.id.Zhong);
+        SungDong = (Button) findViewById(R.id.SungDong);
+        GangZin = (Button) findViewById(R.id.GangZin);
+        GangDong = (Button) findViewById(R.id.GangDong);
+        MaPho = (Button) findViewById(R.id.MaPho);
+        YongSan = (Button) findViewById(R.id.YongSan);
+        GangSue = (Button) findViewById(R.id.GangSue);
+        YangChen = (Button) findViewById(R.id.YangChen);
+        GuRo = (Button) findViewById(R.id.GuRo);
+        YongDengPo = (Button) findViewById(R.id.YongDengPo);
+        DongJack = (Button) findViewById(R.id.DongJack);
+        GemChun = (Button) findViewById(R.id.GemChun);
+        GanAk = (Button) findViewById(R.id.GanAk);
+        SeoCho = (Button) findViewById(R.id.SeoCho);
+        GangNam = (Button) findViewById(R.id.GangNam);
+        SongPa = (Button) findViewById(R.id.SongPa);
 
         // map name
-        spinner = (Spinner) v.findViewById(R.id.spinner);
-        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, sppinerList);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sppinerList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
@@ -205,7 +191,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                     // category select (SEOUL)
                     if (Integer.parseInt(mapmeta.get("category").toString()) == SystemMain.SEOUL_MAP_NUM) {
 
-                        seoulBtnVisibility("visible",mapid);
+                        seoulBtnVisibility("visible", mapid);
                         hashstate.setText(mapmeta.get("hash_tag").toString());
                     }
                 } catch (JSONException ex) {
@@ -245,20 +231,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
         GangNam.setOnClickListener(this);
         SongPa.setOnClickListener(this);
 
-        mapsetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), map_setting.class);
-                intent.putExtra("mapcurname", mapcurname);
-                intent.putExtra("hashtag", hashstate.getText().toString());
-                intent.putExtra("mapkindnum", mapkindnum);
-                intent.putExtra("mapid", mapid);
-                startActivity(intent);
-            }
-        });
-
         imageview.post(new Runnable() {
-
 
             @Override
             public void run() {
@@ -364,15 +337,8 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        return v;
     }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onActivityCreated(savedInstanceState);
-    }
-
+    
     // 서울 지도 버튼 Visibility
     public void seoulBtnVisibility(String visible, String mapid) {
         if (visible.equals("visible")) {
@@ -621,16 +587,15 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
         } else if(user.getMapforpinNum(Integer.parseInt(mapid)) == 2){
             // toast
             text_toast.setText("등록 된 리뷰가 없습니다.");
-            Toast toast = new Toast(getActivity());
+            Toast toast = new Toast(getApplicationContext());
             toast.setDuration(Toast.LENGTH_LONG);
             toast.setView(layout_toast);
             toast.show();
         }
         else {
-
             Log.v("홈", "맵인텐트");
-            Intent intent = new Intent(getActivity(), MapActivity.class);
-            intent.putExtra("fragment_id","home");
+            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+            intent.putExtra("fragment_id","friend_home");
             intent.putExtra("LNG", loc_LNG);
             intent.putExtra("LAT", loc_LAT);
             intent.putExtra("mapid", mapid);
@@ -639,36 +604,8 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void refresh() {
-        Log.v("리프레쉬", "확인");
-        mapnum = user.getMapmetaArray().length();
-        sppinerList = new ArrayList<String>();
-        try {
-            for (int i = 0; i < mapnum; i++) {
-                sppinerList.add(user.getMapmetaArray().getJSONObject(i).getString("title"));
-            }
-        } catch (JSONException ex) {
-
-        }
-
-        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, sppinerList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        user.setMapmetaNum(0);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        user = UserData.getInstance();
-        if (user.getMapmetaNum() == 1)
-            refresh();
-    }
-
-
     public void ScreenSize() {
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Display display = getWindowManager().getDefaultDisplay();
 
 
         if (Build.VERSION.SDK_INT >= 17) {
@@ -701,7 +638,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
     }
 
     public void GetStorearrary(View v) {
-        RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();
+        RequestQueue queue = MyVolley.getInstance(getApplicationContext()).getRequestQueue();
 
         JSONObject obj = new JSONObject();
         try {
@@ -736,8 +673,8 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                         Log.v("홈에서 맵 어레이", user.getMapforpinArray(Integer.parseInt(mapid)).toString());
 
                         Log.v("홈", "맵인텐트");
-                        Intent intent = new Intent(getActivity(), MapActivity.class);
-                        intent.putExtra("fragment_id","home");
+                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                        intent.putExtra("fragment_id","friend_home");
                         intent.putExtra("LNG", loc_LNG);
                         intent.putExtra("LAT", loc_LAT);
                         intent.putExtra("mapid", mapid);
@@ -746,7 +683,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                         user.setMapforpinNum(Integer.parseInt(mapid), 2);
                         // toast
                         text_toast.setText("등록 된 리뷰가 없습니다.");
-                        Toast toast = new Toast(getActivity());
+                        Toast toast = new Toast(getApplicationContext());
                         toast.setDuration(Toast.LENGTH_LONG);
                         toast.setView(layout_toast);
                         toast.show();
@@ -765,7 +702,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                 try {
                     // toast
                     text_toast.setText("인터넷 연결이 필요합니다.");
-                    Toast toast = new Toast(getActivity());
+                    Toast toast = new Toast(getApplicationContext());
                     toast.setDuration(Toast.LENGTH_LONG);
                     toast.setView(layout_toast);
                     toast.show();

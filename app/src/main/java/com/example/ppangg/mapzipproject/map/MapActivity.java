@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.ppangg.mapzipproject.FriendData;
 import com.example.ppangg.mapzipproject.R;
 import com.example.ppangg.mapzipproject.ReviewActivity;
 import com.example.ppangg.mapzipproject.SystemMain;
@@ -61,6 +62,7 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
     private NMapView mMapView = null;
 
     private UserData user;
+    private FriendData fuser;
 
     NMapController mMapController = null;
 
@@ -77,7 +79,7 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
 
     NMapPOIdataOverlay.OnStateChangeListener onPOIdataStateChangeListener = new NMapPOIdataOverlay.OnStateChangeListener() {
         public void onCalloutClick(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
-            if((getIntent().getStringExtra("fragment_id").equals("home")))
+            if ((getIntent().getStringExtra("fragment_id").equals("home")) || (getIntent().getStringExtra("fragment_id").equals("friend_home")))
                 GetMapDetail(item.getId());
         }
 
@@ -96,9 +98,10 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ActionBar actionBar =getActionBar();
+        ActionBar actionBar = getActionBar();
         actionBar.hide();
         user = UserData.getInstance();
+        fuser = FriendData.getInstance();
 
         LayoutInflater inflater = this.getLayoutInflater();
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
@@ -152,23 +155,38 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
 
         NMapPOIdata poiData = new NMapPOIdata(5, mMapViewerResourceProvider);
 
-        if(getIntent().getStringExtra("fragment_id").equals("home")){
-        try {
-            poiData.beginPOIdata(0);
-            String mapid = getIntent().getStringExtra("mapid");
-            JSONArray jarr = new JSONArray();
-            jarr = user.getMapforpinArray(Integer.parseInt(mapid));
-            Log.v("맵 어레이", String.valueOf(user.getMapforpinArray(Integer.parseInt(mapid))));
-            int arrnum = 0;
-            for (arrnum = 0; arrnum < jarr.length(); arrnum++) {
-                poiData.addPOIitem(Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x")), Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y")), jarr.getJSONObject(arrnum).getString("store_name"), markerId, 0, Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id")));
-            }
-            poiData.endPOIdata();
-        } catch (JSONException ex) {
-            Log.v("맵액티비티", "JSONEX");
+        if (getIntent().getStringExtra("fragment_id").equals("home")) {
+            try {
+                poiData.beginPOIdata(0);
+                String mapid = getIntent().getStringExtra("mapid");
+                JSONArray jarr = new JSONArray();
+                jarr = user.getMapforpinArray(Integer.parseInt(mapid));
+                Log.v("맵 어레이", String.valueOf(user.getMapforpinArray(Integer.parseInt(mapid))));
+                int arrnum = 0;
+                for (arrnum = 0; arrnum < jarr.length(); arrnum++) {
+                    poiData.addPOIitem(Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x")), Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y")), jarr.getJSONObject(arrnum).getString("store_name"), markerId, 0, Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id")));
+                }
+                poiData.endPOIdata();
+            } catch (JSONException ex) {
+                Log.v("맵액티비티", "JSONEX");
 
-        }}
-        else if(getIntent().getStringExtra("fragment_id").equals("review")){
+            }
+        } else if (getIntent().getStringExtra("fragment_id").equals("friend_home")) {
+            try {
+                poiData.beginPOIdata(0);
+                String mapid = getIntent().getStringExtra("mapid");
+                JSONArray jarr = new JSONArray();
+                jarr = fuser.getMapforpinArray(Integer.parseInt(mapid));
+                Log.v("맵 어레이", String.valueOf(fuser.getMapforpinArray(Integer.parseInt(mapid))));
+                int arrnum = 0;
+                for (arrnum = 0; arrnum < jarr.length(); arrnum++) {
+                    poiData.addPOIitem(Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x")), Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y")), jarr.getJSONObject(arrnum).getString("store_name"), markerId, 0, Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id")));
+                }
+                poiData.endPOIdata();
+            } catch (JSONException ex) {
+                Log.v("맵액티비티", "JSONEX");
+            }
+        } else if (getIntent().getStringExtra("fragment_id").equals("review")) {
             poiData.beginPOIdata(0);
             poiData.addPOIitem(getIntent().getDoubleExtra("store_x", 0.0), getIntent().getDoubleExtra("store_y", 0.0), getIntent().getStringExtra("store_name"), markerId, 0);
             poiData.endPOIdata();
@@ -285,7 +303,8 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
     }
 
     @Override
-    public NMapCalloutOverlay onCreateCalloutOverlay(NMapOverlay arg0, NMapOverlayItem arg1, Rect arg2) {
+    public NMapCalloutOverlay onCreateCalloutOverlay(NMapOverlay arg0, NMapOverlayItem
+            arg1, Rect arg2) {
         return new NMapCalloutBasicOverlay(arg0, arg1, arg2);
     }
 
@@ -302,7 +321,10 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("userid", user.getUserID());
+            if ((getIntent().getStringExtra("fragment_id").equals("home")))
+                obj.put("userid", user.getUserID());
+            else if ((getIntent().getStringExtra("fragment_id").equals("friend_home")))
+                obj.put("userid", fuser.getUserID());
             obj.put("store_id", poiid);
 
             Log.v("MapActivity 제이손 보내기", obj.toString());
@@ -331,10 +353,20 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
 
                         JSONArray jarr = response.getJSONArray("map_detail");
                         JSONObject obj = jarr.getJSONObject(0);
-                        user.initMapData();
-                        user.setMapData(obj.getString("store_id"), obj.getString("map_id"), obj.getString("store_contact"), obj.getString("review_text"), obj.getString("review_emotion"), obj.getString("store_address"), obj.getString("store_name"));
+
+                        if ((getIntent().getStringExtra("fragment_id").equals("home")))
+                        {
+                            user.initMapData();
+                            user.setMapData(obj.getString("store_id"), obj.getString("map_id"), obj.getString("store_contact"), obj.getString("review_text"), obj.getString("review_emotion"), obj.getString("store_address"), obj.getString("store_name"));
+                        }
+                        else if ((getIntent().getStringExtra("fragment_id").equals("friend_home")))
+                        {
+                            fuser.initMapData();
+                            fuser.setMapData(obj.getString("store_id"), obj.getString("map_id"), obj.getString("store_contact"), obj.getString("review_text"), obj.getString("review_emotion"), obj.getString("store_address"), obj.getString("store_name"));
+                        }
 
                         Intent intent = new Intent(getApplicationContext(), ReviewActivity.class);
+                        intent.putExtra("fragment_id",getIntent().getStringExtra("fragment_id"));
                         intent.putExtra("image_num", obj.getString("image_num"));
                         startActivity(intent);
 

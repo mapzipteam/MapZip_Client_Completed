@@ -31,6 +31,8 @@ import java.util.List;
  */
 public class ReviewActivity extends Activity {
     private UserData user;
+    private FriendData fuser;
+    private boolean userlock = false;
 
     // 리뷰 데이타
     private ImageView review_emotion;
@@ -51,6 +53,11 @@ public class ReviewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
         user = UserData.getInstance();
+        fuser = FriendData.getInstance();
+
+        if (getIntent().getStringExtra("fragment_id").equals("friend_home"))
+            userlock = true;
+
         ActionBar actionBar = getActionBar();
         actionBar.hide();
         review_emotion = (ImageView) findViewById(R.id.emotion_review);
@@ -59,7 +66,14 @@ public class ReviewActivity extends Activity {
         store_address = (TextView) findViewById(R.id.address_text_review);
         store_contact = (TextView) findViewById(R.id.contact_text_review);
 
-        MapData mapData = user.getMapData();
+        MapData mapData;
+
+        if (userlock == false) {
+            mapData = user.getMapData();
+        } else {
+            mapData = fuser.getMapData();
+        }
+
         store_name.setText(mapData.getStore_name());
         review_text.setText(mapData.getReview_text());
         store_address.setText(mapData.getStore_address());
@@ -82,7 +96,12 @@ public class ReviewActivity extends Activity {
 
         bitarrfornone = new Bitmap[oPerlishArray.size()];
         oPerlishArray.toArray(bitarrfornone); // fill the array
-        user.inputGalImages(bitarrfornone);
+
+        if (userlock == false) {
+            user.inputGalImages(bitarrfornone);
+        } else {
+            fuser.inputGalImages(bitarrfornone);
+        }
 
         viewPager = (ViewPager) findViewById(R.id.pager_review);
 
@@ -90,11 +109,20 @@ public class ReviewActivity extends Activity {
         if (image_num != 0) {
             for (int i = 0; i < image_num; i++) {
                 Log.v("imagenum", String.valueOf(i));
-                imageLoad(i, SystemMain.SERVER_ROOT_URL + "/client_data/client_" + user.getUserID() + "_" + mapData.getMapid() + "_" + mapData.getStore_id() + "/image" + String.valueOf(i) + ".jpg");
+
+                if (userlock == false) {
+                    imageLoad(i, SystemMain.SERVER_ROOT_URL + "/client_data/client_" + user.getUserID() + "_" + mapData.getMapid() + "_" + mapData.getStore_id() + "/image" + String.valueOf(i) + ".jpg");
+                } else {
+                    imageLoad(i, SystemMain.SERVER_ROOT_URL + "/client_data/client_" + fuser.getUserID() + "_" + mapData.getMapid() + "_" + mapData.getStore_id() + "/image" + String.valueOf(i) + ".jpg");
+                }
             }
 
         } else {
-            user.inputGalImages(bitarrfornone);
+            if (userlock == false) {
+                user.inputGalImages(bitarrfornone);
+            } else {
+                fuser.inputGalImages(bitarrfornone);
+            }
         }
 
         imageadapter = new ImageAdapter(getApplicationContext());
@@ -118,7 +146,11 @@ public class ReviewActivity extends Activity {
 
                     bitarr = new Bitmap[oPerlishArray.size()];
                     oPerlishArray.toArray(bitarr); // fill the array
-                    user.inputGalImages(bitarr);
+                    if (userlock == false) {
+                        user.inputGalImages(bitarr);
+                    } else {
+                        fuser.inputGalImages(bitarr);
+                    }
 
                     imageadapter = new ImageAdapter(getApplicationContext());
                     viewPager.setAdapter(imageadapter);

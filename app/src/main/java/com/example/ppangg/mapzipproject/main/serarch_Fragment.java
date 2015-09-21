@@ -2,7 +2,11 @@ package com.example.ppangg.mapzipproject.main;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -10,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,8 +28,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.ppangg.mapzipproject.FriendData;
 import com.example.ppangg.mapzipproject.R;
 import com.example.ppangg.mapzipproject.SystemMain;
+import com.example.ppangg.mapzipproject.friend_home;
+import com.example.ppangg.mapzipproject.map_setting;
 import com.example.ppangg.mapzipproject.network.MyVolley;
 
 import org.json.JSONArray;
@@ -38,6 +46,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
 
     private View v;
+    private FriendData fuser;
 
     // search
     private EditText searchhash;
@@ -66,6 +75,11 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
     private Handler handler;
 
+    private Resources res;
+    public int map;
+    public ProgressDialog  asyncDialog;
+    private LoadingTask Loading;
+
     public serarch_Fragment() {
         seq = 0;
     }
@@ -74,11 +88,14 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
+        res = getResources();
+        asyncDialog = new ProgressDialog(this.getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        fuser = FriendData.getInstance();
 
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
@@ -89,6 +106,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         searchBtn = (Button) v.findViewById(R.id.searchBtn);
 
         mListView = (ListView) v.findViewById(R.id.searchList);
+        mListView.setOnItemClickListener(new ListViewItemClickListener());
         marItem = new ArrayList<MyItem>();
 
         mLockListView = true;
@@ -139,13 +157,15 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
     // 리스트뷰 출력 항목
     class MyItem {
-        MyItem(String _coustId, String name, String category, String hashtag) {
+        MyItem(String _coustId, String name, String category, String hashtag, String id) {
             sCustId = _coustId;
+            id_s = id;
             name_s = name;
             category_s = category;
             hashtag_s = hashtag;
         }
 
+        String id_s;
         String sCustId;
         String name_s;
         String category_s;
@@ -180,6 +200,10 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         @Override
         public long getItemId(int position) {
             return position;
+        }
+
+        public String getID(int position) {
+            return alSrc.get(position).id_s;
         }
 
         public String getName(int position) {
@@ -227,7 +251,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                 if (mLockBtn == false) {
                     try {
                         for (int i = 0; i < size; i++) {
-                            items = new MyItem(String.valueOf(i), getArray.getJSONObject(i).getString("user_name"), getArray.getJSONObject(i).getString("category"), getArray.getJSONObject(i).getString("hash_tag"));
+                            items = new MyItem(String.valueOf(i), getArray.getJSONObject(i).getString("user_name"), getArray.getJSONObject(i).getString("category"), getArray.getJSONObject(i).getString("hash_tag"), getArray.getJSONObject(i).getString("user_id"));
                             marItem.add(items);
                         }
                     } catch (JSONException e) {
@@ -344,6 +368,129 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                 }
             }
         };
+    }
+
+    private class ListViewItemClickListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            fuser.initMapData();
+            fuser.initmapforpinnum();
+            Loading = new LoadingTask();
+
+            Log.v("셀렉트 이름", mMyAdapte.getName(position));
+            Log.v("셀렉트 아이디", mMyAdapte.getID(position));
+
+            fuser.inputID(mMyAdapte.getID(position));
+            fuser.inputName(mMyAdapte.getName(position));
+
+            GoFriendHome(view, mMyAdapte.getID(position));
+
+        }
+    }
+
+    public void GoFriendHome(View v, String fid) {
+        RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("target_id", fid);
+            Log.v("searchmap_friend 보내기", obj.toString());
+        } catch (JSONException e) {
+            Log.v("제이손", "에러");
+        }
+
+        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                SystemMain.SERVER_FRIENDHOME_URL,
+                obj,
+                createMyReqSuccessListener_friend(),
+                createMyReqErrorListener()) {
+        };
+        queue.add(myReq);
+    }
+
+    private Response.Listener<JSONObject> createMyReqSuccessListener_friend() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                Log.v("searchmap_friend 받기", response.toString());
+                try {
+                    if (response.get("state").toString().equals("801")) {
+                        fuser.setMapmetaArray(response.getJSONArray("mapmeta_info"));
+
+                        JSONObject jar = response.getJSONObject("gu_enroll_num");
+                        Log.v("구넘버", String.valueOf(jar));
+
+                        Log.v("구넘버", "진입");
+
+                        int mapcount = response.getJSONArray("mapmeta_info").length();
+                        map = mapcount;
+
+                        for (int mapnum = 1; mapnum <= mapcount; mapnum++) {
+                            if (jar.has(String.valueOf(mapnum))) {
+                                JSONObject tmp = jar.getJSONObject(String.valueOf(mapnum));
+                                int gunumber = 1;
+                                int reviewnum = 0;
+                                for (gunumber = 1; gunumber <= 25; gunumber++) {
+                                    if (tmp.has(String.valueOf(gunumber))) {
+                                        reviewnum = tmp.getInt(String.valueOf(gunumber));
+                                        Log.v("구넘버o", tmp.get(String.valueOf(gunumber)).toString());
+                                        //배열에 추가
+                                    } else {
+                                        reviewnum = 0;
+                                        Log.v("구넘버x", String.valueOf(gunumber));
+                                        //배열에 0 추가
+                                    }
+                                    fuser.setReviewCount(mapnum, gunumber, reviewnum);
+                                }
+                            } else {
+                                for (int gunumber = 1; gunumber <= 25; gunumber++)
+                                    fuser.setReviewCount(mapnum, gunumber, 0);
+                            }
+                        }
+
+                        Loading.execute();
+                        Intent intent = new Intent(getActivity(),friend_home.class);
+                        startActivity(intent);
+                    }
+                } catch (JSONException e) {
+                    Log.v("에러", "제이손");
+                }
+
+            }
+        };
+    }
+
+
+    protected class LoadingTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+
+            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            asyncDialog.setMessage("로딩중입니다..");
+            asyncDialog.setCanceledOnTouchOutside(false);
+            // show dialog
+            asyncDialog.show();
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            for (int mapnum = 1; mapnum <= map; mapnum++)
+                fuser.setMapImage(mapnum, res);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            if (asyncDialog != null) {
+                asyncDialog.dismiss();
+            }
+
+            super.onPostExecute(result);
+        }
     }
 
 }

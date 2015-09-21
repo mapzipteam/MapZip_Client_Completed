@@ -24,6 +24,7 @@ public class SystemMain {
     public static final String SERVER_ADDFRIENDSEARCH_URL = SERVER_ROOT_URL+"/friend/friend_search.php";
     public static final String SERVER_ADDFRIENDENROLL_URL = SERVER_ROOT_URL+"/friend/friend_enroll.php";
     public static final String SERVER_FRIENDLIST_URL = SERVER_ROOT_URL+"/friend/friend_show.php";
+    public static final String SERVER_FRIENDHOME_URL = SERVER_ROOT_URL+"/friend/friend_home.php";
 
     // 지도 갯수 디폴트값
     public static final int DEFAULT_MAP_COUNT = 2;
