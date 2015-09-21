@@ -18,7 +18,6 @@
     </string-array>
     <string-array name="spinner_number">
         <item>서울</item>
-        <item>인천</item>
     </string-array>
 
     <string-array name="spinner_review_regi">

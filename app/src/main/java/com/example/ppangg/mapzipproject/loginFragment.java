@@ -165,7 +165,7 @@ public class loginFragment extends Fragment {
                 Log.v("제이손", response.toString());
 
                 try {
-                    if (response.get("login").toString().equals("1")) {
+                    if (response.get("state").toString().equals("200")) {
 
                         user.LoginOK();
                         user.inputID(inputID.getText().toString());
@@ -222,7 +222,7 @@ public class loginFragment extends Fragment {
                         toast.setDuration(Toast.LENGTH_SHORT);
                         toast.setView(layout_toast);
                         toast.show();
-                    } else {
+                    } else if(response.get("state").toString().equals("201")) {
                         // toast
                         text_toast.setText("존재하지 않는 계정정보입니다.");
                         Toast toast = new Toast(getActivity());
