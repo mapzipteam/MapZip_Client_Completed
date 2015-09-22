@@ -329,7 +329,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                         getArray = response.getJSONArray("map_search");
                         seq++;
 
-                        addItems(3);
+                        addItems(6);
 
                         Log.v("searchmap 받기", response.toString());
 

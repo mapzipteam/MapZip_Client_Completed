@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,6 +32,7 @@ import com.example.ppangg.mapzipproject.map.MapActivity;
 import com.example.ppangg.mapzipproject.map.Restaurant;
 import com.example.ppangg.mapzipproject.map.RestaurantResult;
 import com.example.ppangg.mapzipproject.map.RestaurantSearcher;
+import com.example.ppangg.mapzipproject.map.SearchInLocationActivity;
 import com.example.ppangg.mapzipproject.review_register;
 import com.nhn.android.mapviewer.overlay.NMapMyLocationOverlay;
 
@@ -50,6 +52,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
     private Button review_regi;
     private Button review_search;
     private Button map_viewBtn;
+    private Button review_regi_self;
     private EditText searchedit;
 
     private RestaurantResult restaurants;
@@ -71,6 +74,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
     private boolean mLockListView;
     private boolean mLockBtn;
     private boolean mSendLock;
+    private boolean mBtnLockr_mapview;
 
     private Handler handler;
 
@@ -108,6 +112,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         mLockListView = false;
         mLockBtn = true;
         mSendLock = false;
+        mBtnLockr_mapview = true;
 
         // 푸터를 등록. setAdapter 이전에 해야함.
         mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -156,10 +161,33 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
             }
         });
 
+        review_regi_self = (Button) v.findViewById(R.id.registerOwnBtn_review);
+        review_regi_self.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                InputMethodManager inputMethodManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(searchedit.getWindowToken(),0);
+                searchedit.clearFocus();
+                searchedit.setSelectAllOnFocus(false);
+                Intent intent = new Intent(getActivity(), SearchInLocationActivity.class);
+                startActivity(intent);
+            }
+        });
+
         map_viewBtn = (Button) v.findViewById(R.id.mapviewBtn_review);
         map_viewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mBtnLockr_mapview == true) {
+                    // toast
+                    text_toast.setText("위치를 확인할 가게를 선택해주세요.");
+                    Toast toast = new Toast(getActivity());
+                    toast.setDuration(Toast.LENGTH_SHORT);
+                    toast.setView(layout_toast);
+                    toast.show();
+                    return;
+                }
                 Intent intent = new Intent(getActivity(), MapActivity.class);
                 intent.putExtra("LNG",restaurants.get(selectNum).getLngX());
                 intent.putExtra("LAT", restaurants.get(selectNum).getLatY());
@@ -357,6 +385,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
+            mBtnLockr_mapview = false;
             selectNum = position;
             Log.v("리스트뷰 셀렉트",String.valueOf(position));
 
