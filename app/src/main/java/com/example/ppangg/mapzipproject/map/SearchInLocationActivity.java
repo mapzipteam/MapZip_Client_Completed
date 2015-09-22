@@ -1,6 +1,7 @@
 package com.example.ppangg.mapzipproject.map;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -18,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.ppangg.mapzipproject.R;
+import com.example.ppangg.mapzipproject.review_register;
 import com.nhn.android.maps.NMapActivity;
 import com.nhn.android.maps.NMapController;
 import com.nhn.android.maps.NMapOverlay;
@@ -54,6 +57,10 @@ public class SearchInLocationActivity extends NMapActivity implements OnMapState
     private double currentLNG; //경도, X
     private double currentLAT; //위도, Y
 
+    private EditText storename;
+    private EditText storeaddress;
+    private EditText storecontact;
+
     int displayCenterX;
     int displayCenterY;
 
@@ -65,6 +72,10 @@ public class SearchInLocationActivity extends NMapActivity implements OnMapState
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_search_in_location2);
+
+        storename = (EditText) findViewById(R.id.storename_txt_review_regi_self);
+        storeaddress = (EditText) findViewById(R.id.address_txt_review_regi_self);
+        storecontact = (EditText) findViewById(R.id.contact_txt_review_regi_self);
 
         mMapView = new NMapView(this);
 
@@ -130,6 +141,8 @@ public class SearchInLocationActivity extends NMapActivity implements OnMapState
         currentLNG = currentPoint.getLongitude();
 
         currentLAT = currentPoint.getLatitude();
+
+        
     }
 
 
@@ -148,7 +161,7 @@ public class SearchInLocationActivity extends NMapActivity implements OnMapState
 
     }
     ///}
-    
+
 
     //////버튼 리스너
     Button.OnClickListener SearchInLocationActivityOnClickListener = new View.OnClickListener() {
@@ -157,7 +170,13 @@ public class SearchInLocationActivity extends NMapActivity implements OnMapState
 
             switch (v.getId()) {
                 case R.id.search_in_location_make_review_button:
-                    Toast.makeText(getApplicationContext(), "경도 : " + currentLNG + "\n위도 : " + currentLAT + "\n\n make a review??", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(SearchInLocationActivity.this, review_register.class);
+                    intent.putExtra("store_name", storename.getText().toString());
+                    intent.putExtra("store_address", storeaddress.getText().toString());
+                    intent.putExtra("store_contact", storecontact.getText().toString());
+                    intent.putExtra("store_x", currentLNG);
+                    intent.putExtra("store_y", currentLAT);
+                    startActivity(intent);
             }
         }
     };
