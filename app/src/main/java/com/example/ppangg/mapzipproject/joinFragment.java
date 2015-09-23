@@ -77,6 +77,10 @@ public class joinFragment extends Fragment {
         inputPW = (EditText) rootView.findViewById(R.id.InputPW2);
         JoinBtn = (Button) rootView.findViewById(R.id.btnJoin);
 
+        inputID.setOnFocusChangeListener(ofcl);
+        inputName.setOnFocusChangeListener(ofcl);
+        inputPW.setOnFocusChangeListener(ofcl);
+
         JoinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,13 +90,18 @@ public class joinFragment extends Fragment {
 
         return rootView;
     }
-    /*
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
 
+
+    View.OnFocusChangeListener ofcl = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if(hasFocus)
+                v.setBackgroundResource(R.drawable.editback2);
+            else
+                v.setBackgroundResource(R.drawable.editback);
         }
-    */
+    };
+
     public void DoJoin(View v) {
         RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();
         String url = SystemMain.SERVER_JOIN_URL;

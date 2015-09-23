@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,8 +66,6 @@ public class loginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar actionBar = getActivity().getActionBar();
-        actionBar.hide();
         mPageNumber = getArguments().getInt("page");
         res = getResources();
         asyncDialog = new ProgressDialog(this.getActivity());
@@ -89,6 +89,9 @@ public class loginFragment extends Fragment {
         inputPW = (EditText) rootView.findViewById(R.id.InputPW);
         LoginBtn = (Button) rootView.findViewById(R.id.btnLogin);
 
+        inputID.setOnFocusChangeListener(ofcl);
+        inputPW.setOnFocusChangeListener(ofcl);
+
         LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +101,17 @@ public class loginFragment extends Fragment {
 
         return rootView;
     }
+
+    View.OnFocusChangeListener ofcl = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if(hasFocus)
+                v.setBackgroundResource(R.drawable.editback2);
+            else
+                v.setBackgroundResource(R.drawable.editback);
+        }
+    };
+
 
     public void DoLogin(View v) {
         RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();

@@ -77,6 +77,7 @@ public class slidingTap extends FragmentActivity{
         // What's hot, We  will add a counter here
         Log.e("owl", "" + navDrawerItems.size());
 
+
         // Recycle the typed array
         navMenuIcons.recycle();
 

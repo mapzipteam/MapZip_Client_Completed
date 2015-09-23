@@ -671,7 +671,13 @@ public class review_register extends Activity {
 
             int tmp = user.getPingCount(Integer.parseInt(mapData.getMapid()),mapData.getGu_num());
             user.setReviewCount(Integer.parseInt(mapData.getMapid()),mapData.getGu_num(),tmp+1);
-            user.setMapImage(Integer.parseInt(mapData.getMapid()),res);
+            user.setMapImage(Integer.parseInt(mapData.getMapid()), res);
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             Log.e("ss", "success");
 

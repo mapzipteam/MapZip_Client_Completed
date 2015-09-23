@@ -248,7 +248,7 @@ public class friend_home  extends Activity implements View.OnClickListener {
                     fix_x = 47;
                     fix_y = -40-(realHeight/18);
                 } else {
-                    fix_y=-(realHeight/18); //17~18
+                    fix_y=-((realHeight/18)); //17~18
                     Log.e("check", "No");
                 }
                 RelativeLayout.LayoutParams layoutParms1 = new RelativeLayout.LayoutParams(90, 50); // width, height

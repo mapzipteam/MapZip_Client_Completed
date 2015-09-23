@@ -2,22 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:gravity="center"
-    android:background="#fafabb"
+    android:background="@color/mainYellow"
     android:layout_height="match_parent">
 
     <EditText
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/InputID"
+        android:background="@drawable/editback"
         android:layout_gravity="center"
-        android:hint="ID"/>
+        android:singleLine="true"
+        android:maxLength="15"
+        android:hint=" ID"/>
 
     <EditText
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:layout_gravity="center"
-        android:hint="Password"
+        android:background="@drawable/editback"
+        android:hint=" Password"
+        android:maxLength="15"
+        android:singleLine="true"
         android:id="@+id/InputPW" />
 
     <Button

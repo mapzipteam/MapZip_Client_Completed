@@ -2,14 +2,20 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-
+        <item name="android:typeface">sans</item>
         <!-- Customize your theme here. -->
     </style>
 
     <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light" >
         <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:typeface">sans</item>
 
     </style>
+    <!-- Application theme. -->
+    <style name="FontTheme" parent="AppBaseTheme">
+        <item name="android:typeface">monospace</item>
+    </style>
+
 
     <style name="MyActionBar" parent="android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/mainYellow</item>
@@ -22,7 +28,7 @@
     </style>
 
     <style name="AppTheme.DialogWhenLarge" parent="@android:style/Theme.Holo.Light.DialogWhenLarge">
-        <item name="android:typeface">serif</item>
+        <item name="android:typeface">sans</item>
     </style>
 
 

@@ -13,9 +13,9 @@ import java.lang.reflect.Field;
 public class FontApplication extends Application {
     @Override
     public void onCreate() {
-        setDefaultFont(this, "DEFAULT", "Roboto-Light.ttf");
-        setDefaultFont(this, "SANS_SERIF", "Roboto-Light.ttf");
-        setDefaultFont(this, "SERIF", "Roboto-Light.ttf");
+        setDefaultFont(this, "DEFAULT", "default_font2.ttf");
+        setDefaultFont(this, "SANS_SERIF", "default_font2.ttf");
+        setDefaultFont(this, "SERIF", "default_font2.ttf");
 
     }
 
