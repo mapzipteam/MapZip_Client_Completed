@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ppangg.mapzipproject.R;
@@ -40,11 +44,16 @@ import com.nhn.android.maps.NMapView.OnMapStateChangeListener;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager.OnCalloutOverlayListener;
 import com.nhn.android.mapviewer.overlay.NMapResourceProvider;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 
 public class SearchInLocationActivity extends NMapActivity implements OnMapStateChangeListener {
 
 
     //default Member variable declare
+    private boolean lockbtn;
     public static final String API_KEY = MapActivity.API_KEY;
     NMapView mMapView = null;
     NMapController mMapController = null;
@@ -57,8 +66,11 @@ public class SearchInLocationActivity extends NMapActivity implements OnMapState
     private double currentLNG; //경도, X
     private double currentLAT; //위도, Y
 
+    private TextView text_toast;
+    private View layout_toast;
+
     private EditText storename;
-    private EditText storeaddress;
+    private TextView storeaddress;
     private EditText storecontact;
 
     int displayCenterX;
@@ -67,15 +79,29 @@ public class SearchInLocationActivity extends NMapActivity implements OnMapState
     private Button makeReviewButton;
 
 
+    private List<Address> addresses;
+    private Address address;
+    private Geocoder geocoder;
+
+
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
+        lockbtn = false;
+        getActionBar().hide();
         setContentView(R.layout.activity_search_in_location2);
 
+        LayoutInflater inflater = this.getLayoutInflater();
+        layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
+        text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
+
+
         storename = (EditText) findViewById(R.id.storename_txt_review_regi_self);
-        storeaddress = (EditText) findViewById(R.id.address_txt_review_regi_self);
+        storeaddress = (TextView) findViewById(R.id.address_txt_review_regi_self);
         storecontact = (EditText) findViewById(R.id.contact_txt_review_regi_self);
+
+        storename.setOnFocusChangeListener(ofcl);
+        storecontact.setOnFocusChangeListener(ofcl);
 
         mMapView = new NMapView(this);
 
@@ -98,6 +124,18 @@ public class SearchInLocationActivity extends NMapActivity implements OnMapState
         makeReviewButton.setOnClickListener(SearchInLocationActivityOnClickListener);
 
     }
+
+
+
+    View.OnFocusChangeListener ofcl = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if(hasFocus)
+                v.setBackgroundResource(R.drawable.editback2);
+            else
+                v.setBackgroundResource(R.drawable.editback);
+        }
+    };
 
 
     ////*ok*/class SearchInLocationOnMapStateChangeListener implements NMapView.OnMapStateChangeListener{
@@ -142,7 +180,21 @@ public class SearchInLocationActivity extends NMapActivity implements OnMapState
 
         currentLAT = currentPoint.getLatitude();
 
-        
+
+
+        geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(currentLAT, currentLNG, 1);
+            address = addresses.get(0);
+
+            String cuttentAddress = address.getAddressLine(0);
+            storeaddress.setText(cuttentAddress);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -168,15 +220,27 @@ public class SearchInLocationActivity extends NMapActivity implements OnMapState
 
         public void onClick(View v) {
 
-            switch (v.getId()) {
-                case R.id.search_in_location_make_review_button:
-                    Intent intent = new Intent(SearchInLocationActivity.this, review_register.class);
-                    intent.putExtra("store_name", storename.getText().toString());
-                    intent.putExtra("store_address", storeaddress.getText().toString());
-                    intent.putExtra("store_contact", storecontact.getText().toString());
-                    intent.putExtra("store_x", currentLNG);
-                    intent.putExtra("store_y", currentLAT);
-                    startActivity(intent);
+            if (storename.getText().toString().trim().isEmpty()) {
+                text_toast.setText("가게 이름을 입력하세요.");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout_toast);
+                toast.show();
+
+            } else {
+                switch (v.getId()) {
+                    case R.id.search_in_location_make_review_button:
+                        Intent intent = new Intent(SearchInLocationActivity.this, review_register.class);
+                        intent.putExtra("store_name", storename.getText().toString());
+                        intent.putExtra("store_address", storeaddress.getText().toString());
+                        intent.putExtra("store_contact", storecontact.getText().toString());
+                        intent.putExtra("store_x", currentLNG);
+                        intent.putExtra("store_y", currentLAT);
+
+                        startActivity(intent);
+                        finish();
+                }
+
             }
         }
     };

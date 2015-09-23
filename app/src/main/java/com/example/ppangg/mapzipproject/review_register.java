@@ -59,7 +59,8 @@ public class review_register extends Activity {
 
     private UserData user;
     private Resources res;
-    private boolean reviewLock;
+    private int reviewposition1;
+    private int reviewposition2;
     private LoadingTask loading;
     private Button findImage;
     private Button enrollBtn;
@@ -98,7 +99,7 @@ public class review_register extends Activity {
     private TextView text_toast;
 
     private View thisview;
-    public  ProgressDialog asyncDialog ;
+    public ProgressDialog asyncDialog;
     private ImageAdapter imageadapter;
     private Bitmap noimage;
     private Bitmap[] bitarr;
@@ -114,7 +115,7 @@ public class review_register extends Activity {
         setContentView(R.layout.activity_review_regi);
         user = UserData.getInstance();
         serverchoice = 0;
-        res= getResources();
+        res = getResources();
         loading = new LoadingTask();
 
         LayoutInflater inflater = this.getLayoutInflater();
@@ -238,28 +239,53 @@ public class review_register extends Activity {
 
         directEdit = (EditText) findViewById(R.id.editeval_review_regi);
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner_review_regi);
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner_review_regi);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.spinner_review_regi));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        final Spinner spinner2 = (Spinner) findViewById(R.id.spinner_review_regi2);
+        ArrayAdapter adapter2 = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.spinner_review_regi2));
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(adapter2);
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 3) // 직접입력
+                if (position == 15) // 직접입력
                 {
-                    reviewLock = false;
                     directEdit.setVisibility(View.VISIBLE);
                     oneText.setVisibility(View.GONE);
-                } else if (position == 0) {
-                    reviewLock = true;
-                    directEdit.setVisibility(View.GONE);
-                    oneText.setVisibility(View.VISIBLE);
+                    spinner2.setVisibility(View.GONE);
+                    reviewposition1 = position;
                 } else {
-                    reviewLock = false;
                     directEdit.setVisibility(View.GONE);
                     oneText.setVisibility(View.VISIBLE);
-                    mapData.setReview_text(getResources().getStringArray(R.array.spinner_review_regi)[position]);
+                    spinner2.setVisibility(View.VISIBLE);
+                    reviewposition1 = position;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 14) // 직접입력
+                {
+                    directEdit.setVisibility(View.VISIBLE);
+                    oneText.setVisibility(View.GONE);
+                    spinner.setVisibility(View.GONE);
+                    reviewposition2 = position;
+                } else {
+                    directEdit.setVisibility(View.GONE);
+                    oneText.setVisibility(View.VISIBLE);
+                    spinner.setVisibility(View.VISIBLE);
+                    reviewposition2 = position;
                 }
             }
 
@@ -273,21 +299,43 @@ public class review_register extends Activity {
         enrollBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (reviewLock == true) {
-                    // toast
-                    text_toast.setText("리뷰를 작성해주세요.");
-                    Toast toast = new Toast(getApplicationContext());
-                    toast.setDuration(Toast.LENGTH_SHORT);
-                    toast.setView(layout_toast);
-                    toast.show();
-                } else {
+
+                    if (mapData.getReview_emotion() == 0) {
+                        // toast
+                        text_toast.setText("이모티콘을 선택해주세요.");
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setDuration(Toast.LENGTH_SHORT);
+                        toast.setView(layout_toast);
+                        toast.show();
+
+                    } else if ((reviewposition1 == 0) && (reviewposition2 == 0)) {
+                        // toast
+                        text_toast.setText("리뷰를 작성해주세요.");
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setDuration(Toast.LENGTH_SHORT);
+                        toast.setView(layout_toast);
+                        toast.show();
+                    } else {
+                        if ((reviewposition1 == 15) || (reviewposition2 == 14))
+                            mapData.setReview_text(directEdit.getText().toString());
+                        else {
+                            String tmp = "";
+                            if (reviewposition1 != 0)
+                                tmp = getResources().getStringArray(R.array.spinner_review_regi)[reviewposition1];
+
+                            if (reviewposition2 != 0)
+                                tmp += " 하지만" + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
+
+                            mapData.setReview_text(tmp);
+                        }
 
 
-                    thisview = v;
-                    DoReviewset(v);
-                    user.setMapforpinNum(Integer.parseInt(mapData.getMapid()), 0);
+                        thisview = v;
+                        DoReviewset(v);
+                        user.setMapforpinNum(Integer.parseInt(mapData.getMapid()), 0);
+                    }
                 }
-            }
+
         });
 
         cancelBtn = (Button) findViewById(R.id.cancelBtn_review_regi);
@@ -390,6 +438,7 @@ public class review_register extends Activity {
         try {
             if (mapData.getReview_text().isEmpty())
                 mapData.setReview_text(directEdit.getText().toString());
+
             Log.v("직접입력", directEdit.getText().toString());
 
             obj.put("userid", user.getUserID());
@@ -459,8 +508,8 @@ public class review_register extends Activity {
                         mapData.setStore_id(response.getString("store_id"));
                         if (Uriarr.size() != 0)
                             DoReviewset2(thisview);
-                        else{
-                            serverchoice =1;
+                        else {
+                            serverchoice = 1;
                             loading.execute();
                         }
                         // 이미지있으면 2번째통신 시작
@@ -639,9 +688,8 @@ public class review_register extends Activity {
 
         return gunum;
     }
+
     protected class LoadingTask extends AsyncTask<Void, Void, Void> {
-
-
 
 
         @Override
@@ -658,10 +706,9 @@ public class review_register extends Activity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            if(serverchoice ==1) {
+            if (serverchoice == 1) {
 
-            }
-            else if (serverchoice==2){
+            } else if (serverchoice == 2) {
                 uriarray = new Uri[Uriarr.size()];
                 Uriarr.toArray(uriarray);
 
@@ -669,8 +716,8 @@ public class review_register extends Activity {
                     DoUpload(thisview, i);
             }
 
-            int tmp = user.getPingCount(Integer.parseInt(mapData.getMapid()),mapData.getGu_num());
-            user.setReviewCount(Integer.parseInt(mapData.getMapid()),mapData.getGu_num(),tmp+1);
+            int tmp = user.getPingCount(Integer.parseInt(mapData.getMapid()), mapData.getGu_num());
+            user.setReviewCount(Integer.parseInt(mapData.getMapid()), mapData.getGu_num(), tmp + 1);
             user.setMapImage(Integer.parseInt(mapData.getMapid()), res);
 
             try {
@@ -693,6 +740,7 @@ public class review_register extends Activity {
             }
             Log.d("ss", "finish");
             text_toast.setText("리뷰가 등록되었습니다.");
+
             Toast toast = new Toast(getApplicationContext());
             toast.setDuration(Toast.LENGTH_SHORT);
             toast.setView(layout_toast);
@@ -701,7 +749,6 @@ public class review_register extends Activity {
             //removeDialog(PROGRESS_DIALOG);
             super.onPostExecute(result);
         }
-
 
 
     }

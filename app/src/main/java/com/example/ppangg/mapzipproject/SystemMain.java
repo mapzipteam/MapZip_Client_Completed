@@ -34,8 +34,8 @@ public class SystemMain {
     public static final int INCHEUON_MAP_NUM = 2;
 
     // 지도 색상 넘버
-    public static final int MAP_RED_NUM = 2;
-    public static final int MAP_YELLOW_NUM = 1;
+    public static final int MAP_RED_NUM = 10;
+    public static final int MAP_YELLOW_NUM = 5;
 
     public static final int DoBong = 1;
     public static final int NoWon = 2;

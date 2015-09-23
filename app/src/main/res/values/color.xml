@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
 <color name="list_item_title">#000000</color>
-<color name="list_background">#fafab1</color>
-<color name="list_background_pressed">#ffc226</color>
-<color name="list_divider">#ffc226</color>
+<color name="list_background">#f9f9d6</color>
+<color name="list_background_pressed">#f9f99a</color>
+<color name="list_divider">#f9f9d6</color>
 <color name="counter_text_bg">#626262</color>
 <color name="counter_text_color">#c5c4c4</color>
     <color name="mainYellow">#fafab1</color>
     <color name="mainOrange">#ffc226</color>
     <color name="transparent">#00000000</color>
-    <color name="grey">#c5c4c4</color>
+    <color name="grey">#dde1e1</color>
+    <color name="grey2">#d3d6d6</color>
+    <color name="white">#ffffff</color>
 
 </resources>

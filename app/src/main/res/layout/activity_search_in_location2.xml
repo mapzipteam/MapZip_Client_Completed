@@ -47,6 +47,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="2"
+                    android:layout_gravity="center"
                     android:padding="5dp"
                     android:text="가게이름    " />
 
@@ -55,7 +56,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
+                    android:layout_marginTop="5dp"
                     android:padding="5dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/editback"
+                    android:maxLength="25"
                     android:singleLine="true" />
 
             </LinearLayout>
@@ -72,14 +77,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_gravity="center"
                     android:layout_weight="2"
                     android:padding="5dp"
                     android:text="주소    " />
 
-                <EditText
+                <TextView
                     android:id="@+id/address_txt_review_regi_self"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="8"
                     android:padding="5dp"
                     android:singleLine="true" />
@@ -99,15 +106,20 @@
                     android:layout_marginLeft="10dp"
                     android:layout_weight="2"
                     android:padding="5dp"
+                    android:layout_gravity="center"
                     android:text="연락처    " />
 
                 <EditText
                     android:id="@+id/contact_txt_review_regi_self"
                     android:layout_width="0dp"
+                    android:background="@drawable/editback"
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
                     android:padding="5dp"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:maxLength="15"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -115,7 +127,10 @@
         android:id="@+id/search_in_location_make_review_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         android:text="리뷰작성"
-        android:textSize="12sp" />
+        android:textSize="20dp"
+        android:background="@color/mainOrange"
+        />
 
 </LinearLayout>

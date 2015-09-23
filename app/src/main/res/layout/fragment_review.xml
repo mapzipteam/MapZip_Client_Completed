@@ -49,25 +49,34 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/registerBtn_review"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:text="등록" />
-
-            <Button
                 android:id="@+id/registerOwnBtn_review"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:text="직접등록" />
+                android:layout_height="50dp"
+                android:layout_weight="4"
+                android:background="@color/grey"
+                android:text="직접등록"
+                android:textSize="17dp"
+                />
+
+            <Button
+                android:id="@+id/registerBtn_review"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="4"
+                android:background="@color/grey2"
+                android:text="등   록"
+                android:textSize="17dp"
+                />
 
             <Button
                 android:id="@+id/mapviewBtn_review"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:text="지도보기" />
+                android:layout_height="50dp"
+                android:layout_weight="4"
+                android:text="지도보기"
+                android:textSize="17dp"
+                android:background="@color/grey"
+                />
         </LinearLayout>
 
 

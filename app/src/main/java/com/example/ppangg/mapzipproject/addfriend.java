@@ -2,11 +2,13 @@ package com.example.ppangg.mapzipproject;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -49,10 +51,30 @@ public class addfriend extends Activity {
         LayoutInflater inflater = this.getLayoutInflater();
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
-
+        searchBtn = (Button) findViewById(R.id.searchBtn_addfriend);
         searchText = (EditText) findViewById(R.id.searchText_addfriend);
         friendinfo = (TextView) findViewById(R.id.addfriendText);
         friendadd = (Button) findViewById(R.id.addfriendBtn);
+
+        searchBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
+                addFriend_search(v);
+
+            }
+        });
+        friendadd.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                InputMethodManager imm2 = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm2.hideSoftInputFromWindow(friendinfo.getWindowToken(), 0);
+                addFriend_enroll(v);
+
+
+            }
+        });
     }
 
 
@@ -135,7 +157,7 @@ public class addfriend extends Activity {
 
                     friendinfo.setText(response.getString("friend_name") + " (" + friendID + ")\n리뷰수: " + response.get("total_review").toString());
                     if(response.getInt("is_friend")==1){
-                        friendadd.setText("이미친구");
+                        friendadd.setBackgroundResource(R.drawable.friend_add2);
                         friendadd.setEnabled(false);
                     }else if(response.getString("total_review").equals("null")){
                         // toast
@@ -148,7 +170,7 @@ public class addfriend extends Activity {
                         return;
                     }
                     else {
-                        friendadd.setText("친구추가");
+                        friendadd.setBackgroundResource(R.drawable.friend_add);
                         friendadd.setEnabled(true);
                     }
                     friendinfo.setVisibility(View.VISIBLE);
@@ -170,7 +192,7 @@ public class addfriend extends Activity {
                 Log.v("addfriend_enroll", response.toString());
 
                 friendadd.setVisibility(View.INVISIBLE);
-                friendadd.setText("이미친구");
+                friendadd.setBackgroundResource(R.drawable.friend_add2);
                 friendadd.setEnabled(false);
                 friendadd.setVisibility(View.VISIBLE);
 

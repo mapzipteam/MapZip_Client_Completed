@@ -124,17 +124,26 @@
         <Button
             android:id="@+id/saveBtn_setting"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_marginTop="30dp"
             android:onClick="saveOnclick"
-            android:text="저장" />
+            android:background="@color/mainOrange"
+            android:text="저  장"
+            android:textSize="17dp"
+            android:textColor="@color/white"/>
+
+
 
         <Button
             android:id="@+id/cancelBtn_setting"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_marginTop="30dp"
             android:onClick="cancelOnclick"
-            android:text="취소" />
+            android:layout_marginLeft="15dp"
+            android:background="@color/mainOrange"
+            android:text="취  소"
+            android:textSize="17dp"
+            android:textColor="@color/white"/>
     </LinearLayout>
 </LinearLayout>

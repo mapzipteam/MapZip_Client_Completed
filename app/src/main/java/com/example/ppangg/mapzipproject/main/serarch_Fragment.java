@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -88,6 +89,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
+        getActivity().getActionBar().setTitle("     검색");
         res = getResources();
         asyncDialog = new ProgressDialog(this.getActivity());
     }
@@ -127,6 +129,8 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(searchhash.getWindowToken(), 0);
                 if (searchhash.getText().toString().trim().isEmpty())
                     return;
 
@@ -450,8 +454,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                         }
 
                         Loading.execute();
-                        Intent intent = new Intent(getActivity(),friend_home.class);
-                        startActivity(intent);
+
                     }
                 } catch (JSONException e) {
                     Log.v("에러", "제이손");
@@ -487,6 +490,8 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
             if (asyncDialog != null) {
                 asyncDialog.dismiss();
+                Intent intent = new Intent(getActivity(),friend_home.class);
+                startActivity(intent);
             }
 
             super.onPostExecute(result);

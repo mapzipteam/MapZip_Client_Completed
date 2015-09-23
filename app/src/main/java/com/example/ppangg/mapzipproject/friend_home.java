@@ -30,7 +30,7 @@ import com.example.ppangg.mapzipproject.map_setting;
 import com.example.ppangg.mapzipproject.map.MapActivity;
 import com.example.ppangg.mapzipproject.R;
 import com.example.ppangg.mapzipproject.SystemMain;
-import com.example.ppangg.mapzipproject.UserData;
+import com.example.ppangg.mapzipproject.FriendData;
 import com.example.ppangg.mapzipproject.map.Location;
 import com.example.ppangg.mapzipproject.network.MyVolley;
 
@@ -43,7 +43,8 @@ import java.util.ArrayList;
 
 public class friend_home  extends Activity implements View.OnClickListener {
 
-    private FriendData user;
+    private FriendData fuser;
+    private UserData user;
 
     // toast
     private View layout_toast;
@@ -55,7 +56,7 @@ public class friend_home  extends Activity implements View.OnClickListener {
     private double loc_LNG = 0;
     private double loc_LAT = 0;
 
-    private TextView topstate; // user info
+    private TextView topstate; // fuser info
     private ImageView imageview; // map image
     private TextView hashstate; // hashtag
     private String mapcurname = ""; // 현재 지도 이름
@@ -105,14 +106,16 @@ public class friend_home  extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView((R.layout.fragment_home));
 
-        user = FriendData.getInstance();
-        getActionBar().setTitle(user.getUserName() + "의 지도");
-        
-        mapnum = user.getMapmetaArray().length();
+        fuser = FriendData.getInstance();
+        user = UserData.getInstance();
+        getActionBar().setTitle(fuser.getUserName() + "의 지도");
+        getActionBar().setDisplayShowHomeEnabled(false);
+
+        mapnum = fuser.getMapmetaArray().length();
         sppinerList = new ArrayList<String>();
         try {
             for (int i = 0; i < mapnum; i++) {
-                sppinerList.add(user.getMapmetaArray().getJSONObject(i).getString("title"));
+                sppinerList.add(fuser.getMapmetaArray().getJSONObject(i).getString("title"));
             }
         } catch (JSONException ex) {
 
@@ -123,16 +126,26 @@ public class friend_home  extends Activity implements View.OnClickListener {
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
         //  topstate = (TextView) findViewById(R.id.topstate);
-        //  topstate.setText(user.getUserName());
+        //  topstate.setText(fuser.getfuserName());
        /*topstate.append(" (");
-        topstate.append(user.getUserID());
+        topstate.append(fuser.getfuserID());
         topstate.append(")");*/
         //  topstate.append("의 지도");
 
         imageview = (ImageView) findViewById(R.id.mapimage);
         hashstate = (TextView) findViewById(R.id.tagText);
         mapsetting = (Button) findViewById(R.id.mapsetting);
-        mapsetting.setVisibility(View.GONE);
+        if(user.getUserID().equals(fuser.getUserID()))
+            mapsetting.setVisibility(View.GONE);
+        else
+            addFriend_search();
+        mapsetting.setBackgroundResource(R.drawable.addfriend2);
+        mapsetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFriend_enroll(v);
+            }
+        });
 
         // Seoul Btn init
         DoBong = (Button) findViewById(R.id.DoBong);
@@ -180,12 +193,12 @@ public class friend_home  extends Activity implements View.OnClickListener {
                     hashstate.setLayoutParams(tagLayout);
 
                     JSONObject mapmeta = null;
-                    mapmeta = user.getMapmetaArray().getJSONObject(position);
+                    mapmeta = fuser.getMapmetaArray().getJSONObject(position);
                     mapcurname = sppinerList.get(position);
                     mapkindnum = mapmeta.get("category").toString();
                     mapid = mapmeta.get("map_id").toString();
 
-                    Bitmap result = user.getResult(Integer.parseInt(mapid));
+                    Bitmap result = fuser.getResult(Integer.parseInt(mapid));
                     imageview.setImageBitmap(result);
 
                     // category select (SEOUL)
@@ -370,79 +383,79 @@ public class friend_home  extends Activity implements View.OnClickListener {
             SongPa.setVisibility(View.VISIBLE);
 
             DoBong.setText("도봉구\n(");
-            DoBong.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.DoBong)));
+            DoBong.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.DoBong)));
             DoBong.append(")");
             NoWon.setText("노원구\n(");
-            NoWon.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.NoWon)));
+            NoWon.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.NoWon)));
             NoWon.append(")");
             GangBuk.setText("강북구\n(");
-            GangBuk.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GangBuk)));
+            GangBuk.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.GangBuk)));
             GangBuk.append(")");
             SungBuk.setText("성북구\n(");
-            SungBuk.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.SungBuk)));
+            SungBuk.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.SungBuk)));
             SungBuk.append(")");
             ZongRang.setText("중랑구\n(");
-            ZongRang.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.ZongRang)));
+            ZongRang.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.ZongRang)));
             ZongRang.append(")");
             EunPhung.setText("은평구\n(");
-            EunPhung.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.EunPhung)));
+            EunPhung.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.EunPhung)));
             EunPhung.append(")");
             ZongRo.setText("종로구\n(");
-            ZongRo.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.ZongRo)));
+            ZongRo.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.ZongRo)));
             ZongRo.append(")");
             DongDaeMon.setText("동대문구\n(");
-            DongDaeMon.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.DongDaeMon)));
+            DongDaeMon.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.DongDaeMon)));
             DongDaeMon.append(")");
             SuDaeMon.setText("서대문구\n(");
-            SuDaeMon.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.SuDaeMon)));
+            SuDaeMon.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.SuDaeMon)));
             SuDaeMon.append(")");
             Zhong.setText("중구\n(");
-            Zhong.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.Zhong)));
+            Zhong.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.Zhong)));
             Zhong.append(")");
             SungDong.setText("성동구\n(");
-            SungDong.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.SungDong)));
+            SungDong.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.SungDong)));
             SungDong.append(")");
             GangZin.setText("광진구\n(");
-            GangZin.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GangZin)));
+            GangZin.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.GangZin)));
             GangZin.append(")");
             GangDong.setText("강동구\n(");
-            GangDong.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GangDong)));
+            GangDong.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.GangDong)));
             GangDong.append(")");
             MaPho.setText("마포구\n(");
-            MaPho.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.MaPho)));
+            MaPho.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.MaPho)));
             MaPho.append(")");
             YongSan.setText("용산구\n(");
-            YongSan.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.YongSan)));
+            YongSan.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.YongSan)));
             YongSan.append(")");
             GangSue.setText("강서구\n(");
-            GangSue.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GangSue)));
+            GangSue.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.GangSue)));
             GangSue.append(")");
             YangChen.setText("양천구\n(");
-            YangChen.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.YangChen)));
+            YangChen.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.YangChen)));
             YangChen.append(")");
             GuRo.setText("구로구\n(");
-            GuRo.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GuRo)));
+            GuRo.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.GuRo)));
             GuRo.append(")");
             YongDengPo.setText("영등포구\n(");
-            YongDengPo.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.YongDengPo)));
+            YongDengPo.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.YongDengPo)));
             YongDengPo.append(")");
             DongJack.setText("동작구\n(");
-            DongJack.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.DongJack)));
+            DongJack.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.DongJack)));
             DongJack.append(")");
             GemChun.setText("금천구\n(");
-            GemChun.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GemChun)));
+            GemChun.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.GemChun)));
             GemChun.append(")");
             GanAk.setText("관악구\n(");
-            GanAk.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GanAk)));
+            GanAk.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.GanAk)));
             GanAk.append(")");
             SeoCho.setText("서초구\n(");
-            SeoCho.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.SeoCho)));
+            SeoCho.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.SeoCho)));
             SeoCho.append(")");
             GangNam.setText("강남구\n(");
-            GangNam.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.GangNam)));
+            GangNam.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.GangNam)));
             GangNam.append(")");
             SongPa.setText("송파구\n(");
-            SongPa.append(String.valueOf(user.getPingCount(Integer.parseInt(mapid), SystemMain.SongPa)));
+            SongPa.append(String.valueOf(fuser.getPingCount(Integer.parseInt(mapid), SystemMain.SongPa)));
             SongPa.append(")");
 
         } else if (visible.equals("gone")) {
@@ -582,9 +595,9 @@ public class friend_home  extends Activity implements View.OnClickListener {
                 break;
         }
 
-        if (user.getMapforpinNum(Integer.parseInt(mapid)) == 0) {
+        if (fuser.getMapforpinNum(Integer.parseInt(mapid)) == 0) {
             GetStorearrary(v);
-        } else if(user.getMapforpinNum(Integer.parseInt(mapid)) == 2){
+        } else if(fuser.getMapforpinNum(Integer.parseInt(mapid)) == 2){
             // toast
             text_toast.setText("등록 된 리뷰가 없습니다.");
             Toast toast = new Toast(getApplicationContext());
@@ -642,7 +655,7 @@ public class friend_home  extends Activity implements View.OnClickListener {
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("userid", user.getUserID());
+            obj.put("userid", fuser.getUserID());
             obj.put("map_id", mapid);
             Log.v("제이손 보내기", obj.toString());
         } catch (JSONException e) {
@@ -668,9 +681,9 @@ public class friend_home  extends Activity implements View.OnClickListener {
                 Log.v("홈 가게", response.toString());
                 try {
                     if (response.get("state").toString().equals("701")) {
-                        user.setMapforpinNum(Integer.parseInt(mapid), 1);
-                        user.setMapforpinArray(response.getJSONArray("map_meta"), Integer.parseInt(response.getJSONArray("map_meta").getJSONObject(0).get("map_id").toString()));
-                        Log.v("홈에서 맵 어레이", user.getMapforpinArray(Integer.parseInt(mapid)).toString());
+                        fuser.setMapforpinNum(Integer.parseInt(mapid), 1);
+                        fuser.setMapforpinArray(response.getJSONArray("map_meta"), Integer.parseInt(response.getJSONArray("map_meta").getJSONObject(0).get("map_id").toString()));
+                        Log.v("홈에서 맵 어레이", fuser.getMapforpinArray(Integer.parseInt(mapid)).toString());
 
                         Log.v("홈", "맵인텐트");
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
@@ -680,7 +693,7 @@ public class friend_home  extends Activity implements View.OnClickListener {
                         intent.putExtra("mapid", mapid);
                         startActivity(intent);
                     } else if (response.get("state").toString().equals("711")) {
-                        user.setMapforpinNum(Integer.parseInt(mapid), 2);
+                        fuser.setMapforpinNum(Integer.parseInt(mapid), 2);
                         // toast
                         text_toast.setText("등록 된 리뷰가 없습니다.");
                         Toast toast = new Toast(getApplicationContext());
@@ -716,5 +729,94 @@ public class friend_home  extends Activity implements View.OnClickListener {
         };
     }
 
+    public void addFriend_enroll(View v) {
+        RequestQueue queue = MyVolley.getInstance(this).getRequestQueue();
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("userid", user.getUserID());
+            obj.put("friend_id",fuser.getUserID());
+
+            Log.v("addfriend_enroll 보내기", obj.toString());
+        } catch (JSONException e) {
+            Log.v("제이손", "에러");
+        }
+
+        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                SystemMain.SERVER_ADDFRIENDENROLL_URL,
+                obj,
+                createMyReqSuccessListener_enroll(),
+                createMyReqErrorListener()) {
+        };
+        queue.add(myReq);
+    }
+
+    private Response.Listener<JSONObject> createMyReqSuccessListener_enroll() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                Log.v("addfriend_enroll", response.toString());
+
+                mapsetting.setVisibility(View.INVISIBLE);
+                mapsetting.setEnabled(false);
+                mapsetting.setBackgroundResource(R.drawable.addfriend);
+                mapsetting.setVisibility(View.VISIBLE);
+
+                // toast
+                text_toast.setText(fuser.getUserID()+"님과 친구가 되었습니다.");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout_toast);
+                toast.show();
+
+            }
+        };
+    }
+
+
+    public void addFriend_search() {
+        RequestQueue queue = MyVolley.getInstance(this).getRequestQueue();
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("userid", user.getUserID());
+            obj.put("friend_id",fuser.getUserID());
+
+            Log.v("addfriend_search 보내기", obj.toString());
+        } catch (JSONException e) {
+            Log.v("제이손", "에러");
+        }
+
+        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                SystemMain.SERVER_ADDFRIENDSEARCH_URL,
+                obj,
+                createMyReqSuccessListener_search(),
+                createMyReqErrorListener()) {
+        };
+        queue.add(myReq);
+    }
+
+    private Response.Listener<JSONObject> createMyReqSuccessListener_search() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                Log.v("addfriend_search", response.toString());
+
+                try {
+                    if(response.getInt("is_friend")==1){
+                        mapsetting.setVisibility(View.INVISIBLE);
+                        mapsetting.setEnabled(false);
+                        mapsetting.setBackgroundResource(R.drawable.addfriend);
+                        mapsetting.setVisibility(View.VISIBLE);
+                    }
+                }catch (JSONException ex){
+                    Log.e("제이손","에러");
+                }
+
+            }
+        };
+    }
 
 }

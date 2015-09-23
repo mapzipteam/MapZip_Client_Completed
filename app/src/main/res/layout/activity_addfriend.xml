@@ -33,7 +33,6 @@
             android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="2"
-            android:onClick="addFriend_search"
             android:background="@drawable/searchbtn" />
 
     </LinearLayout>
@@ -47,20 +46,20 @@
         android:id="@+id/addfriendText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="6"
+        android:layout_weight="11"
         android:layout_margin="10dp"
         android:text="이름 (ID)\n리뷰수: 123"
+        android:textSize="24sp"
         android:visibility="gone"/>
 
     <Button
         android:id="@+id/addfriendBtn"
-        android:onClick="addFriend_enroll"
         android:layout_width="0dp"
         android:layout_weight="2"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_margin="10dp"
-        android:text="친구추가"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:background="@drawable/friend_add"/>
     </LinearLayout>
 
 

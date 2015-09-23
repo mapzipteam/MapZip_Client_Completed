@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -92,6 +93,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         user = UserData.getInstance();
         arrsize = 0;
         selectNum = -1;
+        getActivity().getActionBar().setTitle("     리뷰");
     }
 
     @Override
@@ -129,7 +131,8 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
             public void onClick(View v) {
                 if (searchedit.getText().toString().trim().isEmpty())
                     return;
-
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(review_search.getWindowToken(), 0);
                 ConnectivityManager manager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
                 NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -165,21 +168,31 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         review_regi_self.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 InputMethodManager inputMethodManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(searchedit.getWindowToken(),0);
+                inputMethodManager.hideSoftInputFromWindow(searchedit.getWindowToken(), 0);
                 searchedit.clearFocus();
                 searchedit.setSelectAllOnFocus(false);
                 Intent intent = new Intent(getActivity(), SearchInLocationActivity.class);
                 startActivity(intent);
             }
         });
+        review_regi_self.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    review_regi_self.setBackgroundResource(R.drawable.background_btn);
 
+                if(event.getAction() == MotionEvent.ACTION_UP)
+                    review_regi_self.setBackgroundResource(R.drawable.noclick);
+                return false;
+            }
+        });
+        review_regi_self.setClickable(true);
         map_viewBtn = (Button) v.findViewById(R.id.mapviewBtn_review);
         map_viewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mBtnLockr_mapview == true) {
+                if (mBtnLockr_mapview == true) {
                     // toast
                     text_toast.setText("위치를 확인할 가게를 선택해주세요.");
                     Toast toast = new Toast(getActivity());
@@ -189,9 +202,9 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
                     return;
                 }
                 Intent intent = new Intent(getActivity(), MapActivity.class);
-                intent.putExtra("LNG",restaurants.get(selectNum).getLngX());
+                intent.putExtra("LNG", restaurants.get(selectNum).getLngX());
                 intent.putExtra("LAT", restaurants.get(selectNum).getLatY());
-                intent.putExtra("fragment_id","review");
+                intent.putExtra("fragment_id", "review");
                 intent.putExtra("store_name", restaurants.get(selectNum).getTitle());
                 intent.putExtra("store_x", restaurants.get(selectNum).getLngX());
                 intent.putExtra("store_y", restaurants.get(selectNum).getLatY());
@@ -200,12 +213,24 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
             }
         });
 
+        map_viewBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    map_viewBtn.setBackgroundResource(R.drawable.background_btn);
+
+                if(event.getAction() == MotionEvent.ACTION_UP)
+                    map_viewBtn.setBackgroundResource(R.drawable.noclick);
+                return false;
+            }
+        });
+        map_viewBtn.setClickable(true);
+
         review_regi = (Button) v.findViewById(R.id.registerBtn_review);
         review_regi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(selectNum == -1)
-                {
+                if (selectNum == -1) {
                     // toast
                     text_toast.setText("가게를 선택해주세요.");
                     Toast toast = new Toast(getActivity());
@@ -215,7 +240,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
                     return;
                 }
 
-                if(restaurants.get(selectNum).getLngX() == 0 || restaurants.get(selectNum).getLatY() == 0) {
+                if (restaurants.get(selectNum).getLngX() == 0 || restaurants.get(selectNum).getLatY() == 0) {
                     // toast
                     text_toast.setText("다시 검색해주세요.");
                     Toast toast = new Toast(getActivity());
@@ -236,7 +261,18 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
                 startActivity(intent);
             }
         });
+        review_regi.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    review_regi.setBackgroundResource(R.drawable.background_btn);
 
+                if(event.getAction() == MotionEvent.ACTION_UP)
+                    review_regi.setBackgroundResource(R.drawable.noclick2);
+                return false;
+            }
+        });
+        review_regi.setClickable(true);
         return v;
     }
 

@@ -73,8 +73,7 @@ public class slidingTap extends FragmentActivity{
         // Communities, Will add a counter here
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
         // Pages
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
-        // What's hot, We  will add a counter here
+
         Log.e("owl", "" + navDrawerItems.size());
 
 
@@ -182,9 +181,6 @@ public class slidingTap extends FragmentActivity{
                 break;
             case 3:
                 fragment = new friend_Fragment();
-                break;
-            case 4:
-                fragment = new setting_Fragment();
                 break;
 
             default:

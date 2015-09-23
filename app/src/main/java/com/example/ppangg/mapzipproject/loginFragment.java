@@ -38,7 +38,7 @@ import org.json.JSONObject;
  */
 public class loginFragment extends Fragment {
 
-
+    private boolean lockBtn;
     private LoadingTask Loading;
     private TextView state;
     private Resources res;
@@ -71,6 +71,7 @@ public class loginFragment extends Fragment {
         asyncDialog = new ProgressDialog(this.getActivity());
         user = UserData.getInstance();
         Loading = new LoadingTask();
+        lockBtn=false;
 
 
     }
@@ -95,7 +96,10 @@ public class loginFragment extends Fragment {
         LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DoLogin(v);
+             if(lockBtn==false) {
+                 lockBtn = true;
+                 DoLogin(v);
+             }
             }
         });
 
@@ -245,6 +249,8 @@ public class loginFragment extends Fragment {
                 } catch (JSONException e) {
                     Log.v("에러", "제이손");
                 }
+
+                lockBtn =false;
             }
         };
     }
@@ -266,6 +272,8 @@ public class loginFragment extends Fragment {
                     // toast
                     Log.e("loginFragment", "nullpointexception");
                 }
+
+                lockBtn =false;
             }
         };
     }

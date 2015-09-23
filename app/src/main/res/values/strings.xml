@@ -13,7 +13,6 @@
         <item>리뷰등록</item>
         <item>지도검색</item>
         <item>친구</item>
-        <item>설정</item>
 
     </string-array>
     <string-array name="spinner_number">
@@ -23,7 +22,37 @@
     <string-array name="spinner_review_regi">
         <item>선택안함</item>
         <item>맛있어요!</item>
-        <item>최고에요!</item>
+        <item>환상적이에요!</item>
+        <item>가성비최고!</item>
+        <item>나만 알고싶은 맛집이에요!</item>
+        <item>양이 엄청나요!</item>
+        <item>간이 딱 좋아요!</item>
+        <item>데이트하기 좋아요!</item>
+        <item>친절해요!</item>
+        <item>서비스가 최고!</item>
+        <item>인테리어가 이뻐요!</item>
+        <item>분위기 좋아요!</item>
+        <item>괜찮아요!</item>
+        <item>재밌어요!</item>
+        <item>역이랑 가까워요!</item>
+        <item>직접입력</item>
+    </string-array>
+
+    <string-array name="spinner_review_regi2">
+        <item>선택안함</item>
+        <item>맛없어요.</item>
+        <item>최악이에요.</item>
+        <item>가성비최악.</item>
+        <item>조만간 사라질 것 같아요.</item>
+        <item>양이 적어요.</item>
+        <item>간이 너무 쎄요.</item>
+        <item>간이 너무 싱거워요.</item>
+        <item>불친절해요.</item>
+        <item>서비스가 최악.</item>
+        <item>분위기가 별로에요.</item>
+        <item>별로에요.</item>
+        <item>그저그래요.</item>
+        <item>찾아오기 힘들어요.</item>
         <item>직접입력</item>
     </string-array>
 

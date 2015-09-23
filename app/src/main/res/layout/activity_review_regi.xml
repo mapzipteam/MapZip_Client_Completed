@@ -23,20 +23,13 @@
 
             <Button
                 android:id="@+id/findImage_review_regi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="사진추가"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_margin="5dp"
-                android:background="#ffffff"
+                android:background="@drawable/picture_add"
                 android:layout_alignParentLeft="true"/>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="#ffffff"
-                android:text="사진제거"
-                android:layout_alignParentRight="true"/>
+
 
             <ImageView
                 android:id="@+id/emotion_review_regi"
@@ -103,11 +96,24 @@
                     android:padding="5dp"
                     android:text="한줄평   " />
 
-                <Spinner
-                    android:id="@+id/spinner_review_regi"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <Spinner
+                    android:id="@+id/spinner_review_regi"
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="wrap_content"
                     android:padding="5dp" />
+
+                <Spinner
+                    android:id="@+id/spinner_review_regi2"
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp" />
+                </LinearLayout>
             </LinearLayout>
 
             <EditText
@@ -191,14 +197,23 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
-                    android:text="등록"/>
+                    android:background="@color/mainOrange"
+                    android:layout_marginLeft="7dp"
+                    android:text="등  록"
+                    android:textSize="17dp"
+                    android:textColor="@color/white"/>
 
                 <Button
                     android:id="@+id/cancelBtn_review_regi"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
-                    android:text="취소"/>
+                    android:background="@color/mainOrange"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="7dp"
+                    android:text="취  소"
+                    android:textSize="17dp"
+                    android:textColor="@color/white"/>
 
             </LinearLayout>
 
