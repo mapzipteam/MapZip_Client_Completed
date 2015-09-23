@@ -133,7 +133,7 @@ public class SearchInLocationActivity extends NMapActivity implements OnMapState
 
         displayCenterX = displayMetrics.widthPixels / 2;
 
-        displayCenterY = displayMetrics.heightPixels / 2;
+        displayCenterY = displayMetrics.heightPixels * 25 / 100;
 
 
         currentPoint = nMapProjection.fromPixels(displayCenterX, displayCenterY);

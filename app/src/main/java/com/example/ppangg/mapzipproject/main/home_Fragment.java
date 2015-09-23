@@ -189,7 +189,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                     RelativeLayout.LayoutParams imageLayout = new RelativeLayout.LayoutParams(realWidth, realHeight / 5 * 3); // width, height
                     imageLayout.setMargins(0, realHeight / 10, 0, 0);
                     imageview.setLayoutParams(imageLayout);
-                    RelativeLayout.LayoutParams tagLayout = new RelativeLayout.LayoutParams(realWidth, realHeight / 18);// width, height
+                    RelativeLayout.LayoutParams tagLayout = new RelativeLayout.LayoutParams(realWidth, realHeight / 14);// width, height
                     tagLayout.setMargins(0, (int) realHeight / 24 * 17, 0, 0);
                     hashstate.setLayoutParams(tagLayout);
 

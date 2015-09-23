@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,13 +35,13 @@ import org.json.JSONObject;
  */
 public class map_setting extends Activity {
     private UserData user;
-    private TextView mapname;
+    private EditText mapname;
     private String mapid;
-    private TextView hashtag1;
-    private TextView hashtag2;
-    private TextView hashtag3;
-    private TextView hashtag4;
-    private TextView hashtag5;
+    private EditText hashtag1;
+    private EditText hashtag2;
+    private EditText hashtag3;
+    private EditText hashtag4;
+    private EditText hashtag5;
     private String hashtag_send = "";
     private int mapkindnum;
 
@@ -58,17 +59,26 @@ public class map_setting extends Activity {
         user = UserData.getInstance();
 
         ActionBar actionBar =getActionBar();
-        actionBar.hide();
+        actionBar.setTitle("    지도 설정");
+        actionBar.setDisplayShowHomeEnabled(false);
+
         LayoutInflater inflater = this.getLayoutInflater();
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
-        mapname = (TextView) findViewById(R.id.maptext);
-        hashtag1 = (TextView) findViewById(R.id.hashtext1);
-        hashtag2 = (TextView) findViewById(R.id.hashtext2);
-        hashtag3 = (TextView) findViewById(R.id.hashtext3);
-        hashtag4 = (TextView) findViewById(R.id.hashtext4);
-        hashtag5 = (TextView) findViewById(R.id.hashtext5);
+        mapname = (EditText) findViewById(R.id.maptext);
+        hashtag1 = (EditText) findViewById(R.id.hashtext1);
+        hashtag2 = (EditText) findViewById(R.id.hashtext2);
+        hashtag3 = (EditText) findViewById(R.id.hashtext3);
+        hashtag4 = (EditText) findViewById(R.id.hashtext4);
+        hashtag5 = (EditText) findViewById(R.id.hashtext5);
+
+        mapname.setOnFocusChangeListener(ofcl);
+        hashtag1.setOnFocusChangeListener(ofcl);
+        hashtag2.setOnFocusChangeListener(ofcl);
+        hashtag3.setOnFocusChangeListener(ofcl);
+        hashtag4.setOnFocusChangeListener(ofcl);
+        hashtag5.setOnFocusChangeListener(ofcl);
 
         mapid = getIntent().getStringExtra("mapid");
 
@@ -119,6 +129,17 @@ public class map_setting extends Activity {
             }
         });
     }
+
+
+    View.OnFocusChangeListener ofcl = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if(hasFocus)
+                v.setBackgroundResource(R.drawable.editback2);
+            else
+                v.setBackgroundResource(R.drawable.editback);
+        }
+    };
 
     public void saveOnclick(View v) {
 

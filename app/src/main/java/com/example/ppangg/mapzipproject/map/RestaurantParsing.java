@@ -51,6 +51,9 @@ public class RestaurantParsing {
 
     private Restaurant restaurant = new Restaurant();
 
+   private String SEOUL_ADRESS = "서울특별시";
+    private boolean isSEOUL = true;
+
 
 
     public RestaurantParsing(RestaurantResult restaurants, String response, Context context) {
@@ -153,9 +156,17 @@ public class RestaurantParsing {
 
                         } else if (tagId_ADRESS == true) {
 
-                            restaurant.setAdress(trimTitle(parser.getText()));
-                            setTagIdFalse();
-                            //Log.d("volley", "5: " + parser.getText().trim());
+                            if(parser.getText().contains(SEOUL_ADRESS)){
+
+                                restaurant.setAdress(trimTitle(parser.getText()));
+                                setTagIdFalse();
+                                //Log.d("volley", "5: " + parser.getText().trim());
+                            }else{
+
+                                setTagIdFalse();
+                                isSEOUL = false;
+                                break;
+                            }
 
                         } else if (tagId_ROADADRESS == true) {
 
@@ -179,11 +190,13 @@ public class RestaurantParsing {
                             setTagIdFalse();
                             //Log.d("volley", "8: " + parser.getText().trim());
 
+                            //이음식점이 서울에 위치하는가?
+                            if(isSEOUL) {
 
-                            restaurant = addRestaurant(restaurant);
-
+                                restaurant = addRestaurant(restaurant);
+                            }
+                            setIsSeoulTrue();
                         }
-
 
                         setTagIdFalse();
                         break;
@@ -240,5 +253,10 @@ public class RestaurantParsing {
       return  returnString;
     }
 
+
+    public void setIsSeoulTrue(){
+
+        isSEOUL = true;
+    }
 }
 

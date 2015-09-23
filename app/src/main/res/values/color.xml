@@ -9,5 +9,6 @@
     <color name="mainYellow">#fafab1</color>
     <color name="mainOrange">#ffc226</color>
     <color name="transparent">#00000000</color>
+    <color name="grey">#c5c4c4</color>
 
 </resources>

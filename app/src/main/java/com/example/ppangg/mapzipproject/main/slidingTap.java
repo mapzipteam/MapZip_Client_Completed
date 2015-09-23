@@ -207,6 +207,7 @@ public class slidingTap extends FragmentActivity{
         }
     }
 
+
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;

@@ -225,9 +225,7 @@ public class loginFragment extends Fragment {
                         }
 
                            Loading.execute();
-                        Intent intent = new Intent(getActivity(), slidingTap.class);
-                        startActivity(intent);
-                        getActivity().finish();
+
 
 
                         // toast
@@ -301,6 +299,9 @@ public class loginFragment extends Fragment {
 
             if (asyncDialog != null) {
                 asyncDialog.dismiss();
+                Intent intent = new Intent(getActivity(), slidingTap.class);
+                startActivity(intent);
+                getActivity().finish();
             }
 
             super.onPostExecute(result);
