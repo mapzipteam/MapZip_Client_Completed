@@ -42,14 +42,19 @@ public class UserData {
         init();
     }
 
-    private void init() {
+    public void init() {
         LoginPermission = false; // ó�� instanceȭ �Ҷ��� �α����㰡 false
         UserID = null;
         UserName = null;
+        mapmetaArray = new JSONArray();
         mapforpinArray = new JSONArray[5];
+        for(int i =0; i<5; i++)
+            mapforpinNum[i] = 0;
+        mapmetaNum = 0;
         mapData = new MapData();
         pingCount = new int[5][26];
         result = new Bitmap[5];
+        GalImages = new Bitmap[5];
     }
 
     //서버에서 리뷰 갯슈 받아오기(지역별 index는 구글드라이브 지도번호 -1 하면 됨)

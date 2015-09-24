@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Created by ppangg on 2015-07-31.
@@ -115,6 +116,31 @@ public class joinFragment extends Fragment {
         final String userid = inputID.getText().toString();
         final String userpw = inputPW.getText().toString();
         final String username = inputName.getText().toString();
+
+        if( userid.length() > 5 ){
+            Pattern ps = Pattern.compile("^[a-zA-Z0-9]+$");//영문, 숫자, 한글만 허용
+            if(!ps.matcher(userid).matches()){
+                // toast
+                text_toast.setText("아이디는 영문과 숫자의 조합으로 생성해주세요.");
+                Toast toast = new Toast(getActivity());
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout_toast);
+                toast.show();
+
+                return;
+            }
+        }
+        else if(userpw.length() <8){
+            // toast
+            text_toast.setText("ID는 5자, Password는 8자이상 입니다.");
+            Toast toast = new Toast(getActivity());
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout_toast);
+            toast.show();
+
+            return;
+        }
+
         if (userid != null && !userid.equals("") && userpw != null && !userpw.equals("") && username != null && !username.equals("")) {
             JSONObject obj = new JSONObject();
             try {

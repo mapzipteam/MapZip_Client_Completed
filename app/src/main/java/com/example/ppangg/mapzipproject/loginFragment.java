@@ -70,6 +70,7 @@ public class loginFragment extends Fragment {
         res = getResources();
         asyncDialog = new ProgressDialog(this.getActivity());
         user = UserData.getInstance();
+        user.init();
         Loading = new LoadingTask();
         lockBtn=false;
 

@@ -51,4 +51,12 @@
         android:layout_gravity="center"
         android:text=""/>
 
+
+    <TextView
+        android:id="@+id/TextState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="ID는 최소 5자이상\nPassword는 최소 8자이상 입니다."/>
+
 </LinearLayout>
