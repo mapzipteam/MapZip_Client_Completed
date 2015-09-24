@@ -130,7 +130,8 @@ public class joinFragment extends Fragment {
                 return;
             }
         }
-        else if(userpw.length() <8){
+
+        if(userpw.length() < 8){
             // toast
             text_toast.setText("ID는 5자, Password는 8자이상 입니다.");
             Toast toast = new Toast(getActivity());
