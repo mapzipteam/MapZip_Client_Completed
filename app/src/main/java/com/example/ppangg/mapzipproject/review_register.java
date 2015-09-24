@@ -152,7 +152,7 @@ public class review_register extends Activity {
         bitarr = new Bitmap[oPerlishArray.size()];
         oPerlishArray.toArray(bitarr); // fill the array
         user.inputGalImages(bitarr);
-        imageadapter = new ImageAdapter(this);
+        imageadapter = new ImageAdapter(this,SystemMain.justuser);
         viewPager.setAdapter(imageadapter);
 
         /*
@@ -323,8 +323,12 @@ public class review_register extends Activity {
                             if (reviewposition1 != 0)
                                 tmp = getResources().getStringArray(R.array.spinner_review_regi)[reviewposition1];
 
-                            if (reviewposition2 != 0)
-                                tmp += " 하지만" + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
+                            if (reviewposition2 != 0) {
+                                if(reviewposition1 != 0)
+                                   tmp += " 하지만" + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
+                                else
+                                    tmp += " " + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
+                            }
 
                             mapData.setReview_text(tmp);
                         }
@@ -411,7 +415,7 @@ public class review_register extends Activity {
                     oPerlishArray.toArray(bitarr); // fill the array
                     user.inputGalImages(bitarr);
 
-                    imageadapter = new ImageAdapter(this);
+                    imageadapter = new ImageAdapter(this,SystemMain.justuser);
                     viewPager.setAdapter(imageadapter);
 
                     imageadapter.notifyDataSetChanged();

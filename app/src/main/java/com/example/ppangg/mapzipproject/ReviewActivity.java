@@ -125,7 +125,12 @@ public class ReviewActivity extends Activity {
             }
         }
 
-        imageadapter = new ImageAdapter(getApplicationContext());
+
+        if(userlock == false)
+            imageadapter = new ImageAdapter(getApplicationContext(), SystemMain.justuser);
+        else
+            imageadapter = new ImageAdapter(getApplicationContext(), SystemMain.justfuser);
+
         viewPager.setAdapter(imageadapter);
         imageadapter.notifyDataSetChanged();
     }
@@ -148,11 +153,12 @@ public class ReviewActivity extends Activity {
                     oPerlishArray.toArray(bitarr); // fill the array
                     if (userlock == false) {
                         user.inputGalImages(bitarr);
+                        imageadapter = new ImageAdapter(getApplicationContext(), SystemMain.justuser);
                     } else {
                         fuser.inputGalImages(bitarr);
+                        imageadapter = new ImageAdapter(getApplicationContext(), SystemMain.justfuser);
                     }
 
-                    imageadapter = new ImageAdapter(getApplicationContext());
                     viewPager.setAdapter(imageadapter);
                     imageadapter.notifyDataSetChanged();
 

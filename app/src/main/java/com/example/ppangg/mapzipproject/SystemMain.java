@@ -37,6 +37,10 @@ public class SystemMain {
     public static final int MAP_RED_NUM = 5;
     public static final int MAP_YELLOW_NUM = 1;
 
+    // imageadapter
+    public static final int justuser = 1;
+    public static final int justfuser = 2;
+
     public static final int DoBong = 1;
     public static final int NoWon = 2;
     public static final int GangBuk = 3;

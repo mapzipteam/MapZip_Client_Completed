@@ -13,15 +13,25 @@ import android.widget.ImageView;
 
 public class ImageAdapter extends PagerAdapter {
     Context context;
+    private int nowwho;
     private UserData user;
+    private FriendData fuser;
 
-    ImageAdapter(Context context){
+    ImageAdapter(Context context, int i){
         this.context=context;
-        user = UserData.getInstance();
+        nowwho = i;
+
+        if(i == SystemMain.justuser)
+            user = UserData.getInstance();
+        else if(i == SystemMain.justfuser)
+            fuser = FriendData.getInstance();
     }
     @Override
     public int getCount() {
-        return user.getGalImages().length;
+        if(nowwho == SystemMain.justuser)
+            return user.getGalImages().length;
+        else
+            return fuser.getGalImages().length;
     }
 
     @Override
@@ -38,7 +48,10 @@ public class ImageAdapter extends PagerAdapter {
 //        imageView.setPadding(padding, padding, padding, padding);
         //imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageView.setImageBitmap(user.getGalImages()[position]);
+        if(nowwho == SystemMain.justuser)
+            imageView.setImageBitmap(user.getGalImages()[position]);
+        else
+            imageView.setImageBitmap(fuser.getGalImages()[position]);
 
         ((ViewPager) container).addView(imageView, 0);
 
