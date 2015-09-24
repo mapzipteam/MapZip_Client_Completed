@@ -46,6 +46,8 @@ import java.util.ArrayList;
 
 public class friend_Fragment extends Fragment implements AbsListView.OnScrollListener {
 
+    private boolean selectlock;
+
     private View v;
     private FriendData fuser;
     private UserData user;
@@ -88,6 +90,7 @@ public class friend_Fragment extends Fragment implements AbsListView.OnScrollLis
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
+        selectlock = false;
         res = getResources();
         asyncDialog = new ProgressDialog(this.getActivity());
 
@@ -355,18 +358,24 @@ public class friend_Fragment extends Fragment implements AbsListView.OnScrollLis
     private class ListViewItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            fuser.initMapData();
-            fuser.initmapforpinnum();
-            Loading = new LoadingTask();
 
-            Log.v("셀렉트 이름", mMyAdapte.getName(position));
-            Log.v("셀렉트 아이디", mMyAdapte.getID(position));
+            if(selectlock == false) {
+                selectlock = true;
 
-            fuser.inputID(mMyAdapte.getID(position));
-            fuser.inputName(mMyAdapte.getName(position));
+                fuser.initMapData();
+                fuser.initmapforpinnum();
+                Loading = new LoadingTask();
 
-            GoFriendHome(view, mMyAdapte.getID(position));
+                Log.v("셀렉트 이름", mMyAdapte.getName(position));
+                Log.v("셀렉트 아이디", mMyAdapte.getID(position));
 
+                fuser.inputID(mMyAdapte.getID(position));
+                fuser.inputName(mMyAdapte.getName(position));
+
+                GoFriendHome(view, mMyAdapte.getID(position));
+            }
+            else
+                return;
         }
     }
 
@@ -438,6 +447,8 @@ public class friend_Fragment extends Fragment implements AbsListView.OnScrollLis
                 } catch (JSONException e) {
                     Log.v("에러", "제이손");
                 }
+
+                selectlock = false;
 
             }
         };

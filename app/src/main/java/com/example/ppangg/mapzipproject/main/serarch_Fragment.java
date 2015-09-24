@@ -45,6 +45,7 @@ import java.util.ArrayList;
 
 public class serarch_Fragment extends Fragment implements AbsListView.OnScrollListener {
 
+    private boolean selectlock;
 
     private View v;
     private FriendData fuser;
@@ -90,6 +91,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         getActivity().getActionBar().setTitle("     검색");
+        selectlock = false;
         res = getResources();
         asyncDialog = new ProgressDialog(this.getActivity());
     }
@@ -377,18 +379,21 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     private class ListViewItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            fuser.initMapData();
-            fuser.initmapforpinnum();
-            Loading = new LoadingTask();
+            if(selectlock == false)
+            {
+                selectlock = true;
+                fuser.initMapData();
+                fuser.initmapforpinnum();
+                Loading = new LoadingTask();
 
-            Log.v("셀렉트 이름", mMyAdapte.getName(position));
-            Log.v("셀렉트 아이디", mMyAdapte.getID(position));
+                Log.v("셀렉트 이름", mMyAdapte.getName(position));
+                Log.v("셀렉트 아이디", mMyAdapte.getID(position));
 
-            fuser.inputID(mMyAdapte.getID(position));
-            fuser.inputName(mMyAdapte.getName(position));
+                fuser.inputID(mMyAdapte.getID(position));
+                fuser.inputName(mMyAdapte.getName(position));
 
-            GoFriendHome(view, mMyAdapte.getID(position));
-
+                GoFriendHome(view, mMyAdapte.getID(position));
+            }
         }
     }
 
@@ -459,6 +464,8 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                 } catch (JSONException e) {
                     Log.v("에러", "제이손");
                 }
+
+                selectlock = false;
 
             }
         };
