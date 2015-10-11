@@ -441,8 +441,6 @@ public class friend_Fragment extends Fragment implements AbsListView.OnScrollLis
                         }
 
                         Loading.execute();
-                        Intent intent = new Intent(getActivity(),friend_home.class);
-                        startActivity(intent);
                     }
                 } catch (JSONException e) {
                     Log.v("에러", "제이손");
@@ -480,10 +478,32 @@ public class friend_Fragment extends Fragment implements AbsListView.OnScrollLis
 
             if (asyncDialog != null) {
                 asyncDialog.dismiss();
+
+                Intent intent = new Intent(getActivity(),friend_home.class);
+                startActivity(intent);
             }
 
             super.onPostExecute(result);
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(user.getfriendlock() == false) {
+            marItem.clear();
+            mMyAdapte = new MyListAdapter(getActivity(), R.layout.custom_listview, marItem);
+            mListView.addFooterView(footer);
+            mListView.setAdapter(mMyAdapte);
+            mMyAdapte.notifyDataSetChanged();
+            seq = 0;
+
+            mLockBtn = false;
+            DoSearch(v);
+
+            user.setfriendlock(true);
+        }
+
+    }
 }

@@ -266,7 +266,9 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                 int[] location = new int[2];
                 imageview.getLocationOnScreen(location);
 
+
                 ScreenSize();
+
                 Log.e("Display size : ", "" + realWidth);
                 Log.e("Display size : ", "" + realHeight);
                 Log.e("check brand", "BRAND = " + Build.BRAND);

@@ -28,6 +28,7 @@ public class UserData {
     private Bitmap[] result; //map
     private Bitmap[] GalImages = new Bitmap[]{
     };
+    private boolean friendlock;
     private boolean reviewListlock;
     private MapData mapData;
 
@@ -55,6 +56,7 @@ public class UserData {
         pingCount = new int[5][26];
         result = new Bitmap[5];
         GalImages = new Bitmap[5];
+        friendlock = true;
     }
 
     //서버에서 리뷰 갯슈 받아오기(지역별 index는 구글드라이브 지도번호 -1 하면 됨)
@@ -305,9 +307,16 @@ public class UserData {
         return reviewListlock;
     }
 
+    public boolean getfriendlock() {
+        return friendlock;
+    }
 
     public void setReviewListlock(boolean rlock) {
         reviewListlock = rlock;
+    }
+
+    public void setfriendlock(boolean rlock) {
+        friendlock = rlock;
     }
 
     public void setMapmetaArray(JSONArray jarray) {

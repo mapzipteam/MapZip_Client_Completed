@@ -68,6 +68,7 @@ public class addfriend extends Activity {
         friendadd.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                user.setfriendlock(false);
                 InputMethodManager imm2 = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm2.hideSoftInputFromWindow(friendinfo.getWindowToken(), 0);
                 addFriend_enroll(v);

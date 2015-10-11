@@ -121,7 +121,18 @@
                     android:layout_gravity="center"
                     android:maxLength="15"/>
             </LinearLayout>
+
         </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:text="지도를 최대로 확대한 후 리뷰를 작성해주세요."
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/counter_text_bg"/>
 
     <Button
         android:id="@+id/search_in_location_make_review_button"
