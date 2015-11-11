@@ -1,6 +1,7 @@
 package com.mapzip.ppang.mapzipproject.main;
 
 import com.mapzip.ppang.mapzipproject.R;
+import com.mapzip.ppang.mapzipproject.UserData;
 import com.mapzip.ppang.mapzipproject.adapter.NavDrawerListAdapter;
 import com.mapzip.ppang.mapzipproject.model.NavDrawerItem;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -39,6 +41,11 @@ public class slidingTap extends FragmentActivity{
 
     private ArrayList<NavDrawerItem> navDrawerItems;
     private NavDrawerListAdapter adapter;
+
+
+    // UserData
+    private UserData userData;
+
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
@@ -113,6 +120,25 @@ public class slidingTap extends FragmentActivity{
             // on first time display view for first nav item
             displayView(0);
         }
+
+        // Auto_Login Setting Process
+        userData = UserData.getInstance();
+        if(userData.getIsAuto() == 1){
+            SharedPreferences pref = getSharedPreferences("auto_login", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putInt("isAuto",1);
+            editor.putString("auto_id",userData.getUserID());
+            editor.putString("auto_pw",userData.getUserPW());
+            editor.commit();
+        }
+        else{
+            SharedPreferences pref = getSharedPreferences("auto_login", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putInt("isAuto",0);
+            editor.commit();
+        }
+
+
     }
 
     /**

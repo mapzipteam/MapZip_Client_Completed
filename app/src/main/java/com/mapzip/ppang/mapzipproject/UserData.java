@@ -1,5 +1,6 @@
 package com.mapzip.ppang.mapzipproject;
 
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -20,6 +21,7 @@ public class UserData {
     private boolean LoginPermission; // �α����㰡
     private String UserID; // ����� ���̵�
     private String UserName; // ����� �̸�
+    private String UserPW;
     private JSONArray mapmetaArray;
     private JSONArray[] mapforpinArray;
     private int[] mapforpinNum = {0, 0, 0, 0, 0};
@@ -31,6 +33,10 @@ public class UserData {
     private boolean friendlock;
     private boolean reviewListlock;
     private MapData mapData;
+
+
+    // auto_login
+    private int isAuto;
 
     public static UserData getInstance() {
         if (ourInstance == null) {
@@ -57,6 +63,9 @@ public class UserData {
         result = new Bitmap[5];
         GalImages = new Bitmap[5];
         friendlock = true;
+
+        //auto_login
+        isAuto = -1;
     }
 
     //서버에서 리뷰 갯슈 받아오기(지역별 index는 구글드라이브 지도번호 -1 하면 됨)
@@ -283,6 +292,10 @@ public class UserData {
         UserName = name;
     }
 
+    public void inputPW(String pw){
+        UserPW = pw;
+    }
+
     public String getUserID() {
         return UserID;
     }
@@ -293,6 +306,10 @@ public class UserData {
 
     public String getUserName() {
         return UserName;
+    }
+
+    public String getUserPW(){
+        return UserPW;
     }
 
     public JSONArray getMapmetaArray() {
@@ -372,5 +389,14 @@ public class UserData {
     public MapData getMapData() {
         return mapData;
     }
+
+   public void setIsAuto(int isAuto){
+       this.isAuto = isAuto;
+   }
+
+    public int getIsAuto(){
+        return isAuto;
+    }
+
 
 }

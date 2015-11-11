@@ -1,18 +1,29 @@
 package com.mapzip.ppang.mapzipproject;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
+
+    // auto_login
+    private SharedPreferences pref;
+    private int isAuto;
+    private String auto_id;
+    private String auto_pw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +34,29 @@ public class MainActivity extends FragmentActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
+
+        pref = getSharedPreferences("auto_login", MODE_PRIVATE);
+        isAuto = pref.getInt("isAuto", -1);
+
+        UserData userData = UserData.getInstance();
+        userData.init();
+
+        userData.setIsAuto(isAuto);
+
+        Log.d("pref", "isAuto : " + userData.getIsAuto());
+        if(isAuto == -1){
+            // no auto login
+            Log.d("pref","Auto Login off : "+isAuto);
+        }
+        else if(isAuto == 1){
+            Log.d("pref","Auto Login on");
+            auto_id = pref.getString("auto_id","");
+            auto_pw = pref.getString("auto_pw","");
+            Log.d("pref","auto_id : "+auto_id);
+            Log.d("pref","auto_pw : "+auto_pw);
+        }
+
+
     }
 
     private class PagerAdapter extends FragmentStatePagerAdapter {
@@ -35,7 +69,7 @@ public class MainActivity extends FragmentActivity {
         public Fragment getItem(int position) {
             // �ش��ϴ� page�� Fragment�� �����մϴ�.
             if(position == 0)
-                return loginFragment.create(position);
+                return loginFragment.create(position,isAuto,auto_id,auto_pw);
             else
                 return joinFragment.create(position);
         }

@@ -3,6 +3,7 @@ package com.mapzip.ppang.mapzipproject;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,12 +50,21 @@ public class loginFragment extends Fragment {
     private View layout_toast;
     private TextView text_toast;
 
+    //auto_login
+    private int isAuto;
+    private String auto_id;
+    private String auto_pw;
+    private CheckBox check_auto;
 
-    public static loginFragment create(int pageNumber) {
+
+    public static loginFragment create(int pageNumber,int isAuto,String auto_id, String auto_pw) {
 
         loginFragment fragment = new loginFragment();
         Bundle args = new Bundle();
         args.putInt("page", pageNumber);
+        args.putInt("isAuto",isAuto);
+        args.putString("auto_id",auto_id);
+        args.putString("auto_pw",auto_pw);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,13 +73,17 @@ public class loginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPageNumber = getArguments().getInt("page");
+        isAuto = getArguments().getInt("isAuto");
+        if(isAuto == 1){
+            auto_id = getArguments().getString("auto_id","");
+            auto_pw = getArguments().getString("auto_pw","");
+        }
         res = getResources();
         asyncDialog = new ProgressDialog(this.getActivity());
         user = UserData.getInstance();
-        user.init();
+
         Loading = new LoadingTask();
         lockBtn=false;
-
 
     }
 
@@ -86,8 +101,28 @@ public class loginFragment extends Fragment {
         inputPW = (EditText) rootView.findViewById(R.id.InputPW);
         LoginBtn = (Button) rootView.findViewById(R.id.btnLogin);
 
+        // Auto_Login CheckBox
+        check_auto = (CheckBox)rootView.findViewById(R.id.check_auto);
+        check_auto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (check_auto.isChecked()) {
+                    user.setIsAuto(1);
+                } else {
+                    user.setIsAuto(0);
+
+                }
+            }
+        });
+
         inputID.setOnFocusChangeListener(ofcl);
         inputPW.setOnFocusChangeListener(ofcl);
+
+        if(user.getIsAuto() == 1){
+            check_auto.setChecked(true);
+            inputID.setText(auto_id);
+            inputPW.setText(auto_pw);
+        }
 
         LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +133,8 @@ public class loginFragment extends Fragment {
              }
             }
         });
+
+
 
         return rootView;
     }
@@ -183,6 +220,7 @@ public class loginFragment extends Fragment {
 
                         user.LoginOK();
                         user.inputID(inputID.getText().toString());
+                        user.inputPW(inputPW.getText().toString());
                         user.inputName(response.get("username").toString());
 
                         Log.v("테스트 아이디", user.getUserID());
@@ -274,9 +312,6 @@ public class loginFragment extends Fragment {
         };
     }
     protected class LoadingTask extends AsyncTask<Void, Void, Void> {
-
-
-
 
         @Override
         protected void onPreExecute() {
