@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
+    // Login fragment, Join fragment
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
 
@@ -43,7 +44,7 @@ public class MainActivity extends FragmentActivity {
 
         userData.setIsAuto(isAuto);
 
-        Log.d("pref", "isAuto : " + userData.getIsAuto());
+
         if(isAuto == -1){
             // no auto login
             Log.d("pref","Auto Login off : "+isAuto);

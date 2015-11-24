@@ -46,6 +46,7 @@ public class loginFragment extends Fragment {
     public  UserData user;
     public int map;
     public ProgressDialog  asyncDialog;
+
     // toast
     private View layout_toast;
     private TextView text_toast;
@@ -156,11 +157,7 @@ public class loginFragment extends Fragment {
         final String userid = inputID.getText().toString();
         final String userpw = inputPW.getText().toString();
         if (userid != null && !userid.equals("") && userpw != null && !userpw.equals("")) {
-            /*
-            Map<String,String> params = new HashMap<String,String>();
-            params.put("userid", userid);
-            params.put("userpw",userpw);
-            */
+
             InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(inputPW.getWindowToken(), 0);
             InputMethodManager imm2 = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -179,31 +176,8 @@ public class loginFragment extends Fragment {
                     SystemMain.SERVER_LOGIN_URL,
                     obj,
                     createMyReqSuccessListener(),
-                    createMyReqErrorListener()) {
-/*
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String,String> params = new HashMap<String,String>();
-                    params.put("userid", userid);
-                    params.put("userpw",userpw);
+                    createMyReqErrorListener());
 
-                    return params;
-                }*/
-/*
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    try {
-                        String utf_String = new String(response.data,"UTF-8");
-                        return Response.success(utf_String,HttpHeaderParser.parseCacheHeaders(response));
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                        return Response.error(new VolleyError());
-                    }
-
-
-
-                }*/
-            };
             queue.add(myReq);
         }
     }

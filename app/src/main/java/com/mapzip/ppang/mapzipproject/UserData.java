@@ -18,14 +18,14 @@ import org.json.JSONArray;
 public class UserData {
     private static UserData ourInstance;
 
-    private boolean LoginPermission; // �α����㰡
-    private String UserID; // ����� ���̵�
-    private String UserName; // ����� �̸�
+    private boolean LoginPermission;
+    private String UserID;
+    private String UserName;
     private String UserPW;
     private JSONArray mapmetaArray;
     private JSONArray[] mapforpinArray;
-    private int[] mapforpinNum = {0, 0, 0, 0, 0};
-    private int mapmetaNum;
+    private int[] mapforpinNum = {0, 0, 0, 0, 0}; // 지도별 리뷰정보 로딩여부 0: loding yet, 1: loding ok, 2: no review
+    private int mapmetaNum; // 지도정보 수정 시 홈화면 리프레시
     private int[][] pingCount; //25개 지역별 핑 갯수(색 지정에 쓰임)
     private Bitmap[] result; //map
     private Bitmap[] GalImages = new Bitmap[]{

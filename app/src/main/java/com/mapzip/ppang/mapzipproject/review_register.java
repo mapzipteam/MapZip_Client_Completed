@@ -322,7 +322,7 @@ public class review_register extends Activity {
 
                             if (reviewposition2 != 0) {
                                 if(reviewposition1 != 0)
-                                   tmp += " 하지만" + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
+                                   tmp += " 하지만 " + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
                                 else
                                     tmp += " " + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
                             }
