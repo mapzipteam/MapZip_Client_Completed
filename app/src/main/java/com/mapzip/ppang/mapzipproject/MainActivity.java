@@ -1,5 +1,6 @@
 package com.mapzip.ppang.mapzipproject;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -56,6 +57,12 @@ public class MainActivity extends FragmentActivity {
             Log.d("pref","auto_id : "+auto_id);
             Log.d("pref","auto_pw : "+auto_pw);
         }
+
+        AlertDialog.Builder ab = new AlertDialog.Builder(MainActivity.this);
+        ab.setTitle("새로운 MapZip의 패치소식 ^0^/");
+        ab.setMessage("안녕하세요. 이곳에는 앞으로 MapZip의 패치소식이 업데이트 될 것입니다>_<\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\nr\n스크롤바 알아서 되네 굳");
+                ab.setPositiveButton("ok", null);
+        ab.show();
 
 
     }
