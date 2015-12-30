@@ -1,1 +1,1 @@
-include ':app', ':nmaps', ':httpcore-4.4.1'
+include ':app', ':httpcore-4.4.1', ':nmaps'
