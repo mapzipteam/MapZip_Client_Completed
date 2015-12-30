@@ -57,6 +57,13 @@
         <item>직접입력</item>
     </string-array>
 
+    <string-array name="spinner_suggest">
+        <item>선택안함</item>
+        <item>버그신고</item>
+        <item>건의하기</item>
+        <item>기타</item>
+    </string-array>
+
     <!-- Nav Drawer List Item Icons --><!-- Keep them in order as the titles are in -->
     <array name="nav_drawer_icons">
         <item>@drawable/earth</item>
