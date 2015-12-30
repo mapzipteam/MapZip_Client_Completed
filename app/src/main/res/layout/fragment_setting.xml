@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/mailLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:gravity="center">
+
+    <ImageView android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/mail"
+        android:layout_margin="10dp"
+        android:id="@+id/mailIcon"/>
+
     <TextView
         android:id="@+id/txtLabel"
-         android:layout_width="wrap_content"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_margin="10dp"
         android:textSize="16dp"
-        android:text="myzip Fragment"/>
-    
-    <ImageView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtLabel"
-        android:src="@drawable/ic_people"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>
-    
+        android:text="개발자에게 건의하기"/>
+    </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

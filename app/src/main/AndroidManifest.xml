@@ -31,6 +31,7 @@
         <activity android:name="com.mapzip.ppang.mapzipproject.addfriend" />
         <activity android:name="com.mapzip.ppang.mapzipproject.friend_home"/>
         <activity android:name="com.mapzip.ppang.mapzipproject.map.SearchInLocationActivity"/>
+        <activity android:name="com.mapzip.ppang.mapzipproject.suggestActivity"/>
 
     </application>
 

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textSize="16dp"
+        android:text="개발자에게 건의하기"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+    <EditText
+        android:layout_marginTop="10dp"
+        android:id="@+id/editeval_suggest"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fffff9"
+        android:inputType="textMultiLine"
+        android:hint="건의사항을 입력해주세요."
+        android:minLines="10"
+        android:maxLength="1000"
+        android:padding="15dp"/>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/submitBtn_suggest"
+        android:layout_gravity="bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="보내기"/>
+
+
+</LinearLayout>
