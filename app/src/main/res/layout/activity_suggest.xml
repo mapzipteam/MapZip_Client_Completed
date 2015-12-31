@@ -7,24 +7,23 @@
 
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:id="@+id/spLayout_suggest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="카테고리: "/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="카테고리: " />
 
-    <Spinner
-        android:id="@+id/spinner_suggest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp">
-    </Spinner>
+        <Spinner
+            android:id="@+id/spinner_suggest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"></Spinner>
     </LinearLayout>
 
     <ScrollView
@@ -32,46 +31,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spLayout_suggest">
-    <EditText
-        android:id="@+id/editeval_suggest"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#fffff9"
-        android:inputType="textMultiLine"
-        android:hint="건의사항을 입력해주세요."
-        android:minLines="15"
-        android:maxLines="15"
-        android:maxLength="1000"
-        android:layout_margin="10dp"
-        android:padding="15dp"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editeval_suggest"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:background="#fffff9"
+                android:hint="건의사항을 입력해주세요."
+                android:inputType="textMultiLine"
+                android:maxLength="1000"
+                android:maxLines="15"
+                android:minLines="15"
+                android:padding="15dp" />
+
+            <Button
+                android:id="@+id/cancelBtn_suggest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/editeval_suggest"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/mainOrange"
+                android:onClick="cancelOnclick_suggest"
+                android:text="취소"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/okBtn_suggest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/editeval_suggest"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/mainOrange"
+                android:onClick="saveOnclick_suggest"
+                android:text="보내기"
+                android:textColor="@color/white" />
+        </RelativeLayout>
     </ScrollView>
-
-    <Button
-        android:id="@+id/cancelBtn_suggest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_below="@+id/scroll_suggest"
-        android:layout_alignParentLeft="true"
-        android:background="@color/mainOrange"
-        android:textColor="@color/white"
-        android:text="취소"
-        android:onClick="cancelOnclick_suggest" />
-
-    <Button
-        android:id="@+id/okBtn_suggest"
-        android:layout_gravity="bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_below="@+id/scroll_suggest"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true"
-        android:background="@color/mainOrange"
-        android:textColor="@color/white"
-        android:text="보내기"/>
-
 
 </RelativeLayout>
