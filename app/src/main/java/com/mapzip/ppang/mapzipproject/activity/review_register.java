@@ -1,4 +1,4 @@
-package com.mapzip.ppang.mapzipproject;
+package com.mapzip.ppang.mapzipproject.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -34,7 +34,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.mapzip.ppang.mapzipproject.R;
+import com.mapzip.ppang.mapzipproject.adapter.ImageAdapter;
 import com.mapzip.ppang.mapzipproject.model.MapData;
+import com.mapzip.ppang.mapzipproject.model.SystemMain;
+import com.mapzip.ppang.mapzipproject.model.UserData;
+import com.mapzip.ppang.mapzipproject.network.MultipartRequest;
 import com.mapzip.ppang.mapzipproject.network.MyVolley;
 
 import org.json.JSONException;
@@ -149,7 +154,7 @@ public class review_register extends Activity {
         bitarr = new Bitmap[oPerlishArray.size()];
         oPerlishArray.toArray(bitarr); // fill the array
         user.inputGalImages(bitarr);
-        imageadapter = new ImageAdapter(this,SystemMain.justuser);
+        imageadapter = new ImageAdapter(this, SystemMain.justuser);
         viewPager.setAdapter(imageadapter);
 
         /*

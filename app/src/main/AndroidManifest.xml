@@ -7,14 +7,14 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
 
     <application
-        android:name="com.mapzip.ppang.mapzipproject.FontApplication"
+        android:name=".adapter.FontApplication"
         android:allowBackup="true"
         android:icon="@drawable/egg"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppBaseTheme">
         <activity
-            android:name="com.mapzip.ppang.mapzipproject.MainActivity"
+            android:name=".main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -25,13 +25,13 @@
         </activity>
         <activity android:name="com.mapzip.ppang.mapzipproject.main.slidingTap" />
         <activity android:name="com.mapzip.ppang.mapzipproject.map.MapActivity" />
-        <activity android:name="com.mapzip.ppang.mapzipproject.ReviewActivity" />
-        <activity android:name="com.mapzip.ppang.mapzipproject.map_setting" />
-        <activity android:name="com.mapzip.ppang.mapzipproject.review_register" />
-        <activity android:name="com.mapzip.ppang.mapzipproject.addfriend" />
-        <activity android:name="com.mapzip.ppang.mapzipproject.friend_home"/>
+        <activity android:name=".activity.ReviewActivity" />
+        <activity android:name=".activity.map_setting" />
+        <activity android:name=".activity.review_register" />
+        <activity android:name=".activity.addfriend" />
+        <activity android:name=".activity.friend_home"/>
         <activity android:name="com.mapzip.ppang.mapzipproject.map.SearchInLocationActivity"/>
-        <activity android:name="com.mapzip.ppang.mapzipproject.suggestActivity"/>
+        <activity android:name=".activity.suggestActivity"/>
 
     </application>
 

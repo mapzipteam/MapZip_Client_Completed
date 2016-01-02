@@ -1,4 +1,4 @@
-package com.mapzip.ppang.mapzipproject;
+package com.mapzip.ppang.mapzipproject.adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
@@ -6,6 +6,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.mapzip.ppang.mapzipproject.model.FriendData;
+import com.mapzip.ppang.mapzipproject.model.SystemMain;
+import com.mapzip.ppang.mapzipproject.model.UserData;
 
 /**
  * Created by ppangg on 2015-08-23.
@@ -17,7 +21,7 @@ public class ImageAdapter extends PagerAdapter {
     private UserData user;
     private FriendData fuser;
 
-    ImageAdapter(Context context, int i){
+    public ImageAdapter(Context context, int i){
         this.context=context;
         nowwho = i;
 

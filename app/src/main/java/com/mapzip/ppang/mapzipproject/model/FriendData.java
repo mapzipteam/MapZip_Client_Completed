@@ -1,4 +1,4 @@
-package com.mapzip.ppang.mapzipproject;
+package com.mapzip.ppang.mapzipproject.model;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -7,7 +7,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 
-import com.mapzip.ppang.mapzipproject.model.MapData;
+import com.mapzip.ppang.mapzipproject.R;
 
 import org.json.JSONArray;
 

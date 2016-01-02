@@ -1,6 +1,5 @@
-package com.mapzip.ppang.mapzipproject;
+package com.mapzip.ppang.mapzipproject.model;
 
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -8,7 +7,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 
-import com.mapzip.ppang.mapzipproject.model.MapData;
+import com.mapzip.ppang.mapzipproject.R;
 
 import org.json.JSONArray;
 
@@ -33,7 +32,6 @@ public class UserData {
     private boolean friendlock;
     private boolean reviewListlock;
     private MapData mapData;
-
 
     // auto_login
     private int isAuto;
@@ -364,13 +362,9 @@ public class UserData {
         return GalImages;
     }
 
-    ;
-
     public void inputGalImages(Bitmap[] Images) {
         GalImages = Images;
     }
-
-    ;
 
     public void initMapData() {
         mapData = new MapData();

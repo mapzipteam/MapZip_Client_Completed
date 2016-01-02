@@ -27,11 +27,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.mapzip.ppang.mapzipproject.map_setting;
+import com.mapzip.ppang.mapzipproject.activity.map_setting;
 import com.mapzip.ppang.mapzipproject.map.MapActivity;
 import com.mapzip.ppang.mapzipproject.R;
-import com.mapzip.ppang.mapzipproject.SystemMain;
-import com.mapzip.ppang.mapzipproject.UserData;
+import com.mapzip.ppang.mapzipproject.model.SystemMain;
+import com.mapzip.ppang.mapzipproject.model.UserData;
 import com.mapzip.ppang.mapzipproject.map.Location;
 import com.mapzip.ppang.mapzipproject.network.MyVolley;
 

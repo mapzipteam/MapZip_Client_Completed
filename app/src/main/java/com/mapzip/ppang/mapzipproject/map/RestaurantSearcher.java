@@ -14,7 +14,7 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.mapzip.ppang.mapzipproject.UserData;
+import com.mapzip.ppang.mapzipproject.model.UserData;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

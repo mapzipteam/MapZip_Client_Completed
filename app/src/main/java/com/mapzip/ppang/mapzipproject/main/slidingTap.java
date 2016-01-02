@@ -1,7 +1,7 @@
 package com.mapzip.ppang.mapzipproject.main;
 
 import com.mapzip.ppang.mapzipproject.R;
-import com.mapzip.ppang.mapzipproject.UserData;
+import com.mapzip.ppang.mapzipproject.model.UserData;
 import com.mapzip.ppang.mapzipproject.adapter.NavDrawerListAdapter;
 import com.mapzip.ppang.mapzipproject.model.NavDrawerItem;
 import java.util.ArrayList;

@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapzip.ppang.mapzipproject.R;
-import com.mapzip.ppang.mapzipproject.review_register;
+import com.mapzip.ppang.mapzipproject.activity.review_register;
 import com.nhn.android.maps.NMapActivity;
 import com.nhn.android.maps.NMapController;
 import com.nhn.android.maps.NMapProjection;

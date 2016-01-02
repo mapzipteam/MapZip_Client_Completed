@@ -1,4 +1,4 @@
-package com.mapzip.ppang.mapzipproject;
+package com.mapzip.ppang.mapzipproject.main;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +22,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.mapzip.ppang.mapzipproject.R;
+import com.mapzip.ppang.mapzipproject.model.SystemMain;
+import com.mapzip.ppang.mapzipproject.model.UserData;
 import com.mapzip.ppang.mapzipproject.network.MyVolley;
 
 import org.json.JSONException;

@@ -23,12 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapzip.ppang.mapzipproject.R;
-import com.mapzip.ppang.mapzipproject.UserData;
+import com.mapzip.ppang.mapzipproject.model.UserData;
 import com.mapzip.ppang.mapzipproject.map.MapActivity;
 import com.mapzip.ppang.mapzipproject.map.RestaurantResult;
 import com.mapzip.ppang.mapzipproject.map.RestaurantSearcher;
 import com.mapzip.ppang.mapzipproject.map.SearchInLocationActivity;
-import com.mapzip.ppang.mapzipproject.review_register;
+import com.mapzip.ppang.mapzipproject.activity.review_register;
 
 import java.util.ArrayList;
 

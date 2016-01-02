@@ -4,7 +4,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.mapzip.ppang.mapzipproject.SystemMain;
+import com.mapzip.ppang.mapzipproject.model.SystemMain;
 
 import java.util.HashMap;
 import java.util.Map;

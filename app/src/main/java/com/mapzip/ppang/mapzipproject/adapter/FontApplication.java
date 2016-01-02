@@ -1,4 +1,4 @@
-package com.mapzip.ppang.mapzipproject;
+package com.mapzip.ppang.mapzipproject.adapter;
 
 /**
  * Created by Minjeong on 2015-08-23.

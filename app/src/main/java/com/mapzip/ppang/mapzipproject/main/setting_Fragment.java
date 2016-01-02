@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mapzip.ppang.mapzipproject.R;
-import com.mapzip.ppang.mapzipproject.suggestActivity;
+import com.mapzip.ppang.mapzipproject.activity.suggestActivity;
 
 /**
  * Created by ppangg on 2015-12-29.

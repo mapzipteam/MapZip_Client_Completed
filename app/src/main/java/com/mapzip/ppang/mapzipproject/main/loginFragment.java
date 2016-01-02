@@ -1,9 +1,8 @@
-package com.mapzip.ppang.mapzipproject;
+package com.mapzip.ppang.mapzipproject.main;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,7 +23,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.mapzip.ppang.mapzipproject.main.slidingTap;
+import com.mapzip.ppang.mapzipproject.R;
+import com.mapzip.ppang.mapzipproject.model.SystemMain;
+import com.mapzip.ppang.mapzipproject.model.UserData;
 import com.mapzip.ppang.mapzipproject.network.MyVolley;
 
 import org.json.JSONException;
@@ -43,7 +44,7 @@ public class loginFragment extends Fragment {
     private EditText inputPW;
     private int mPageNumber;
     private Button LoginBtn;
-    public  UserData user;
+    public UserData user;
     public int map;
     public ProgressDialog  asyncDialog;
 

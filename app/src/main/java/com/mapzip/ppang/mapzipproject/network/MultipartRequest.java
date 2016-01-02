@@ -1,4 +1,4 @@
-package com.mapzip.ppang.mapzipproject;
+package com.mapzip.ppang.mapzipproject.network;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;

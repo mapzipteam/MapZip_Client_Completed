@@ -27,10 +27,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.mapzip.ppang.mapzipproject.FriendData;
+import com.mapzip.ppang.mapzipproject.model.FriendData;
 import com.mapzip.ppang.mapzipproject.R;
-import com.mapzip.ppang.mapzipproject.SystemMain;
-import com.mapzip.ppang.mapzipproject.friend_home;
+import com.mapzip.ppang.mapzipproject.model.SystemMain;
+import com.mapzip.ppang.mapzipproject.activity.friend_home;
 import com.mapzip.ppang.mapzipproject.network.MyVolley;
 
 import org.json.JSONArray;
