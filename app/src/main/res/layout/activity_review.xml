@@ -112,10 +112,41 @@
                     android:padding="5dp"
                     android:singleLine="false"
                     android:text="02-1234-5678" />
-
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/contact_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/modifyBtn_review"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:background="@color/mainOrange"
+                    android:layout_marginLeft="7dp"
+                    android:text="수  정"
+                    android:textSize="17dp"
+                    android:textColor="@color/white"
+                    android:onClick="modifyOnclick"/>
+
+                <Button
+                    android:id="@+id/deleteBtn_review"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:background="@color/mainOrange"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="7dp"
+                    android:text="삭  제"
+                    android:textSize="17dp"
+                    android:textColor="@color/white"
+                    android:onClick="deleteOnclick"/>
+            </LinearLayout>
+
         </RelativeLayout>
     </ScrollView>
-
-
 </RelativeLayout>

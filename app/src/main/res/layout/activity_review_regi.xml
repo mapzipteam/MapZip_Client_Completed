@@ -27,7 +27,8 @@
                 android:layout_height="50dp"
                 android:layout_margin="5dp"
                 android:background="@drawable/picture_add"
-                android:layout_alignParentLeft="true"/>
+                android:layout_alignParentLeft="true"
+                android:onClick="findImageonClick"/>
 
 
 
@@ -201,7 +202,8 @@
                     android:layout_marginLeft="7dp"
                     android:text="등  록"
                     android:textSize="17dp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:onClick="enrollonClick_review_regi"/>
 
                 <Button
                     android:id="@+id/cancelBtn_review_regi"
@@ -213,7 +215,8 @@
                     android:layout_marginRight="7dp"
                     android:text="취  소"
                     android:textSize="17dp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:onClick="cancelonClick_review_regi"/>
 
             </LinearLayout>
 

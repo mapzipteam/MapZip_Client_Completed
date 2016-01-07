@@ -3,6 +3,7 @@ package com.mapzip.ppang.mapzipproject.main;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;

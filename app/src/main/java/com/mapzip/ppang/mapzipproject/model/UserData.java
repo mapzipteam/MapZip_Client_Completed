@@ -21,8 +21,8 @@ public class UserData {
     private String UserID;
     private String UserName;
     private String UserPW;
-    private JSONArray mapmetaArray;
-    private JSONArray[] mapforpinArray;
+    private JSONArray mapmetaArray; // 홈화면 정보
+    private JSONArray[] mapforpinArray; // 지도 핀 데이터
     private int[] mapforpinNum = {0, 0, 0, 0, 0}; // 지도별 리뷰정보 로딩여부 0: loding yet, 1: loding ok, 2: no review
     private int mapmetaNum; // 지도정보 수정 시 홈화면 리프레시
     private int[][] pingCount; //25개 지역별 핑 갯수(색 지정에 쓰임)
@@ -32,6 +32,11 @@ public class UserData {
     private boolean friendlock;
     private boolean reviewListlock;
     private MapData mapData;
+    private boolean mapRefreshLock = true;
+
+    // noimage
+    private Bitmap noimage;
+    private boolean checkNoimage = false;
 
     // auto_login
     private int isAuto;
@@ -370,7 +375,7 @@ public class UserData {
         mapData = new MapData();
     }
 
-    public void setMapData(String s_id, String m_id, String s_contact, String r_text, String r_emotion, String s_address, String s_name) {
+    public void setMapData(String s_id, String m_id, String s_contact, String r_text, String r_emotion, String s_address, String s_name, String g_num) {
         mapData.setStore_id(s_id);
         mapData.setMapid(m_id);
         mapData.setStore_contact(s_contact);
@@ -378,6 +383,7 @@ public class UserData {
         mapData.setReview_emotion(Integer.parseInt(r_emotion));
         mapData.setStore_address(s_address);
         mapData.setStore_name(s_name);
+        mapData.setGu_num(Integer.parseInt(g_num));
     }
 
     public MapData getMapData() {
@@ -392,5 +398,27 @@ public class UserData {
         return isAuto;
     }
 
+    public Bitmap getNoimage() {
+        return noimage;
+    }
 
+    public void setNoimage(Bitmap noimage) {
+        this.noimage = noimage;
+    }
+
+    public boolean isCheckNoimage() {
+        return checkNoimage;
+    }
+
+    public void setCheckNoimage(boolean checkNoimage) {
+        this.checkNoimage = checkNoimage;
+    }
+
+    public boolean isMapRefreshLock() {
+        return mapRefreshLock;
+    }
+
+    public void setMapRefreshLock(boolean mapRefreshLock) {
+        this.mapRefreshLock = mapRefreshLock;
+    }
 }

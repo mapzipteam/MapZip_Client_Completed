@@ -219,7 +219,7 @@ public class loginFragment extends Fragment {
                                 JSONObject tmp = jar.getJSONObject(String.valueOf(mapnum));
                                 int gunumber = 1;
                                 int reviewnum = 0;
-                                for (gunumber = 1; gunumber <= 25; gunumber++) {
+                                for (gunumber = 1; gunumber <= SystemMain.SeoulGuCount; gunumber++) {
                                     if (tmp.has(String.valueOf(gunumber))) {
                                         reviewnum = tmp.getInt(String.valueOf(gunumber));
                                         Log.v("구넘버o", tmp.get(String.valueOf(gunumber)).toString());
@@ -232,7 +232,7 @@ public class loginFragment extends Fragment {
                                     user.setReviewCount(mapnum, gunumber, reviewnum);
                                 }
                             } else {
-                                for (int gunumber = 1; gunumber <= 25; gunumber++)
+                                for (int gunumber = 1; gunumber <= SystemMain.SeoulGuCount; gunumber++)
                                     user.setReviewCount(mapnum, gunumber, 0);
                             }
                         }

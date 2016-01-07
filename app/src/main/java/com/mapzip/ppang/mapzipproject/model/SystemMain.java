@@ -25,6 +25,8 @@ public class SystemMain {
     public static final String SERVER_FRIENDHOME_URL = SERVER_ROOT_URL+"/friend/friend_home.php";
     public static final String SERVER_NOTICE_URL = SERVER_ROOT_URL+"/interact/get_patch_update.php";
     public static final String SERVER_SUGGEST_URL = SERVER_ROOT_URL +"/interact/post_user_sound.php";
+    public static final String SERVER_REVIEWDELETE_URL = SERVER_ROOT_URL+"/client_data/client_review_delete.php";
+    public static final String SERVER_REVIEWMODIFY_URL = SERVER_ROOT_URL+"/client_data/client_review_update.php";
 
     // state define -1~
     public static final int NON_KNOWN_ERROR = -1;
@@ -92,6 +94,7 @@ public class SystemMain {
     public static final int justfuser = 2;
 
     // GU number DEFAULT
+    public static final int SeoulGuCount = 25;
     public static final int DoBong = 1;
     public static final int NoWon = 2;
     public static final int GangBuk = 3;

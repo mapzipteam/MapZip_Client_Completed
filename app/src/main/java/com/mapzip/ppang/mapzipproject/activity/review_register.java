@@ -57,57 +57,61 @@ import java.util.Map;
  * Created by ppangg on 2015-08-22.
  */
 public class review_register extends Activity {
-    final int REQ_CODE_SELECT_IMAGE = 100;
+    // toast
+    private View layout_toast;
+    private TextView text_toast;
 
+    // user Data
     private UserData user;
-    private Resources res;
-    private int reviewposition1;
-    private int reviewposition2;
-    private LoadingTask loading;
-    private Button findImage;
-    private Button enrollBtn;
-    private Button cancelBtn;
 
-    private int serverchoice;
-
+    // UI
     private TextView titleText;
     private TextView addressText;
     private TextView contactText;
 
+    // Image View
+    private ViewPager viewPager;
+    private List<Bitmap> oPerlishArray; // Image List
+    private Bitmap[] bitarr; // Image array, oPerlishArray.toArray(bitarr)
+    private ImageAdapter imageadapter;
+    private Bitmap noimage;
+
+    // Image Select
+    final int REQ_CODE_SELECT_IMAGE = 100;
+    private boolean oncreatelock = false; // image array clear -> false: oPerlishArray.clear() , true: x
+    private List<Uri> Uriarr; // selected Images Uri List
+    private Uri image_uri; // selected Image Uri, Uriarr.add(image_uri);
+
+    // Image Send
+    private int serverchoice = 0; // Image send check -> 0: default, 1: only text, 2: image send in Loding Background
+    private Uri uriarray[]; // Uriarr.toArray(uriarray), mfile = getImageFile(uriarray[i])
+    private int imagenum = 0; // to identify Image -> increase in doUpload
+    private File mfile; // request param - image file
+
+    // Loading
+    private LoadingTask loading;
+    public ProgressDialog asyncDialog;
+
+    // review text
+    private int reviewposition1; // first spinner select num
+    private int reviewposition2; // second spinner select num
     private EditText directEdit;
+    private TextView oneText; // '한줄평' textview
+
+    // review emotion
     private SeekBar seekbar;
     private ImageView emotion;
-    private TextView oneText;
-    private List<Uri> Uriarr;
-    private Uri uriarray[];
-    private Uri image_uri;
-    private List<Bitmap> oPerlishArray;
-    private int arrnum = 0;
 
     // map spinner
     private ArrayList<String> mapsppinerList; // map name
     private Spinner mapspinner;
     private ArrayAdapter mapadapter;
 
-    // 보낼 정보
+    // to send Review Data
     private MapData mapData = new MapData();
 
-    private int imagenum = 0;
-
-    private File mfile;
-
-    // toast
-    private View layout_toast;
-    private TextView text_toast;
-
-    private View thisview;
-    public ProgressDialog asyncDialog;
-    private ImageAdapter imageadapter;
-    private Bitmap noimage;
-    private Bitmap[] bitarr;
-    private ViewPager viewPager;
-
-    private boolean oncreatelock = false;
+    // set Map Image
+    private Resources res;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,15 +119,24 @@ public class review_register extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.hide();
         setContentView(R.layout.activity_review_regi);
-        user = UserData.getInstance();
-        serverchoice = 0;
-        res = getResources();
-        loading = new LoadingTask();
 
+        // toast
         LayoutInflater inflater = this.getLayoutInflater();
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 
+        // user Data
+        user = UserData.getInstance();
+
+        /*
+         *  Init var & Setting view
+         */
+        res = getResources();
+        loading = new LoadingTask();
+        serverchoice = 0;
+        imagenum = 0;
+
+        // setting mapData to send
         mapData.setStore_x(getIntent().getDoubleExtra("store_x", 0));
         mapData.setStore_y(getIntent().getDoubleExtra("store_y", 0));
         mapData.setStore_name(getIntent().getStringExtra("store_name"));
@@ -131,25 +144,25 @@ public class review_register extends Activity {
         mapData.setStore_contact(getIntent().getStringExtra("store_contact"));
         mapData.setGu_num(getGunum());
 
+        // setting View
         titleText = (TextView) findViewById(R.id.name_review_regi);
         addressText = (TextView) findViewById(R.id.address_txt_review_regi);
         contactText = (TextView) findViewById(R.id.contact_txt_review_regi);
-
         titleText.setText(mapData.getStore_name());
         addressText.setText(mapData.getStore_address());
         contactText.setText(mapData.getStore_contact());
 
-        imagenum = 0;
-
-        arrnum = 0;
+        /*
+         *  setting for Image
+         */
+        viewPager = (ViewPager) findViewById(R.id.pager_review_regi);
 
         Uriarr = new ArrayList<Uri>();
-
-        noimage = drawableToBitmap(getResources().getDrawable(R.drawable.noimage));
         oPerlishArray = new ArrayList<Bitmap>();
-        oPerlishArray.add(noimage);
 
-        viewPager = (ViewPager) findViewById(R.id.pager_review_regi);
+        // no Image
+        noimage = drawableToBitmap(getResources().getDrawable(R.drawable.noimage));
+        oPerlishArray.add(noimage);
 
         bitarr = new Bitmap[oPerlishArray.size()];
         oPerlishArray.toArray(bitarr); // fill the array
@@ -158,19 +171,19 @@ public class review_register extends Activity {
         viewPager.setAdapter(imageadapter);
 
         /*
-        user.inputGalImages(noimagearr);
-        imageadapter.notifyDataSetChanged();
-*/
+         *  map spinner
+         */
+        // get map name
         mapsppinerList = new ArrayList<String>();
         try {
             for (int i = 0; i < user.getMapmetaArray().length(); i++) {
                 mapsppinerList.add(user.getMapmetaArray().getJSONObject(i).getString("title"));
             }
         } catch (JSONException ex) {
-
+            Log.v("제이손 에러","review_regi_mapspinner");
         }
 
-        // map name
+        // set map spinner
         mapspinner = (Spinner) findViewById(R.id.spinner_review);
         mapadapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, mapsppinerList);
         mapadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -181,12 +194,13 @@ public class review_register extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
+                    // get map id to send
                     JSONObject mapmeta = null;
                     mapmeta = user.getMapmetaArray().getJSONObject(position);
                     mapData.setMapid(mapmeta.get("map_id").toString());
                     Log.v("mappid", mapData.getMapid());
-
                 } catch (JSONException ex) {
+                    Log.v("제이손 에러","review_regi_mapspinner2");
                 }
             }
 
@@ -196,25 +210,14 @@ public class review_register extends Activity {
             }
         });
 
-        findImage = (Button) findViewById(R.id.findImage_review_regi);
-        findImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
-                intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, REQ_CODE_SELECT_IMAGE);
-            }
-        });
-
-        oneText = (TextView) findViewById(R.id.spinner_text_review_regi);
-        seekbar = (SeekBar) findViewById(R.id.emotionBar_review_regi);
+        // emotion
         emotion = (ImageView) findViewById(R.id.emotion_review_regi);
-        emotion.setImageResource(R.drawable.sample_emotion0);
+        emotion.setImageResource(R.drawable.sample_emotion0); // default emotion image
+        seekbar = (SeekBar) findViewById(R.id.emotionBar_review_regi);
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mapData.setReview_emotion(progress);
+                mapData.setReview_emotion(progress); // to send emotion
 
                 if (progress < 20)
                     emotion.setImageResource(R.drawable.emotion1);
@@ -227,25 +230,27 @@ public class review_register extends Activity {
                 else
                     emotion.setImageResource(R.drawable.emotion5);
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
 
+        /*
+         *  review text
+         */
+        oneText = (TextView) findViewById(R.id.spinner_text_review_regi);
         directEdit = (EditText) findViewById(R.id.editeval_review_regi);
 
+        // first spinner
         final Spinner spinner = (Spinner) findViewById(R.id.spinner_review_regi);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.spinner_review_regi));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        // second spinner
         final Spinner spinner2 = (Spinner) findViewById(R.id.spinner_review_regi2);
         ArrayAdapter adapter2 = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.spinner_review_regi2));
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -259,7 +264,7 @@ public class review_register extends Activity {
                     directEdit.setVisibility(View.VISIBLE);
                     oneText.setVisibility(View.GONE);
                     spinner2.setVisibility(View.GONE);
-                    reviewposition1 = position;
+                    reviewposition1 = position; // save selected position
                 } else {
                     directEdit.setVisibility(View.GONE);
                     oneText.setVisibility(View.VISIBLE);
@@ -282,7 +287,7 @@ public class review_register extends Activity {
                     directEdit.setVisibility(View.VISIBLE);
                     oneText.setVisibility(View.GONE);
                     spinner.setVisibility(View.GONE);
-                    reviewposition2 = position;
+                    reviewposition2 = position; // save selected position
                 } else {
                     directEdit.setVisibility(View.GONE);
                     oneText.setVisibility(View.VISIBLE);
@@ -296,104 +301,12 @@ public class review_register extends Activity {
 
             }
         });
-
-        enrollBtn = (Button) findViewById(R.id.enrollBtn_review_regi);
-        enrollBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                    if (mapData.getReview_emotion() == 0) {
-                        // toast
-                        text_toast.setText("이모티콘을 선택해주세요.");
-                        Toast toast = new Toast(getApplicationContext());
-                        toast.setDuration(Toast.LENGTH_SHORT);
-                        toast.setView(layout_toast);
-                        toast.show();
-
-                    } else if ((reviewposition1 == 0) && (reviewposition2 == 0)) {
-                        // toast
-                        text_toast.setText("리뷰를 작성해주세요.");
-                        Toast toast = new Toast(getApplicationContext());
-                        toast.setDuration(Toast.LENGTH_SHORT);
-                        toast.setView(layout_toast);
-                        toast.show();
-                    } else {
-                        if ((reviewposition1 == 15) || (reviewposition2 == 14))
-                            mapData.setReview_text(directEdit.getText().toString());
-                        else {
-                            String tmp = "";
-                            if (reviewposition1 != 0)
-                                tmp = getResources().getStringArray(R.array.spinner_review_regi)[reviewposition1];
-
-                            if (reviewposition2 != 0) {
-                                if(reviewposition1 != 0)
-                                   tmp += " 하지만 " + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
-                                else
-                                    tmp += " " + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
-                            }
-
-                            mapData.setReview_text(tmp);
-                        }
-
-
-                        thisview = v;
-                        DoReviewset(v);
-                        user.setMapforpinNum(Integer.parseInt(mapData.getMapid()), 0);
-                    }
-                }
-
-        });
-
-        cancelBtn = (Button) findViewById(R.id.cancelBtn_review_regi);
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-/*
-                user.inputGalImages(noimagearr);
-                imageadapter.notifyDataSetChanged();
-*/
-                finish();
-            }
-        });
-
     }
 
-    private File getImageFile(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        if (uri == null) {
-            return null;
-        }
-        Cursor mCursor = getContentResolver().query(uri, projection, null, null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
-        if (mCursor == null || mCursor.getCount() < 1) {
-            return null;
-        }
-        int column_index = mCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        mCursor.moveToFirst();
-
-        String path = mCursor.getString(column_index);
-        if (mCursor != null) {
-            mCursor.close();
-            mCursor = null;
-        }
-        return new File(path);
-    }
-
-/*
-    @Override
-    public void onPause(){
-        super.onPause();
-        if(  asyncDialog != null) {
-            Log.e("ss", "success5555555");
-        }
-    }
-*/
-
+    //  onResult - findImageonClick
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-
         Log.v("resultCode", String.valueOf(resultCode));
-        //Toast.makeText(getBaseContext(), "resultCode : " + resultCode, Toast.LENGTH_SHORT).show();
 
         if (requestCode == REQ_CODE_SELECT_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
@@ -402,28 +315,22 @@ public class review_register extends Activity {
                     //String name_Str = getImageNameToUri(data.getData());
 
                     //이미지 데이터를 비트맵으로 받아온다.
-
                     Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                    Log.d("image", "data.getData() : " + data.getData());
                     image_uri = data.getData();
                     Uriarr.add(image_uri);
 
-                    if (oncreatelock == false) {
+                    if (oncreatelock == false) { // 사진 여러장 일 때
                         oPerlishArray.clear();
                         oncreatelock = true;
                     }
                     oPerlishArray.add(image_bitmap);
                     bitarr = new Bitmap[oPerlishArray.size()];
-                    oPerlishArray.toArray(bitarr); // fill the array
-                    user.inputGalImages(bitarr);
+                    oPerlishArray.toArray(bitarr);
+                    user.inputGalImages(bitarr); // save Image in user Data
 
                     imageadapter = new ImageAdapter(this,SystemMain.justuser);
                     viewPager.setAdapter(imageadapter);
-
                     imageadapter.notifyDataSetChanged();
-
-                    //Toast.makeText(getBaseContext(), "name_Str : "+name_Str , Toast.LENGTH_SHORT).show();
-
                 } catch (FileNotFoundException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -437,6 +344,7 @@ public class review_register extends Activity {
         }
     }
 
+    // in enroll Btn
     public void DoReviewset(View v) {
         RequestQueue queue = MyVolley.getInstance(this).getRequestQueue();
 
@@ -444,8 +352,6 @@ public class review_register extends Activity {
         try {
             if (mapData.getReview_text().isEmpty())
                 mapData.setReview_text(directEdit.getText().toString());
-
-            Log.v("직접입력", directEdit.getText().toString());
 
             obj.put("userid", user.getUserID());
             obj.put("map_id", mapData.getMapid());
@@ -473,7 +379,8 @@ public class review_register extends Activity {
         queue.add(myReq);
     }
 
-    public void DoReviewset2(View v) {
+    // in enroll Btn -> response, 이미지 있을때
+    public void DoReviewset2() {
         RequestQueue queue = MyVolley.getInstance(this).getRequestQueue();
 
         JSONObject obj = new JSONObject();
@@ -496,16 +403,11 @@ public class review_register extends Activity {
         queue.add(myReq);
     }
 
-
     private Response.Listener<JSONObject> createMyReqSuccessListener() {
         return new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
                 Log.v("review_regi 받기", response.toString());
-
-                //home_Fragment hf = (home_Fragment) getFragmentManager().findFragmentByTag("home_fragment");
-                //hf.refresh();
 
                 try {
                     if (response.get("state").toString().equals("601")) {
@@ -513,20 +415,16 @@ public class review_register extends Activity {
                         Log.v("리뷰저장", "OK");
                         mapData.setStore_id(response.getString("store_id"));
                         if (Uriarr.size() != 0)
-                            DoReviewset2(thisview);
+                            DoReviewset2(); // 이미지 있으면 2번째 통신 시작
                         else {
-                            serverchoice = 1;
+                            serverchoice = 1; // no image
                             loading.execute();
                         }
-                        // 이미지있으면 2번째통신 시작
-
                     } else if (response.get("state").toString().equals("602") || response.get("state").toString().equals("621")) {
                         // 2번째통신 성공
                         Log.v("리뷰저장2", "OK");
                         serverchoice = 2;
                         loading.execute();
-
-
                         // 3번째통신 이미지갯수만큼 반복
                     }
                     if (response.get("state").toString().equals("612")) {
@@ -537,72 +435,12 @@ public class review_register extends Activity {
                         toast.setDuration(Toast.LENGTH_SHORT);
                         toast.setView(layout_toast);
                         toast.show();
-
                     }
-
                 } catch (JSONException ex) {
-
+                    Log.e("제이손","에러");
                 }
             }
         };
-    }
-
-    public void DoUpload(View v, final int i) {
-        mfile = getImageFile(uriarray[i]);
-        if (mfile == null) {
-            Toast.makeText(getApplicationContext(), "이미지가 선택되지 않았습니다", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Log.d("mfile", mfile.toString());
-
-//        String sdString = Environment.getExternalStorageDirectory().getPath();
-//        sdString += "/DCIM/Camera/20150818_130908.jpg";
-//
-//        mfile = new File(sdString);
-
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("userid", user.getUserID());
-        params.put("map_id", mapData.getMapid());
-        params.put("store_id", mapData.getStore_id());
-        params.put("image_name", "image" + String.valueOf(imagenum));
-        imagenum++;
-
-        RequestQueue queue = MyVolley.getInstance(getApplicationContext()).getRequestQueue();
-        MultipartRequest mRequest = new MultipartRequest(SystemMain.SERVER_REVIEWENROLL3_URL,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // toast
-                        text_toast.setText("인터넷 연결이 필요합니다.");
-                        Toast toast = new Toast(getApplicationContext());
-                        toast.setDuration(Toast.LENGTH_LONG);
-                        toast.setView(layout_toast);
-                        toast.show();
-                        //Log.d("volley",error.getMessage());
-
-                    }
-                }, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                Log.d("volley", response);
-
-
-
-
-/*
-                user.inputGalImages(noimagearr);
-                imageadapter.notifyDataSetChanged();
-*/
-
-            }
-        }, mfile, params);
-
-        Log.v("사진 보내기", mRequest.toString());
-
-        queue.add(mRequest);
-
     }
 
     private Response.ErrorListener createMyReqErrorListener() {
@@ -626,6 +464,71 @@ public class review_register extends Activity {
         };
     }
 
+    /*
+     * for Image
+     */
+    // get image uri, use in DoUpload
+    private File getImageFile(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        if (uri == null) {
+            return null;
+        }
+        Cursor mCursor = getContentResolver().query(uri, projection, null, null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
+        if (mCursor == null || mCursor.getCount() < 1) {
+            return null;
+        }
+        int column_index = mCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        mCursor.moveToFirst();
+
+        String path = mCursor.getString(column_index);
+        if (mCursor != null) {
+            mCursor.close();
+            mCursor = null;
+        }
+        return new File(path);
+    }
+
+    // image upload
+    public void DoUpload(final int i) {
+        mfile = getImageFile(uriarray[i]);
+        if (mfile == null) {
+            Toast.makeText(getApplicationContext(), "이미지가 선택되지 않았습니다", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("userid", user.getUserID());
+        params.put("map_id", mapData.getMapid());
+        params.put("store_id", mapData.getStore_id());
+        params.put("image_name", "image" + String.valueOf(imagenum));
+        imagenum++;
+
+        RequestQueue queue = MyVolley.getInstance(getApplicationContext()).getRequestQueue();
+        MultipartRequest mRequest = new MultipartRequest(SystemMain.SERVER_REVIEWENROLL3_URL,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // toast
+                        text_toast.setText("인터넷 연결이 필요합니다.");
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setDuration(Toast.LENGTH_LONG);
+                        toast.setView(layout_toast);
+                        toast.show();
+                    }
+                }, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("volley", response);
+            }
+        }, mfile, params);
+        Log.v("사진 보내기", mRequest.toString());
+        queue.add(mRequest);
+    }
+
+    /*
+     * util
+     */
+    // for no Image
     public static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
@@ -639,6 +542,7 @@ public class review_register extends Activity {
         return bitmap;
     }
 
+    // to send Gunum
     public int getGunum() {
         int gunum = -1;
         if (mapData.getStore_address().contains("서울특별시 도봉구"))
@@ -695,33 +599,30 @@ public class review_register extends Activity {
         return gunum;
     }
 
+    /*
+     *  Loading
+     */
     protected class LoadingTask extends AsyncTask<Void, Void, Void> {
-
-
         @Override
         protected void onPreExecute() {
             asyncDialog = new ProgressDialog(review_register.this);
             asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             asyncDialog.setMessage("로딩중입니다..");
             asyncDialog.setCanceledOnTouchOutside(false);
-            // show dialog
             asyncDialog.show();
             super.onPreExecute();
-
         }
 
         @Override
         protected Void doInBackground(Void... arg0) {
             if (serverchoice == 1) {
-
             } else if (serverchoice == 2) {
                 uriarray = new Uri[Uriarr.size()];
                 Uriarr.toArray(uriarray);
 
                 for (int i = 0; i < Uriarr.size(); i++)
-                    DoUpload(thisview, i);
+                    DoUpload(i);
             }
-
             int tmp = user.getPingCount(Integer.parseInt(mapData.getMapid()), mapData.getGu_num());
             user.setReviewCount(Integer.parseInt(mapData.getMapid()), mapData.getGu_num(), tmp + 1);
             user.setMapImage(Integer.parseInt(mapData.getMapid()), res);
@@ -732,31 +633,80 @@ public class review_register extends Activity {
                 e.printStackTrace();
             }
 
-            Log.e("ss", "success");
-
+            Log.v("loading", "success");
             return null;
         }
 
-
         @Override
         protected void onPostExecute(Void result) {
-
             if (asyncDialog != null) {
                 asyncDialog.dismiss();
             }
-            Log.d("ss", "finish");
-            text_toast.setText("리뷰가 등록되었습니다.");
+            Log.d("loading", "finish");
 
+            // toast
+            text_toast.setText("리뷰가 등록되었습니다.");
             Toast toast = new Toast(getApplicationContext());
             toast.setDuration(Toast.LENGTH_SHORT);
             toast.setView(layout_toast);
             toast.show();
             finish();
-            //removeDialog(PROGRESS_DIALOG);
+            
             super.onPostExecute(result);
         }
-
-
     }
 
+    /*
+     *  onClick Btn
+     */
+    // 사진찾기 버튼
+    public void findImageonClick(View v) {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
+        intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQ_CODE_SELECT_IMAGE);
+    }
+
+    // 리뷰등록 버튼
+    public void enrollonClick_review_regi(View v) {
+        if (mapData.getReview_emotion() == 0) { // emotion not selected
+            // toast
+            text_toast.setText("이모티콘을 선택해주세요.");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout_toast);
+            toast.show();
+        } else if ((reviewposition1 == 0) && (reviewposition2 == 0)) { // review text not selected
+            // toast
+            text_toast.setText("리뷰를 작성해주세요.");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout_toast);
+            toast.show();
+        } else {
+            if ((reviewposition1 == 15) || (reviewposition2 == 14)) // direct review text
+                mapData.setReview_text(directEdit.getText().toString());
+            else { // selected review text
+                String tmp = "";
+                if (reviewposition1 != 0) // first spinner
+                    tmp = getResources().getStringArray(R.array.spinner_review_regi)[reviewposition1];
+                if (reviewposition2 != 0) { // second spinner
+                    if(reviewposition1 != 0)
+                        tmp += " 하지만 " + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
+                    else
+                        tmp += " " + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
+                }
+
+                mapData.setReview_text(tmp); // set final review to send
+            }
+
+            DoReviewset(v); // 서버 통신
+            user.setMapforpinNum(Integer.parseInt(mapData.getMapid()), 0); // to review loading
+        }
+    }
+
+    // 취소 버튼
+    public void cancelonClick_review_regi(View v) {
+        finish();
+    }
 }
