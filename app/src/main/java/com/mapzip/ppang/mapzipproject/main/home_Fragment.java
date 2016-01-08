@@ -5,6 +5,8 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -28,6 +30,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.mapzip.ppang.mapzipproject.ScalableLayout.ScalableLayout;
 import com.mapzip.ppang.mapzipproject.activity.map_setting;
 import com.mapzip.ppang.mapzipproject.map.MapActivity;
 import com.mapzip.ppang.mapzipproject.R;
@@ -101,6 +104,9 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
     private Button GangNam;
     private Button SongPa;
 
+    private ScalableLayout scalableLayout;
+
+
     public home_Fragment() {
     }
 
@@ -141,6 +147,10 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
         topstate.append(user.getUserID());
         topstate.append(")");*/
       //  topstate.append("의 지도");
+
+
+        scalableLayout = (ScalableLayout) v.findViewById(R.id.scalablelayout);
+
 
         imageview = (ImageView) v.findViewById(R.id.mapimage);
         hashstate = (TextView) v.findViewById(R.id.tagText);
@@ -198,7 +208,14 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                     mapid = mapmeta.get("map_id").toString();
 
                     Bitmap result = user.getResult(Integer.parseInt(mapid));
-                    imageview.setImageBitmap(result);
+//2016.01.08        imageview.setImageBitmap(result);
+                    imageview.setEnabled(false);
+                    Drawable drawable = new BitmapDrawable(result);
+                    scalableLayout.setBackground(drawable);
+                    //scalableLayout.setBackground(new BitmapDrawable(getActivity().getResources(), result));
+
+
+
 
                     // category select (SEOUL)
                     if (Integer.parseInt(mapmeta.get("category").toString()) == SystemMain.SEOUL_MAP_NUM) {
@@ -278,89 +295,229 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                     fix_y=-(realHeight/13)-(realHeight/400); //17~18
                     Log.e("check", "No");
                 }
-                RelativeLayout.LayoutParams layoutParms1 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms1.setMargins((realWidth / 100 * 33) + fix_x, realHeight / 100 * 36 + fix_y, 0, 0); // left, top, 0, 0
-                EunPhung.setLayoutParams(layoutParms1);
-                RelativeLayout.LayoutParams layoutParms2 = new RelativeLayout.LayoutParams(90 + fix_x, 90); // width, height
-                layoutParms2.setMargins(realWidth / 100 * 34 + fix_x, realHeight / 100 * 45 + fix_y, 0, 0); // left, top, 0, 0
-                SuDaeMon.setLayoutParams(layoutParms2);
-                RelativeLayout.LayoutParams layoutParms3 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms3.setMargins(realWidth / 100 * 45 + fix_x, realHeight / 100 * 43 + fix_y, 0, 0); // left, top, 0, 0
-                ZongRo.setLayoutParams(layoutParms3);
-                RelativeLayout.LayoutParams layoutParms4 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms4.setMargins(realWidth / 100 * 54 + fix_x, realHeight / 100 * 40 + fix_y, 0, 0); // left, top, 0, 0
-                SungBuk.setLayoutParams(layoutParms4);
-                RelativeLayout.LayoutParams layoutParms5 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms5.setMargins(realWidth / 100 * 52 + fix_x, realHeight / 100 * 32 + fix_y, 0, 0); // left, top, 0, 0
-                GangBuk.setLayoutParams(layoutParms5);
+//김민정이 코드
+//                RelativeLayout.LayoutParams layoutParms1 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms1.setMargins((realWidth / 100 * 33) + fix_x, realHeight / 100 * 36 + fix_y, 0, 0); // left, top, 0, 0
+//                EunPhung.setLayoutParams(layoutParms1);
+//                RelativeLayout.LayoutParams layoutParms2 = new RelativeLayout.LayoutParams(90 + fix_x, 90); // width, height
+//                layoutParms2.setMargins(realWidth / 100 * 34 + fix_x, realHeight / 100 * 45 + fix_y, 0, 0); // left, top, 0, 0
+//                SuDaeMon.setLayoutParams(layoutParms2);
+//                RelativeLayout.LayoutParams layoutParms3 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms3.setMargins(realWidth / 100 * 45 + fix_x, realHeight / 100 * 43 + fix_y, 0, 0); // left, top, 0, 0
+//                ZongRo.setLayoutParams(layoutParms3);
+//                RelativeLayout.LayoutParams layoutParms4 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms4.setMargins(realWidth / 100 * 54 + fix_x, realHeight / 100 * 40 + fix_y, 0, 0); // left, top, 0, 0
+//                SungBuk.setLayoutParams(layoutParms4);
+//                RelativeLayout.LayoutParams layoutParms5 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms5.setMargins(realWidth / 100 * 52 + fix_x, realHeight / 100 * 32 + fix_y, 0, 0); // left, top, 0, 0
+//                GangBuk.setLayoutParams(layoutParms5);
+//
+//                RelativeLayout.LayoutParams layoutParms6 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms6.setMargins(realWidth / 100 * 58 + fix_x, realHeight / 100 * 27 + fix_y, 0, 0); // left, top, 0, 0
+//                DoBong.setLayoutParams(layoutParms6);
+//                RelativeLayout.LayoutParams layoutParms7 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms7.setMargins(realWidth / 100 * 68 + fix_x, realHeight / 100 * 33 + fix_y, 0, 0); // left, top, 0, 0
+//                NoWon.setLayoutParams(layoutParms7);
+//                RelativeLayout.LayoutParams layoutParms8 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms8.setMargins(realWidth / 100 * 72 + fix_x, realHeight / 100 * 40 + fix_y, 0, 0); // left, top, 0, 0
+//                ZongRang.setLayoutParams(layoutParms8);
+//                RelativeLayout.LayoutParams layoutParms9 = new RelativeLayout.LayoutParams(90 + fix_x, 90); // width, height
+//                layoutParms9.setMargins(realWidth / 100 * 62 + fix_x, realHeight / 100 * 44 + fix_y, 0, 0); // left, top, 0, 0
+//                DongDaeMon.setLayoutParams(layoutParms9);
+//                RelativeLayout.LayoutParams layoutParms10 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms10.setMargins(realWidth / 100 * 9 + fix_x, realHeight / 100 * 47 + fix_y, 0, 0); // left, top, 0, 0
+//                GangSue.setLayoutParams(layoutParms10);
+//
+//                RelativeLayout.LayoutParams layoutParms11 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms11.setMargins(realWidth / 100 * 17 + fix_x, realHeight / 100 * 56 + fix_y, 0, 0); // left, top, 0, 0
+//                YangChen.setLayoutParams(layoutParms11);
+//                RelativeLayout.LayoutParams layoutParms12 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms12.setMargins(realWidth / 100 * 13 + fix_x, realHeight / 100 * 62 + fix_y, 0, 0); // left, top, 0, 0
+//                GuRo.setLayoutParams(layoutParms12);
+//                RelativeLayout.LayoutParams layoutParms13 = new RelativeLayout.LayoutParams(90, 90);// width, height
+//                layoutParms13.setMargins(realWidth / 100 * 26 + fix_x, realHeight / 100 * 68 + fix_y, 0, 0); // left, top, 0, 0
+//                GemChun.setLayoutParams(layoutParms13);
+//                RelativeLayout.LayoutParams layoutParms14 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms14.setMargins(realWidth / 100 * 29 + fix_x, realHeight / 100 * 49 + fix_y, 0, 0); // left, top, 0, 0
+//                MaPho.setLayoutParams(layoutParms14);
+//                RelativeLayout.LayoutParams layoutParms15 = new RelativeLayout.LayoutParams(90 + fix_x, 90); // width, height
+//                layoutParms15.setMargins(realWidth / 100 * 29 + fix_x, realHeight / 100 * 56 + fix_y, 0, 0); // left, top, 0, 0
+//                YongDengPo.setLayoutParams(layoutParms15);
+//
+//                RelativeLayout.LayoutParams layoutParms16 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms16.setMargins(realWidth / 100 * 37 + fix_x, realHeight / 100 * 67 + fix_y, 0, 0); // left, top, 0, 0
+//                GanAk.setLayoutParams(layoutParms16);
+//                RelativeLayout.LayoutParams layoutParms17 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms17.setMargins((realWidth / 100 * 39) + fix_x, realHeight / 100 * 59 + fix_y, 0, 0); // left, top, 0, 0
+//                DongJack.setLayoutParams(layoutParms17);
+//                RelativeLayout.LayoutParams layoutParms18 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms18.setMargins(realWidth / 100 * 45 + fix_x, realHeight / 100 * 53 + fix_y, 0, 0); // left, top, 0, 0
+//                YongSan.setLayoutParams(layoutParms18);
+//                RelativeLayout.LayoutParams layoutParms19 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms19.setMargins(realWidth / 100 * 49 + fix_x, realHeight / 100 * 48 + fix_y, 0, 0); // left, top, 0, 0
+//                Zhong.setLayoutParams(layoutParms19);
+//                RelativeLayout.LayoutParams layoutParms20 = new RelativeLayout.LayoutParams(90, 90);// width, height
+//                layoutParms20.setMargins(realWidth / 100 * 60 + fix_x, realHeight / 100 * 50 + fix_y, 0, 0); // left, top, 0, 0
+//                SungDong.setLayoutParams(layoutParms20);
+//
+//                RelativeLayout.LayoutParams layoutParms21 = new RelativeLayout.LayoutParams(90, 90);// width, height
+//                layoutParms21.setMargins(realWidth / 100 * 53 + fix_x, realHeight / 100 * 64 + fix_y, 0, 0); // left, top, 0, 0
+//                SeoCho.setLayoutParams(layoutParms21);
+//                RelativeLayout.LayoutParams layoutParms22 = new RelativeLayout.LayoutParams(90, 90);// width, height
+//                layoutParms22.setMargins(realWidth / 100 * 63 + fix_x, realHeight / 100 * 61 + fix_y, 0, 0); // left, top, 0, 0
+//                GangNam.setLayoutParams(layoutParms22);
+//                RelativeLayout.LayoutParams layoutParms23 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms23.setMargins(realWidth / 100 * 70 + fix_x, realHeight / 100 * 51 + fix_y, 0, 0); // left, top, 0, 0
+//                GangZin.setLayoutParams(layoutParms23);
+//                RelativeLayout.LayoutParams layoutParms24 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms24.setMargins(realWidth / 100 * 75 + fix_x, realHeight / 100 * 58 + fix_y, 0, 0); // left, top, 0, 0
+//                SongPa.setLayoutParams(layoutParms24);
+//                RelativeLayout.LayoutParams layoutParms25 = new RelativeLayout.LayoutParams(90, 90); // width, height
+//                layoutParms25.setMargins(realWidth / 100 * 83 + fix_x, realHeight / 100 * 49 + fix_y, 0, 0); // left, top, 0, 0
+//                GangDong.setLayoutParams(layoutParms25);
+//
+//                //  SungBuk.setLayoutParams(layoutParms5);
+//                Log.e("owl", "" + imageview.getHeight());
 
-                RelativeLayout.LayoutParams layoutParms6 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms6.setMargins(realWidth / 100 * 58 + fix_x, realHeight / 100 * 27 + fix_y, 0, 0); // left, top, 0, 0
-                DoBong.setLayoutParams(layoutParms6);
-                RelativeLayout.LayoutParams layoutParms7 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms7.setMargins(realWidth / 100 * 68 + fix_x, realHeight / 100 * 33 + fix_y, 0, 0); // left, top, 0, 0
-                NoWon.setLayoutParams(layoutParms7);
-                RelativeLayout.LayoutParams layoutParms8 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms8.setMargins(realWidth / 100 * 72 + fix_x, realHeight / 100 * 40 + fix_y, 0, 0); // left, top, 0, 0
-                ZongRang.setLayoutParams(layoutParms8);
-                RelativeLayout.LayoutParams layoutParms9 = new RelativeLayout.LayoutParams(90 + fix_x, 90); // width, height
-                layoutParms9.setMargins(realWidth / 100 * 62 + fix_x, realHeight / 100 * 44 + fix_y, 0, 0); // left, top, 0, 0
-                DongDaeMon.setLayoutParams(layoutParms9);
-                RelativeLayout.LayoutParams layoutParms10 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms10.setMargins(realWidth / 100 * 9 + fix_x, realHeight / 100 * 47 + fix_y, 0, 0); // left, top, 0, 0
-                GangSue.setLayoutParams(layoutParms10);
+                //은평
+                ScalableLayout.LayoutParams layoutParams1 = new ScalableLayout.LayoutParams(1500, 1300, 700f, 500f);
+                EunPhung.setLayoutParams(layoutParams1);//scalableLayout.addView(EunPhung, layoutParams1);
+                scalableLayout.setScale_TextSize(EunPhung, 150);
 
-                RelativeLayout.LayoutParams layoutParms11 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms11.setMargins(realWidth / 100 * 17 + fix_x, realHeight / 100 * 56 + fix_y, 0, 0); // left, top, 0, 0
-                YangChen.setLayoutParams(layoutParms11);
-                RelativeLayout.LayoutParams layoutParms12 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms12.setMargins(realWidth / 100 * 13 + fix_x, realHeight / 100 * 62 + fix_y, 0, 0); // left, top, 0, 0
-                GuRo.setLayoutParams(layoutParms12);
-                RelativeLayout.LayoutParams layoutParms13 = new RelativeLayout.LayoutParams(90, 90);// width, height
-                layoutParms13.setMargins(realWidth / 100 * 26 + fix_x, realHeight / 100 * 68 + fix_y, 0, 0); // left, top, 0, 0
-                GemChun.setLayoutParams(layoutParms13);
-                RelativeLayout.LayoutParams layoutParms14 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms14.setMargins(realWidth / 100 * 29 + fix_x, realHeight / 100 * 49 + fix_y, 0, 0); // left, top, 0, 0
-                MaPho.setLayoutParams(layoutParms14);
-                RelativeLayout.LayoutParams layoutParms15 = new RelativeLayout.LayoutParams(90 + fix_x, 90); // width, height
-                layoutParms15.setMargins(realWidth / 100 * 29 + fix_x, realHeight / 100 * 56 + fix_y, 0, 0); // left, top, 0, 0
-                YongDengPo.setLayoutParams(layoutParms15);
+                //서대문
+                ScalableLayout.LayoutParams layoutParams2 = new ScalableLayout.LayoutParams(1650, 1900, 700f, 500f);
+                SuDaeMon.setLayoutParams(layoutParams2);//scalableLayout.addView(SuDaeMon, layoutParams2);
+                scalableLayout.setScale_TextSize(SuDaeMon, 150);
 
-                RelativeLayout.LayoutParams layoutParms16 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms16.setMargins(realWidth / 100 * 37 + fix_x, realHeight / 100 * 67 + fix_y, 0, 0); // left, top, 0, 0
-                GanAk.setLayoutParams(layoutParms16);
-                RelativeLayout.LayoutParams layoutParms17 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms17.setMargins((realWidth / 100 * 39) + fix_x, realHeight / 100 * 59 + fix_y, 0, 0); // left, top, 0, 0
-                DongJack.setLayoutParams(layoutParms17);
-                RelativeLayout.LayoutParams layoutParms18 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms18.setMargins(realWidth / 100 * 45 + fix_x, realHeight / 100 * 53 + fix_y, 0, 0); // left, top, 0, 0
-                YongSan.setLayoutParams(layoutParms18);
-                RelativeLayout.LayoutParams layoutParms19 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms19.setMargins(realWidth / 100 * 49 + fix_x, realHeight / 100 * 48 + fix_y, 0, 0); // left, top, 0, 0
-                Zhong.setLayoutParams(layoutParms19);
-                RelativeLayout.LayoutParams layoutParms20 = new RelativeLayout.LayoutParams(90, 90);// width, height
-                layoutParms20.setMargins(realWidth / 100 * 60 + fix_x, realHeight / 100 * 50 + fix_y, 0, 0); // left, top, 0, 0
-                SungDong.setLayoutParams(layoutParms20);
+                //종로
+                ScalableLayout.LayoutParams layoutParams3 = new ScalableLayout.LayoutParams(2050, 1700, 700f, 500f);
+                ZongRo.setLayoutParams(layoutParams3);//scalableLayout.addView(ZongRo, layoutParams3);
+                scalableLayout.setScale_TextSize(ZongRo, 150);
 
-                RelativeLayout.LayoutParams layoutParms21 = new RelativeLayout.LayoutParams(90, 90);// width, height
-                layoutParms21.setMargins(realWidth / 100 * 53 + fix_x, realHeight / 100 * 64 + fix_y, 0, 0); // left, top, 0, 0
-                SeoCho.setLayoutParams(layoutParms21);
-                RelativeLayout.LayoutParams layoutParms22 = new RelativeLayout.LayoutParams(90, 90);// width, height
-                layoutParms22.setMargins(realWidth / 100 * 63 + fix_x, realHeight / 100 * 61 + fix_y, 0, 0); // left, top, 0, 0
-                GangNam.setLayoutParams(layoutParms22);
-                RelativeLayout.LayoutParams layoutParms23 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms23.setMargins(realWidth / 100 * 70 + fix_x, realHeight / 100 * 51 + fix_y, 0, 0); // left, top, 0, 0
-                GangZin.setLayoutParams(layoutParms23);
-                RelativeLayout.LayoutParams layoutParms24 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms24.setMargins(realWidth / 100 * 75 + fix_x, realHeight / 100 * 58 + fix_y, 0, 0); // left, top, 0, 0
-                SongPa.setLayoutParams(layoutParms24);
-                RelativeLayout.LayoutParams layoutParms25 = new RelativeLayout.LayoutParams(90, 90); // width, height
-                layoutParms25.setMargins(realWidth / 100 * 83 + fix_x, realHeight / 100 * 49 + fix_y, 0, 0); // left, top, 0, 0
-                GangDong.setLayoutParams(layoutParms25);
+                //성북
+                ScalableLayout.LayoutParams layoutParams4 = new ScalableLayout.LayoutParams(2600, 1600, 700f, 500f);
+                SungBuk.setLayoutParams(layoutParams4);//scalableLayout.addView(SungBuk, layoutParams4);
+                scalableLayout.setScale_TextSize(SungBuk, 150);
 
-                //  SungBuk.setLayoutParams(layoutParms5);
-                Log.e("owl", "" + imageview.getHeight());
+                //강북
+                ScalableLayout.LayoutParams layoutParams5 = new ScalableLayout.LayoutParams(2400, 900, 700f, 500f);
+                GangBuk.setLayoutParams(layoutParams5);//scalableLayout.addView(GangBuk, layoutParams5);
+                scalableLayout.setScale_TextSize(GangBuk, 150);
 
+
+
+
+                //도봉
+                ScalableLayout.LayoutParams layoutParams6 = new ScalableLayout.LayoutParams(2750, 500, 700f, 500f);
+                DoBong.setLayoutParams(layoutParams6);//scalableLayout.addView(DoBong, layoutParams6);
+                scalableLayout.setScale_TextSize(DoBong, 150);
+
+                //노원
+                ScalableLayout.LayoutParams layoutParams7 = new ScalableLayout.LayoutParams(3200, 1000, 700f, 500f);
+                NoWon.setLayoutParams(layoutParams7);//scalableLayout.addView(NoWon, layoutParams7);
+                scalableLayout.setScale_TextSize(NoWon, 150);
+
+                //중랑
+                ScalableLayout.LayoutParams layoutParams8 = new ScalableLayout.LayoutParams(3400, 1600, 700f, 500f);
+                ZongRang.setLayoutParams(layoutParams8);//scalableLayout.addView(ZongRang, layoutParams8);
+                scalableLayout.setScale_TextSize(ZongRang, 150);
+
+                //동대문
+                ScalableLayout.LayoutParams layoutParams9 = new ScalableLayout.LayoutParams(3000, 1900, 700f, 500f);
+                DongDaeMon.setLayoutParams(layoutParams9);//scalableLayout.addView(DongDaeMon, layoutParams9);
+                scalableLayout.setScale_TextSize(DongDaeMon, 150);
+
+                //강서
+                ScalableLayout.LayoutParams layoutParams10 = new ScalableLayout.LayoutParams(390, 2150, 700f, 500f);
+                GangSue.setLayoutParams(layoutParams10);//scalableLayout.addView(GangSue, layoutParams10);
+                scalableLayout.setScale_TextSize(GangSue, 150);
+
+
+
+
+                ///////////////////////
+                //양천
+                ScalableLayout.LayoutParams layoutParams11 = new ScalableLayout.LayoutParams(700, 2850, 700f, 500f);
+                YangChen.setLayoutParams(layoutParams11);//scalableLayout.addView(YangChen, layoutParams11);
+                scalableLayout.setScale_TextSize(YangChen, 150);
+
+                //구로
+                ScalableLayout.LayoutParams layoutParams12 = new ScalableLayout.LayoutParams(600, 3350, 700f, 500f);
+                GuRo.setLayoutParams(layoutParams12);//scalableLayout.addView(GuRo, layoutParams12);
+                scalableLayout.setScale_TextSize(GuRo, 150);
+
+                //금천
+                ScalableLayout.LayoutParams layoutParams13 = new ScalableLayout.LayoutParams(1200, 3800, 700f, 500f);
+                GemChun.setLayoutParams(layoutParams13);//scalableLayout.addView(GemChun, layoutParams13);
+                scalableLayout.setScale_TextSize(GemChun, 150);
+
+                //마포
+                ScalableLayout.LayoutParams layoutParams14 = new ScalableLayout.LayoutParams(1400, 2350, 700f, 500f);
+                MaPho.setLayoutParams(layoutParams14);//scalableLayout.addView(MaPho, layoutParams14);
+                scalableLayout.setScale_TextSize(MaPho, 150);
+
+                //영등포
+                ScalableLayout.LayoutParams layoutParams15 = new ScalableLayout.LayoutParams(1350, 2900, 700f, 500f);
+                YongDengPo.setLayoutParams(layoutParams15);//scalableLayout.addView(YongDengPo, layoutParams15);
+                scalableLayout.setScale_TextSize(YongDengPo, 150);
+
+
+
+
+                /////////////////////////
+                //관악
+                ScalableLayout.LayoutParams layoutParams16 = new ScalableLayout.LayoutParams(1750, 3800, 700f, 500f);
+                GanAk.setLayoutParams(layoutParams16);//scalableLayout.addView(GanAk, layoutParams16);
+                scalableLayout.setScale_TextSize(GanAk, 150);
+
+                //동작
+                ScalableLayout.LayoutParams layoutParams17 = new ScalableLayout.LayoutParams(1800, 3150, 700f, 500f);
+                DongJack.setLayoutParams(layoutParams17);//scalableLayout.addView(DongJack, layoutParams17);
+                scalableLayout.setScale_TextSize(DongJack, 150);
+
+                //용산
+                ScalableLayout.LayoutParams layoutParams18 = new ScalableLayout.LayoutParams(2150, 2650, 700f, 500f);
+                YongSan.setLayoutParams(layoutParams18);//scalableLayout.addView(YongSan, layoutParams18);
+                scalableLayout.setScale_TextSize(YongSan, 150);
+
+                //중구
+                ScalableLayout.LayoutParams layoutParams19 = new ScalableLayout.LayoutParams(2300, 2200, 700f, 500f);
+                Zhong.setLayoutParams(layoutParams19);//scalableLayout.addView(Zhong, layoutParams19);
+                scalableLayout.setScale_TextSize(Zhong, 150);
+
+                //성동
+                ScalableLayout.LayoutParams layoutParams20 = new ScalableLayout.LayoutParams(2800, 2400, 700f, 500f);
+                SungDong.setLayoutParams(layoutParams20);//scalableLayout.addView(SungDong, layoutParams20);
+                scalableLayout.setScale_TextSize(SungDong, 150);
+
+
+
+
+                //////////////////////////////////
+                //서초
+                ScalableLayout.LayoutParams layoutParams21 = new ScalableLayout.LayoutParams(2450, 3500, 700f, 500f);
+                SeoCho.setLayoutParams(layoutParams21);//scalableLayout.addView(SeoCho, layoutParams21);
+                scalableLayout.setScale_TextSize(SeoCho, 150);
+
+                //강남
+                ScalableLayout.LayoutParams layoutParams22 = new ScalableLayout.LayoutParams(2950, 3250, 700f, 500f);
+                GangNam.setLayoutParams(layoutParams22);//scalableLayout.addView(GangNam, layoutParams22);
+                scalableLayout.setScale_TextSize(GangNam, 150);
+
+                //광진
+                ScalableLayout.LayoutParams layoutParams23 = new ScalableLayout.LayoutParams(3300, 2500, 700f, 500f);
+                GangZin.setLayoutParams(layoutParams23);//scalableLayout.addView(GangZin, layoutParams23);
+                scalableLayout.setScale_TextSize(GangZin, 150);
+
+                //송파
+                ScalableLayout.LayoutParams layoutParams24 = new ScalableLayout.LayoutParams(3500, 3000, 700f, 500f);
+                SongPa.setLayoutParams(layoutParams24);//scalableLayout.addView(SongPa, layoutParams24);
+                scalableLayout.setScale_TextSize(SongPa, 150);
+
+                //강동
+                ScalableLayout.LayoutParams layoutParams25 = new ScalableLayout.LayoutParams(4000, 2300, 700f, 500f);
+                GangDong.setLayoutParams(layoutParams25);//scalableLayout.addView(GangDong, layoutParams25);
+                scalableLayout.setScale_TextSize(GangDong, 150);
             }
         });
 

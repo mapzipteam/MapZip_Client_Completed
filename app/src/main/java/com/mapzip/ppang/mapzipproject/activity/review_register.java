@@ -42,6 +42,7 @@ import com.mapzip.ppang.mapzipproject.model.UserData;
 import com.mapzip.ppang.mapzipproject.network.MultipartRequest;
 import com.mapzip.ppang.mapzipproject.network.MyVolley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -57,6 +58,10 @@ import java.util.Map;
  * Created by ppangg on 2015-08-22.
  */
 public class review_register extends Activity {
+    // state
+    private int state = 0; // 0: default review enroll, 1: modify review
+    private String primap_id;
+
     // toast
     private View layout_toast;
     private TextView text_toast;
@@ -68,6 +73,8 @@ public class review_register extends Activity {
     private TextView titleText;
     private TextView addressText;
     private TextView contactText;
+    private Button enrollBtn;
+    private Button modifyBtn;
 
     // Image View
     private ViewPager viewPager;
@@ -135,6 +142,29 @@ public class review_register extends Activity {
         loading = new LoadingTask();
         serverchoice = 0;
         imagenum = 0;
+
+        enrollBtn = (Button) findViewById(R.id.enrollBtn_review_regi);
+        modifyBtn = (Button) findViewById(R.id.modifyBtn_review_regi);
+
+        // state
+        if(getIntent().getStringExtra("state").equals("modify") == true) {
+            state = 1;
+            mapData = user.getMapData();
+            primap_id = mapData.getMapid();
+            Log.v("mapid",mapData.getMapid());
+        }
+        else
+            state=0;
+
+        if(state == 0){
+            enrollBtn.setVisibility(View.VISIBLE);
+            modifyBtn.setVisibility(View.GONE);
+        }
+        else{
+            enrollBtn.setVisibility(View.GONE);
+            modifyBtn.setVisibility(View.VISIBLE);
+        }
+        Log.v("state",String.valueOf(state));
 
         // setting mapData to send
         mapData.setStore_x(getIntent().getDoubleExtra("store_x", 0));
@@ -403,6 +433,89 @@ public class review_register extends Activity {
         queue.add(myReq);
     }
 
+    // in modify Btn
+    public void DoModifyset(View v) {
+        RequestQueue queue = MyVolley.getInstance(this).getRequestQueue();
+
+        JSONObject obj = new JSONObject();
+        try {
+            if (mapData.getReview_text().isEmpty())
+                mapData.setReview_text(directEdit.getText().toString());
+
+            obj.put("user_id", user.getUserID());
+            obj.put("map_id", mapData.getMapid());
+            obj.put("review_emotion", mapData.getReview_emotion());
+            obj.put("review_text", mapData.getReview_text());
+            obj.put("store_id",getIntent().getStringExtra("store_id"));
+            obj.put("image_num", 0);
+
+            Log.v("review 수정 보내기", obj.toString());
+        } catch (JSONException e) {
+            Log.v("제이손", "에러");
+        }
+
+        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                SystemMain.SERVER_REVIEWMODIFY_URL,
+                obj,
+                createMyReqSuccessListener_modify(),
+                createMyReqErrorListener()) {
+        };
+        queue.add(myReq);
+    }
+
+    // for modify response
+    private Response.Listener<JSONObject> createMyReqSuccessListener_modify() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("review_modify 받기", response.toString());
+                try {
+                    if (response.getString("state").equals("complete")) {
+                        user.setModifystate(true);
+                        // toast
+                        text_toast.setText("리뷰가 수정되었습니다.");
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setDuration(Toast.LENGTH_SHORT);
+                        toast.setView(layout_toast);
+                        toast.show();
+
+                        // mapforpinNUm modify, if review count is 0
+
+                        // mapforpinArray modify
+/*
+                        JSONArray farray = user.getMapforpinArray(Integer.parseInt(primap_id));
+                        Log.v("farray", farray.toString());
+                        JSONObject moveobj = new JSONObject();
+                        for(int i=0; i<farray.length(); i++){
+                            if(farray.getJSONObject(i).getString("store_id").equals(mapData.getStore_id()) == true){
+                                moveobj = farray.getJSONObject(i);
+                                farray = removeJsonObjectAtJsonArrayIndex(farray,i);
+                            }
+                        }
+                        user.setMapforpinArray(farray, Integer.parseInt(primap_id));
+                        Log.v("moveobj", moveobj.toString());
+
+                        JSONArray sarray = user.getMapforpinArray(Integer.parseInt(mapData.getMapid()));
+                        Log.v("sarray", sarray.toString());
+                        sarray.put(sarray.length(),moveobj);
+                        user.setMapforpinArray(sarray, Integer.parseInt(mapData.getMapid()));
+                        Log.v("sarray", sarray.toString());
+
+                        user.setMapRefreshLock(false);
+*/
+
+                        // pingCount modify
+
+                        finish();
+                    }
+                }catch (JSONException e){
+                    Log.e("제이손","에러");
+                }
+            }
+        };
+    }
+
+    // for enroll response
     private Response.Listener<JSONObject> createMyReqSuccessListener() {
         return new Response.Listener<JSONObject>() {
             @Override
@@ -528,6 +641,19 @@ public class review_register extends Activity {
     /*
      * util
      */
+    // for array item remove
+    public static JSONArray removeJsonObjectAtJsonArrayIndex(JSONArray source, int index) throws JSONException {
+        if (index < 0 || index > source.length() - 1) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        final JSONArray copy = new JSONArray();
+        for (int i = 0, count = source.length(); i < count; i++) {
+            if (i != index) copy.put(source.get(i));
+        }
+        return copy;
+    }
+
     // for no Image
     public static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
@@ -597,6 +723,41 @@ public class review_register extends Activity {
             gunum = SystemMain.SongPa;
 
         return gunum;
+    }
+
+    // setting review text & emotion
+    public void reviewtextset() {
+        if (mapData.getReview_emotion() == 0) { // emotion not selected
+            // toast
+            text_toast.setText("이모티콘을 선택해주세요.");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout_toast);
+            toast.show();
+        } else if ((reviewposition1 == 0) && (reviewposition2 == 0)) { // review text not selected
+            // toast
+            text_toast.setText("리뷰를 작성해주세요.");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout_toast);
+            toast.show();
+        } else {
+            if ((reviewposition1 == 15) || (reviewposition2 == 14)) // direct review text
+                mapData.setReview_text(directEdit.getText().toString());
+            else { // selected review text
+                String tmp = "";
+                if (reviewposition1 != 0) // first spinner
+                    tmp = getResources().getStringArray(R.array.spinner_review_regi)[reviewposition1];
+                if (reviewposition2 != 0) { // second spinner
+                    if (reviewposition1 != 0)
+                        tmp += " 하지만 " + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
+                    else
+                        tmp += " " + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
+                }
+
+                mapData.setReview_text(tmp); // set final review to send
+            }
+        }
     }
 
     /*
@@ -669,44 +830,19 @@ public class review_register extends Activity {
 
     // 리뷰등록 버튼
     public void enrollonClick_review_regi(View v) {
-        if (mapData.getReview_emotion() == 0) { // emotion not selected
-            // toast
-            text_toast.setText("이모티콘을 선택해주세요.");
-            Toast toast = new Toast(getApplicationContext());
-            toast.setDuration(Toast.LENGTH_SHORT);
-            toast.setView(layout_toast);
-            toast.show();
-        } else if ((reviewposition1 == 0) && (reviewposition2 == 0)) { // review text not selected
-            // toast
-            text_toast.setText("리뷰를 작성해주세요.");
-            Toast toast = new Toast(getApplicationContext());
-            toast.setDuration(Toast.LENGTH_SHORT);
-            toast.setView(layout_toast);
-            toast.show();
-        } else {
-            if ((reviewposition1 == 15) || (reviewposition2 == 14)) // direct review text
-                mapData.setReview_text(directEdit.getText().toString());
-            else { // selected review text
-                String tmp = "";
-                if (reviewposition1 != 0) // first spinner
-                    tmp = getResources().getStringArray(R.array.spinner_review_regi)[reviewposition1];
-                if (reviewposition2 != 0) { // second spinner
-                    if(reviewposition1 != 0)
-                        tmp += " 하지만 " + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
-                    else
-                        tmp += " " + getResources().getStringArray(R.array.spinner_review_regi2)[reviewposition2];
-                }
-
-                mapData.setReview_text(tmp); // set final review to send
-            }
-
+            reviewtextset();
             DoReviewset(v); // 서버 통신
             user.setMapforpinNum(Integer.parseInt(mapData.getMapid()), 0); // to review loading
-        }
     }
 
     // 취소 버튼
     public void cancelonClick_review_regi(View v) {
         finish();
+    }
+
+    // 리뷰수정 버튼
+    public void modifyonClick_review_regi(View v){
+        reviewtextset();
+        DoModifyset(v);
     }
 }

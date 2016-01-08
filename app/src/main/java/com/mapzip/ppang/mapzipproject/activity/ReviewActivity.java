@@ -2,6 +2,7 @@ package com.mapzip.ppang.mapzipproject.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -26,6 +27,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.mapzip.ppang.mapzipproject.R;
 import com.mapzip.ppang.mapzipproject.adapter.ImageAdapter;
+import com.mapzip.ppang.mapzipproject.map.SearchInLocationActivity;
 import com.mapzip.ppang.mapzipproject.model.FriendData;
 import com.mapzip.ppang.mapzipproject.model.MapData;
 import com.mapzip.ppang.mapzipproject.model.SystemMain;
@@ -245,7 +247,17 @@ public class ReviewActivity extends Activity {
 
     // modify Btn
     public void modifyOnclick(View v) {
-
+        Intent intent = new Intent(this, review_register.class);
+        intent.putExtra("store_name", mapData.getStore_name());
+        intent.putExtra("store_address", mapData.getStore_address());
+        intent.putExtra("store_contact", mapData.getStore_contact());
+        intent.putExtra("store_x", mapData.getStore_x());
+        intent.putExtra("store_y", mapData.getStore_y());
+        intent.putExtra("store_cx", 0);
+        intent.putExtra("store_cy", 0);
+        intent.putExtra("store_id",mapData.getStore_id());
+        intent.putExtra("state","modify");
+        startActivity(intent);
     }
 
     // delete Btn
@@ -363,4 +375,13 @@ public class ReviewActivity extends Activity {
         return copy;
     }
 
+    // after modify
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(user.isModifystate()) {
+            user.setModifystate(false);
+            finish();
+        }
+    }
 }

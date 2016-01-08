@@ -33,6 +33,7 @@ public class UserData {
     private boolean reviewListlock;
     private MapData mapData;
     private boolean mapRefreshLock = true;
+    private boolean modifystate = false;
 
     // noimage
     private Bitmap noimage;
@@ -420,5 +421,13 @@ public class UserData {
 
     public void setMapRefreshLock(boolean mapRefreshLock) {
         this.mapRefreshLock = mapRefreshLock;
+    }
+
+    public boolean isModifystate() {
+        return modifystate;
+    }
+
+    public void setModifystate(boolean modifystate) {
+        this.modifystate = modifystate;
     }
 }

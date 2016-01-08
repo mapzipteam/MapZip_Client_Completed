@@ -248,6 +248,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
                 intent.putExtra("store_y", restaurants.get(selectNum).getLatY());
                 intent.putExtra("store_cx", restaurants.get(selectNum).getKatecX());
                 intent.putExtra("store_cy", restaurants.get(selectNum).getKatecY());
+                intent.putExtra("state","enroll");
                 startActivity(intent);
             }
         });

@@ -206,6 +206,20 @@
                     android:onClick="enrollonClick_review_regi"/>
 
                 <Button
+                    android:id="@+id/modifyBtn_review_regi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:background="@color/mainOrange"
+                    android:layout_marginLeft="7dp"
+                    android:text="수정완료"
+                    android:textSize="17dp"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    android:onClick="modifyonClick_review_regi"/>
+
+
+                <Button
                     android:id="@+id/cancelBtn_review_regi"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
