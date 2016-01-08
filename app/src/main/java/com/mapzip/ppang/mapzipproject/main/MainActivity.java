@@ -162,14 +162,25 @@ public class MainActivity extends FragmentActivity {
                 Log.v("mainActivity 받기", response.toString());
 
                 try{
-                    noticeString = "버전: " + response.get("version").toString() + "\n\n";
-                    noticeString += response.get("contents").toString();
+                    if(response.get("version").equals(pref.getString("notice_version","0"))){
 
-                    AlertDialog.Builder ab = new AlertDialog.Builder(MainActivity.this);
-                    ab.setTitle("새로운 MapZip의 패치소식 ^0^/");
-                    ab.setMessage(noticeString);
-                    ab.setPositiveButton("확인", null);
-                    ab.show();
+                    }else {
+                        noticeString = "버전: " + response.get("version").toString() + "\n\n";
+
+                        noticeString += response.get("contents").toString()+"\n\n";
+                        noticeString += "@이 창은 공지사항탭에서 다시 확인할 수 있습니다.";
+
+                        AlertDialog.Builder ab = new AlertDialog.Builder(MainActivity.this);
+                        ab.setTitle("새로운 MapZip의 패치소식 ^0^/");
+                        ab.setMessage(noticeString);
+                        ab.setPositiveButton("확인", null);
+
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString("notice_version", response.get("version").toString());
+                        editor.commit();
+
+                        ab.show();
+                    }
                 }catch (JSONException e){
                     Log.v("제이손", "에러");
                 }
