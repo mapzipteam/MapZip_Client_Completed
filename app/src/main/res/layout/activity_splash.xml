@@ -3,14 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:background="@android:color/white"
     tools:context="com.mapzip.ppang.mapzipproject.main.SplashActivity">
 
     <ImageView
-        android:id="@+id/start_image"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:src="@drawable/egg"/>
+        android:id="@+id/start_ma_image"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/emotion1"/>
+    <ImageView
+        android:id="@+id/start_flag1_image"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/start_ma_image"
+        android:src="@drawable/emotion2"/>
+    <ImageView
+        android:id="@+id/start_zi_image"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/start_flag1_image"
+        android:src="@drawable/emotion3"/>
+    <ImageView
+        android:id="@+id/start_flag2_image"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_toRightOf="@id/start_zi_image"
+        android:src="@drawable/emotion4"/>
 
 </RelativeLayout>

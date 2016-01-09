@@ -29,7 +29,8 @@
         <activity android:name=".activity.suggestActivity"/>
         <activity
             android:name=".main.SplashActivity"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:hardwareAccelerated="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
