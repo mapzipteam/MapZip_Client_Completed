@@ -470,7 +470,7 @@ public class review_register extends Activity {
             public void onResponse(JSONObject response) {
                 Log.v("review_modify 받기", response.toString());
                 try {
-                    if (response.getString("state").equals("complete")) {
+                    if (response.getString("state").equals("607")) {
                         user.setModifystate(true);
                         // toast
                         text_toast.setText("리뷰가 수정되었습니다.");
@@ -479,32 +479,76 @@ public class review_register extends Activity {
                         toast.setView(layout_toast);
                         toast.show();
 
-                        // mapforpinNUm modify, if review count is 0
+                        // if Map Id modified (지도 변경시)
+                        if(primap_id.equals(mapData.getMapid()) == false){
+                            int pmap_id = Integer.parseInt(primap_id); // 수정 전
+                            int nmap_id = Integer.parseInt(mapData.getMapid()); // 수정 후 map_id
+                            int gu_num = mapData.getGu_num();
+                            int nmapnocheck = 0; // 0: 리뷰있음 1: no review
 
-                        // mapforpinArray modify
-/*
-                        JSONArray farray = user.getMapforpinArray(Integer.parseInt(primap_id));
-                        Log.v("farray", farray.toString());
-                        JSONObject moveobj = new JSONObject();
-                        for(int i=0; i<farray.length(); i++){
-                            if(farray.getJSONObject(i).getString("store_id").equals(mapData.getStore_id()) == true){
-                                moveobj = farray.getJSONObject(i);
-                                farray = removeJsonObjectAtJsonArrayIndex(farray,i);
+                            if(user.getPingCount(nmap_id,gu_num) == 0){ // no review check in now map
+                                int checknonzero = 0;
+                                for(int c=1; c<=SystemMain.SeoulGuCount; c++){
+                                    if(user.getPingCount(nmap_id,c) != 0){
+                                        checknonzero = 1;
+                                        break;
+                                    }
+                                }
+                                if(checknonzero == 0)
+                                    nmapnocheck = 1;
                             }
+
+                            // mapforpinNum, PingCount modify, if review count is 0
+                            user.setReviewCount(pmap_id, gu_num,user.getPingCount(pmap_id,gu_num)-1);
+                            user.setReviewCount(nmap_id, gu_num, user.getPingCount(nmap_id,gu_num)+1);
+
+                            if(user.getPingCount(pmap_id,gu_num) == 0){ // no review check in primap
+                                int checknonzero = 0;
+                                for(int c=1; c<=SystemMain.SeoulGuCount; c++){
+                                    if(user.getPingCount(pmap_id,c) != 0){
+                                        checknonzero = 1;
+                                        break;
+                                    }
+                                }
+                                if(checknonzero == 0)
+                                    user.setMapforpinNum(pmap_id,2);
+                            }
+
+                            // map Image reload
+                            user.setMapImage(pmap_id, res);
+                            user.setMapImage(nmap_id, res);
+                            user.setMapmetaNum(1);
+
+                            // mapforpinArray modify
+                            JSONArray farray = user.getMapforpinArray(pmap_id); // 이전 지도에서 리뷰디테일 삭제
+                            JSONObject moveobj = new JSONObject();
+                            for(int i=0; i<farray.length(); i++){
+                                if(farray.getJSONObject(i).getString("store_id").equals(mapData.getStore_id()) == true){
+                                    moveobj = farray.getJSONObject(i);
+                                    farray = removeJsonObjectAtJsonArrayIndex(farray,i);
+                                }
+                            }
+                            user.setMapforpinArray(farray, pmap_id);
+                            Log.v("moveobj", moveobj.toString());
+
+                            if(nmapnocheck == 1) { // 옮길 지도에 리뷰 정보가 없었을때
+                                JSONArray sarray = new JSONArray();
+                                sarray.put(sarray.length(),moveobj);
+                                user.setMapforpinArray(sarray, nmap_id);
+                                user.setMapforpinNum(nmap_id, 1);
+                                Log.v("1 sarray", sarray.toString());
+                            }
+                            else{ // 리뷰 정보가 있었을때
+                                if(user.getMapforpinNum(nmap_id) != 0) {
+                                    JSONArray sarray = user.getMapforpinArray(nmap_id);
+                                    Log.v("0_1 sarray", sarray.toString());
+                                    sarray.put(sarray.length(), moveobj);
+                                    user.setMapforpinArray(sarray, nmap_id);
+                                    Log.v("0 sarray", sarray.toString());
+                                }
+                            }
+                            user.setMapRefreshLock(false);
                         }
-                        user.setMapforpinArray(farray, Integer.parseInt(primap_id));
-                        Log.v("moveobj", moveobj.toString());
-
-                        JSONArray sarray = user.getMapforpinArray(Integer.parseInt(mapData.getMapid()));
-                        Log.v("sarray", sarray.toString());
-                        sarray.put(sarray.length(),moveobj);
-                        user.setMapforpinArray(sarray, Integer.parseInt(mapData.getMapid()));
-                        Log.v("sarray", sarray.toString());
-
-                        user.setMapRefreshLock(false);
-*/
-
-                        // pingCount modify
 
                         finish();
                     }
