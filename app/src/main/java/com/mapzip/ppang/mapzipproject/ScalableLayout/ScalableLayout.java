@@ -78,8 +78,8 @@ public class ScalableLayout extends FrameLayout {
      * Simple constructor to use when creating a view from code.
      * Scale_Width, Scale_Height uses a default value of 100.
      * <p>
-     * code¿¡¼­ ScalableLayoutÀ» »ı¼ºÇÒ ¶§ »ç¿ëÇÏ´Â constructor.
-     * Scale_Width, Scale_Height¸¦ ±âº»°ªÀÎ 100À¸·Î ¼¼ÆÃÇÔ.
+     * codeì—ì„œ ScalableLayoutì„ ìƒì„±í•  ë•Œ ì‚¬ìš©í•˜ëŠ” constructor.
+     * Scale_Width, Scale_Heightë¥¼ ê¸°ë³¸ê°’ì¸ 100ìœ¼ë¡œ ì„¸íŒ…í•¨.
      *
      * @param pContext
      */
@@ -90,7 +90,7 @@ public class ScalableLayout extends FrameLayout {
     /**
      * Constructor that is called when inflating a view from XML.
      * <p>
-     * XML¿¡¼­ ScalableLayoutÀ» »ı¼ºÇÒ ¶§ »ç¿ëÇÏ´Â constructor.
+     * XMLì—ì„œ ScalableLayoutì„ ìƒì„±í•  ë•Œ ì‚¬ìš©í•˜ëŠ” constructor.
      *
      * @param pContext
      * @param pAttrs
@@ -105,7 +105,7 @@ public class ScalableLayout extends FrameLayout {
     /**
      * Simple constructor to use when creating a view from code.
      * <p>
-     * code¿¡¼­ ScalableLayoutÀ» »ı¼ºÇÒ ¶§ »ç¿ëÇÏ´Â constructor.
+     * codeì—ì„œ ScalableLayoutì„ ìƒì„±í•  ë•Œ ì‚¬ìš©í•˜ëŠ” constructor.
      *
      * @param pContext
      * @param pScale_Width Scale width of ScalableLayout.
@@ -288,7 +288,7 @@ public class ScalableLayout extends FrameLayout {
         int 	lRoot_MeasureSpec_HeightMode 	= MeasureSpec.getMode(pHeightMeasureSpec);
 
         // get condition of ScalableLayout
-        // ScalableLayoutÀÌ ÁöÄÑ¾ß µÇ´Â Á¶°ÇµéÀ» È®ÀÎÇÔ
+        // ScalableLayoutì´ ì§€ì¼œì•¼ ë˜ëŠ” ì¡°ê±´ë“¤ì„ í™•ì¸í•¨
         {
             int lRoot_MeasureSpec_Width 	= MeasureSpec.getSize(pWidthMeasureSpec);
             int lRoot_MeasureSpec_Height 	= MeasureSpec.getSize(pHeightMeasureSpec);
@@ -358,7 +358,7 @@ public class ScalableLayout extends FrameLayout {
 
             //////////////////////// Text Measure
             // TODO english
-            // ScalableLayout³»ÀÇ TextViewÁß¿¡ TextView_WrapContent_Direction ¼¼ÆÃµÇ¾î ÀÖÀ» °æ¿ì ScalableLayoutÀÇ Scale Size¿Í ÀÌ¿ôÇÑ ViewµéÀÇ Scalable LayoutParams¸¦ Àç°è»ê
+            // ScalableLayoutë‚´ì˜ TextViewì¤‘ì— TextView_WrapContent_Direction ì„¸íŒ…ë˜ì–´ ìˆì„ ê²½ìš° ScalableLayoutì˜ Scale Sizeì™€ ì´ì›ƒí•œ Viewë“¤ì˜ Scalable LayoutParamsë¥¼ ì¬ê³„ì‚°
             for (int i=0;i<getChildCount();i++) {
                 View lView = getChildAt(i);
 
@@ -370,7 +370,7 @@ public class ScalableLayout extends FrameLayout {
 
 
             // calculate final size of ScalableLayout
-            // ScalableLayoutÀÇ ÃÖÁ¾ÀûÀÎ Å©±â¸¦ °áÁ¤ÁöÀ½
+            // ScalableLayoutì˜ ìµœì¢…ì ì¸ í¬ê¸°ë¥¼ ê²°ì •ì§€ìŒ
             float lScale_Ratio_Post = Math.min(lRoot_Width_Max / mScale_Root_Width, lRoot_Height_Max / mScale_Root_Height);
 
             {
@@ -381,7 +381,7 @@ public class ScalableLayout extends FrameLayout {
             {
 
 
-                // ÃÖÁ¾ÀûÀ¸·Î ¹èÄ¡ À§Ä¡¸¦ ¼¼ÆÃÇÏ±â À§ÇØ °¢ ÀÚ½Ä ºäµéÀÇ layoutparams¸¦ ¾÷µ¥ÀÌÆ®ÇÔ
+                // ìµœì¢…ì ìœ¼ë¡œ ë°°ì¹˜ ìœ„ì¹˜ë¥¼ ì„¸íŒ…í•˜ê¸° ìœ„í•´ ê° ìì‹ ë·°ë“¤ì˜ layoutparamsë¥¼ ì—…ë°ì´íŠ¸í•¨
                 // update layoutparams of each child view to arrange finally
                 float lTopMarginFromWeight = (lRoot_Height - (lRoot_Width * mRatioOfWidthHeight))/4;
 //				log("  onMeasure ("+lRoot_Width+","+lRoot_Height+") Ratio:"+mRatioOfWidthHeight+" lScale_TextViewMeasure_Post:"+lScale_Ratio_Post+" lTopMarginFromWeight:"+lTopMarginFromWeight);
@@ -467,7 +467,7 @@ public class ScalableLayout extends FrameLayout {
         Nothing
     }
     private ViewPosition getViewPosition(LayoutParams pSrc, LayoutParams pDst) {
-        // À§¿¡ ÀÖ´Â °æ¿ì
+        // ìœ„ì— ìˆëŠ” ê²½ìš°
         if(pSrc.getScale_Top() >= pDst.getScale_Bottom() &&
                 (
                         ( pSrc.getScale_Left() <= pDst.getScale_Left() && pDst.getScale_Left() <= pSrc.getScale_Right())
@@ -478,7 +478,7 @@ public class ScalableLayout extends FrameLayout {
                 )) {
             return ViewPosition.Top;
         }
-        // ¾Æ·¡¿¡ ÀÖ´Â °æ¿ì
+        // ì•„ë˜ì— ìˆëŠ” ê²½ìš°
         else if(pSrc.getScale_Bottom() <= pDst.getScale_Top() &&
                 (
                         ( pSrc.getScale_Left() <= pDst.getScale_Left() && pDst.getScale_Left() <= pSrc.getScale_Right())
@@ -489,7 +489,7 @@ public class ScalableLayout extends FrameLayout {
                 )) {
             return ViewPosition.Bottom;
         }
-        // ¿ŞÂÊ¿¡ ÀÖ´Â °æ¿ì
+        // ì™¼ìª½ì— ìˆëŠ” ê²½ìš°
         else if(pSrc.getScale_Left() >= pDst.getScale_Right() &&
                 (
                         ( pSrc.getScale_Top() <= pDst.getScale_Top() && pDst.getScale_Top() <= pSrc.getScale_Bottom())
@@ -500,7 +500,7 @@ public class ScalableLayout extends FrameLayout {
                 )) {
             return ViewPosition.Left;
         }
-        // ¿À¸¥ÂÊ¿¡ ÀÖ´Â °æ¿ì
+        // ì˜¤ë¥¸ìª½ì— ìˆëŠ” ê²½ìš°
         else if(pSrc.getScale_Right() <= pDst.getScale_Left() &&
                 (
                         ( pSrc.getScale_Top() <= pDst.getScale_Top() && pDst.getScale_Top() <= pSrc.getScale_Bottom())
@@ -511,7 +511,7 @@ public class ScalableLayout extends FrameLayout {
                 )) {
             return ViewPosition.Right;
         }
-        // °¨½Î°í ÀÖ´Â °æ¿ì
+        // ê°ì‹¸ê³  ìˆëŠ” ê²½ìš°
         else if(pDst.getScale_Top() <= pSrc.getScale_Top() &&
                 pDst.getScale_Left() <= pSrc.getScale_Left() &&
                 pDst.getScale_Right() >= pSrc.getScale_Right() &&
@@ -538,7 +538,7 @@ public class ScalableLayout extends FrameLayout {
         float lTextView_ScaleHeight_New 	= lTextView_ScaleHeight_Old;
         {
             // get new scale size
-            // »õ·Î¿î Scale Å©±â¸¦ °¡Á®¿È
+            // ìƒˆë¡œìš´ Scale í¬ê¸°ë¥¼ ê°€ì ¸ì˜´
             float lTextSize_New = lTV_SLLP.mScale_TextSize * pScale_TextViewMeasure_Pre;
 //			log("updateTextViewHeight 1.1 lTextView_ScaleHeight_Old:"+lTextView_ScaleHeight_Old+" getScaleHeight():"+getScaleHeight()+" pScale_TextViewMeasure_Pre:"+pScale_TextViewMeasure_Pre);
 //			log("updateTextViewHeight 1.2 lTextSize_New:"+lTextSize_New+" pTV_Text.getTextSize():"+pTV_Text.getTextSize());
@@ -964,7 +964,7 @@ public class ScalableLayout extends FrameLayout {
 
 
 
-    //////////////// Æí¸®ÇÏ°Ô View¸¦ Ãß°¡ÇÏ±â À§ÇÑ ÇÔ¼öµé //////////////
+    //////////////// í¸ë¦¬í•˜ê²Œ Viewë¥¼ ì¶”ê°€í•˜ê¸° ìœ„í•œ í•¨ìˆ˜ë“¤ //////////////
     /**
      * adds new TextView with (TextSize, Left, Top, Width, Height) parameters
      * DuplicateState is false by default.
@@ -1159,8 +1159,8 @@ public class ScalableLayout extends FrameLayout {
         setThisLoggable("ScalableLayout");
     }
     /**
-     * Log¸¦ Ãâ·ÂÇÒ¼ö ÀÖ°ÔÇÔ
-     * @param pLogTag DDMS Log Tag¸¦ ÁöÁ¤
+     * Logë¥¼ ì¶œë ¥í• ìˆ˜ ìˆê²Œí•¨
+     * @param pLogTag DDMS Log Tagë¥¼ ì§€ì •
      */
     public void setThisLoggable(String pLogTag) {
         mLogTag_This = pLogTag;
@@ -1200,8 +1200,8 @@ public class ScalableLayout extends FrameLayout {
         setLoggable("ScalableLayout");
     }
     /**
-     * Log¸¦ Ãâ·ÂÇÒ¼ö ÀÖ°ÔÇÔ
-     * @param pLogTag DDMS Log Tag¸¦ ÁöÁ¤
+     * Logë¥¼ ì¶œë ¥í• ìˆ˜ ìˆê²Œí•¨
+     * @param pLogTag DDMS Log Tagë¥¼ ì§€ì •
      */
     public static void setLoggable(String pLogTag) {
         sLogTag_Global = pLogTag;
