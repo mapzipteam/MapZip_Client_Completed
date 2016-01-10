@@ -44,7 +44,19 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
     private Button review_search;
     private Button map_viewBtn;
     private Button review_regi_self;
-    private EditText searchedit;
+
+    //2016.01.10송지원이 고침
+    //private EditText searchedit;
+    private EditText searchedName;
+    private EditText searchedLocation;
+
+    private String storeToSerch;
+    private String storeName;
+    private String storeLocation;
+
+
+
+
 
     private RestaurantResult restaurants;
     private Context context;
@@ -113,14 +125,51 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         // 스크롤 리스너 등록
         mListView.setOnScrollListener(this);
 
-        searchedit = (EditText) v.findViewById(R.id.searchText_review);
+        //2016.01.10송지원이 고침
+        //searchedit = (EditText) v.findViewById(R.id.searchText_review);//검색창이 하나였던것을 가게와 지역으로 나누어 검색하게 함
+        searchedName = (EditText) v.findViewById(R.id.searchNameText_review);
+        searchedLocation = (EditText) v.findViewById(R.id.searchLocationText_review);
 
         review_search = (Button) v.findViewById(R.id.searchBtn_review);
         review_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (searchedit.getText().toString().trim().isEmpty())
+
+                storeName = null;//검색창에 입력한 가게이름 받아오는 String
+                storeLocation = null;//검색창에 입력한 가게위치 받아오는 String
+                storeName = searchedName.getText().toString().trim();
+                storeLocation = searchedLocation.getText().toString().trim();
+
+
+                storeToSerch = null;//입력된 가게이름과 가게위치를 합쳐서 하나의 검색어로 만들어 저징하는 String
+
+                if(storeName.length() != 0){//가게이름이 있을경우
+
+                    if(storeLocation.length() != 0){//장소 있을경우
+
+                        storeToSerch = storeName+" "+storeLocation;
+                    }
+                    else{//장소 없을경우
+                        //이부분은 검색시 가게이름만 작성하고 위치는 작성하지않았을때 사용자의 자주가는 지역 중심으로 검색 결과를 보여주는 옵션을 추가할때 사용할 부분.
+                        //지금은 그냥 지역정보 없이 가게명만 보냄. 옵션 추가하기전까진 중구부터 나올것이다.
+                        Log.d("dSJW", "2");
+                        storeToSerch = storeName;
+                    }
+                }
+                else{//가게이름 없을경우
+
+                    //이부분은 추가하거나 말거나 이야기 해봅시다!!!
+                    //토스트를 띄울건지 아니면 아무반응 없게 할것인지
+                    text_toast.setText("검색어를 입력해주세요.");
+                    Toast toast = new Toast(getActivity());
+                    toast.setDuration(Toast.LENGTH_SHORT);
+                    toast.setView(layout_toast);
+                    toast.show();
+
                     return;
+                }
+
+
                 InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(review_search.getWindowToken(), 0);
                 ConnectivityManager manager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -139,7 +188,8 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
                     return;
                 }
 
-                query = searchedit.getText().toString();
+                //query = searchedit.getText().toString();
+                query = storeToSerch;
                 startSearching();
 
                 marItem.clear();
@@ -159,9 +209,18 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
             @Override
             public void onClick(View v) {
                 InputMethodManager inputMethodManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(searchedit.getWindowToken(), 0);
-                searchedit.clearFocus();
-                searchedit.setSelectAllOnFocus(false);
+//                inputMethodManager.hideSoftInputFromWindow(searchedit.getWindowToken(), 0);
+//                searchedit.clearFocus();
+//                searchedit.setSelectAllOnFocus(false);
+
+                inputMethodManager.hideSoftInputFromWindow(searchedName.getWindowToken(), 0);
+                searchedName.clearFocus();
+                searchedName.setSelectAllOnFocus(false);
+
+                inputMethodManager.hideSoftInputFromWindow(searchedLocation.getWindowToken(), 0);
+                searchedLocation.clearFocus();
+                searchedLocation.setSelectAllOnFocus(false);
+
                 Intent intent = new Intent(getActivity(), SearchInLocationActivity.class);
                 startActivity(intent);
             }
