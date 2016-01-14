@@ -199,6 +199,8 @@ public class ReviewActivity extends Activity {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                 if (response != null && response.getBitmap() != null) {
+                    Log.v("이미지이미지", response.getRequestUrl().toString());
+
                     // add image to array
                     oPerlishArray.add(response.getBitmap());
 
