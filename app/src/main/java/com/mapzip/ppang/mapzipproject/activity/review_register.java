@@ -95,6 +95,10 @@ public class review_register extends Activity {
     private int imagenum = 0; // to identify Image -> increase in doUpload
     private File mfile; // request param - image file
 
+    // modify image
+    private boolean modifyedcheck = false; // image modify check -> false: no modify, true: modified
+    private int afterimagenum = 0;
+
     // Loading
     private LoadingTask loading;
     public ProgressDialog asyncDialog;
@@ -190,13 +194,15 @@ public class review_register extends Activity {
         Uriarr = new ArrayList<Uri>();
         oPerlishArray = new ArrayList<Bitmap>();
 
-        // no Image
-        noimage = drawableToBitmap(getResources().getDrawable(R.drawable.noimage));
-        oPerlishArray.add(noimage);
+        if(state == 0){ // in enroll
+            // no Image
+            noimage = drawableToBitmap(getResources().getDrawable(R.drawable.noimage));
+            oPerlishArray.add(noimage);
 
-        bitarr = new Bitmap[oPerlishArray.size()];
-        oPerlishArray.toArray(bitarr); // fill the array
-        user.inputGalImages(bitarr);
+            bitarr = new Bitmap[oPerlishArray.size()];
+            oPerlishArray.toArray(bitarr); // fill the array
+            user.inputGalImages(bitarr);
+        }
         imageadapter = new ImageAdapter(this, SystemMain.justuser);
         viewPager.setAdapter(imageadapter);
 
@@ -218,6 +224,8 @@ public class review_register extends Activity {
         mapadapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, mapsppinerList);
         mapadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mapspinner.setAdapter(mapadapter);
+        if(state == 1) // in modify
+                mapspinner.setSelection(Integer.parseInt(mapData.getMapid())-1);
 
         // map select
         mapspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -230,7 +238,7 @@ public class review_register extends Activity {
                     mapData.setMapid(mapmeta.get("map_id").toString());
                     Log.v("mappid", mapData.getMapid());
                 } catch (JSONException ex) {
-                    Log.v("제이손 에러","review_regi_mapspinner2");
+                    Log.v("제이손 에러", "review_regi_mapspinner2");
                 }
             }
 
@@ -244,6 +252,21 @@ public class review_register extends Activity {
         emotion = (ImageView) findViewById(R.id.emotion_review_regi);
         emotion.setImageResource(R.drawable.sample_emotion0); // default emotion image
         seekbar = (SeekBar) findViewById(R.id.emotionBar_review_regi);
+        if(state == 1)  // in modify
+        {
+            int pro = mapData.getReview_emotion();
+            seekbar.setProgress(pro);
+            if (pro < 20)
+                emotion.setImageResource(R.drawable.emotion1);
+            else if ((20 <= pro) && (pro < 40))
+                emotion.setImageResource(R.drawable.emotion2);
+            else if ((40 <= pro) && (pro < 60))
+                emotion.setImageResource(R.drawable.emotion3);
+            else if ((60 <= pro) && (pro < 80))
+                emotion.setImageResource(R.drawable.emotion4);
+            else
+                emotion.setImageResource(R.drawable.emotion5);
+        }
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -331,6 +354,17 @@ public class review_register extends Activity {
 
             }
         });
+
+        // in modify
+        if(state == 1){
+            spinner.setSelection(15);
+            directEdit.setText(mapData.getReview_text());
+
+            directEdit.setVisibility(View.VISIBLE);
+            oneText.setVisibility(View.GONE);
+            spinner2.setVisibility(View.GONE);
+            reviewposition1 = 15; // save selected position
+        }
     }
 
     //  onResult - findImageonClick
@@ -349,14 +383,26 @@ public class review_register extends Activity {
                     image_uri = data.getData();
                     Uriarr.add(image_uri);
 
-                    if (oncreatelock == false) { // 사진 여러장 일 때
+                    if (oncreatelock == false || state == 1) { // 사진 여러장 일 때 or modify
                         oPerlishArray.clear();
                         oncreatelock = true;
                     }
                     oPerlishArray.add(image_bitmap);
                     bitarr = new Bitmap[oPerlishArray.size()];
                     oPerlishArray.toArray(bitarr);
-                    user.inputGalImages(bitarr); // save Image in user Data
+
+                    // save Image in user Data
+                    if (state == 1) // in modify
+                    {
+                        Log.v("image modify", "ok");
+                        Log.v("image_length1",String.valueOf(user.getGalImages().length));
+                        user.addGalImages(bitarr);
+                        modifyedcheck = true;
+                        afterimagenum++;
+                        Log.v("image_length2",String.valueOf(user.getGalImages().length));
+                    }
+                    else
+                        user.inputGalImages(bitarr);
 
                     imageadapter = new ImageAdapter(this,SystemMain.justuser);
                     viewPager.setAdapter(imageadapter);
@@ -442,12 +488,14 @@ public class review_register extends Activity {
             if (mapData.getReview_text().isEmpty())
                 mapData.setReview_text(directEdit.getText().toString());
 
+            mapData.setImage_num(mapData.getImage_num()+afterimagenum);
             obj.put("user_id", user.getUserID());
             obj.put("map_id", mapData.getMapid());
             obj.put("review_emotion", mapData.getReview_emotion());
             obj.put("review_text", mapData.getReview_text());
             obj.put("store_id",getIntent().getStringExtra("store_id"));
-            obj.put("image_num", 0);
+            obj.put("image_num", mapData.getImage_num());
+            Log.v("image_num", String.valueOf(mapData.getImage_num()));
 
             Log.v("review 수정 보내기", obj.toString());
         } catch (JSONException e) {
@@ -472,6 +520,14 @@ public class review_register extends Activity {
                 try {
                     if (response.getString("state").equals("607")) {
                         user.setModifystate(true);
+
+                        if(modifyedcheck == true){
+                            Log.v("리뷰수정", "OK");
+                            serverchoice = 2;
+                            loading.execute();
+                            // 2번째통신 이미지갯수만큼 반복
+                        }
+
                         // toast
                         text_toast.setText("리뷰가 수정되었습니다.");
                         Toast toast = new Toast(getApplicationContext());
@@ -770,7 +826,7 @@ public class review_register extends Activity {
     }
 
     // setting review text & emotion
-    public void reviewtextset() {
+    public int reviewtextset() {
         if (mapData.getReview_emotion() == 0) { // emotion not selected
             // toast
             text_toast.setText("이모티콘을 선택해주세요.");
@@ -778,6 +834,8 @@ public class review_register extends Activity {
             toast.setDuration(Toast.LENGTH_SHORT);
             toast.setView(layout_toast);
             toast.show();
+
+            return -1;
         } else if ((reviewposition1 == 0) && (reviewposition2 == 0)) { // review text not selected
             // toast
             text_toast.setText("리뷰를 작성해주세요.");
@@ -785,6 +843,8 @@ public class review_register extends Activity {
             toast.setDuration(Toast.LENGTH_SHORT);
             toast.setView(layout_toast);
             toast.show();
+
+            return -1;
         } else {
             if ((reviewposition1 == 15) || (reviewposition2 == 14)) // direct review text
                 mapData.setReview_text(directEdit.getText().toString());
@@ -801,6 +861,7 @@ public class review_register extends Activity {
 
                 mapData.setReview_text(tmp); // set final review to send
             }
+            return 1;
         }
     }
 
@@ -825,12 +886,18 @@ public class review_register extends Activity {
                 uriarray = new Uri[Uriarr.size()];
                 Uriarr.toArray(uriarray);
 
+                if(state==1) // in modify
+                    imagenum=(mapData.getImage_num()-afterimagenum);
+
                 for (int i = 0; i < Uriarr.size(); i++)
                     DoUpload(i);
             }
-            int tmp = user.getPingCount(Integer.parseInt(mapData.getMapid()), mapData.getGu_num());
-            user.setReviewCount(Integer.parseInt(mapData.getMapid()), mapData.getGu_num(), tmp + 1);
-            user.setMapImage(Integer.parseInt(mapData.getMapid()), res);
+
+            if(state == 0) {
+                int tmp = user.getPingCount(Integer.parseInt(mapData.getMapid()), mapData.getGu_num());
+                user.setReviewCount(Integer.parseInt(mapData.getMapid()), mapData.getGu_num(), tmp + 1);
+                user.setMapImage(Integer.parseInt(mapData.getMapid()), res);
+            }
 
             try {
                 Thread.sleep(100);
@@ -874,9 +941,10 @@ public class review_register extends Activity {
 
     // 리뷰등록 버튼
     public void enrollonClick_review_regi(View v) {
-            reviewtextset();
-            DoReviewset(v); // 서버 통신
-            user.setMapforpinNum(Integer.parseInt(mapData.getMapid()), 0); // to review loading
+            if(reviewtextset() == 1) {
+                DoReviewset(v); // 서버 통신
+                user.setMapforpinNum(Integer.parseInt(mapData.getMapid()), 0); // to review loading
+            }
     }
 
     // 취소 버튼

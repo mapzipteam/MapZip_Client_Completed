@@ -372,11 +372,26 @@ public class UserData {
         GalImages = Images;
     }
 
+    public void addGalImages(Bitmap[] Images){
+        Bitmap[] tmp = GalImages.clone();
+        GalImages = new Bitmap[tmp.length+Images.length];
+        for(int j=0; j<tmp.length; j++)
+            GalImages[j] = tmp[j];
+
+        Log.v("add imagelength",String .valueOf(Images.length));
+        int a = 0;
+        for(int i=(tmp.length); i<(tmp.length+Images.length); i++){
+            Log.v("add i",String .valueOf(i));
+            GalImages[i] = Images[a];
+            a++;
+        }
+    }
+
     public void initMapData() {
         mapData = new MapData();
     }
 
-    public void setMapData(String s_id, String m_id, String s_contact, String r_text, String r_emotion, String s_address, String s_name, String g_num) {
+    public void setMapData(String s_id, String m_id, String s_contact, String r_text, String r_emotion, String s_address, String s_name, String g_num, String i_num) {
         mapData.setStore_id(s_id);
         mapData.setMapid(m_id);
         mapData.setStore_contact(s_contact);
@@ -385,6 +400,7 @@ public class UserData {
         mapData.setStore_address(s_address);
         mapData.setStore_name(s_name);
         mapData.setGu_num(Integer.parseInt(g_num));
+        mapData.setImage_num(Integer.parseInt(i_num));
     }
 
     public MapData getMapData() {
