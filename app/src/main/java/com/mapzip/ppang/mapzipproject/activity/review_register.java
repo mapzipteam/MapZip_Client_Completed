@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -58,6 +59,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -387,6 +389,7 @@ public class review_register extends Activity {
 
                     //이미지 데이터를 비트맵으로 받아온다.
                     Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                    image_bitmap = resizeBitmapImage(image_bitmap,image_bitmap.getWidth(),image_bitmap.getHeight());
                     image_uri = data.getData();
                     Uriarr.add(image_uri);
 
@@ -710,6 +713,7 @@ public class review_register extends Activity {
 
     // image upload
     public void DoUpload(final int i) {
+        Log.v("에러치크","2");
         StringRequest stringRequest = new StringRequest(Request.Method.POST, SystemMain.SERVER_REVIEWENROLL3_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -722,21 +726,27 @@ public class review_register extends Activity {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         //Showing toast
-                        Log.v("이미지 업로드 에러", String.valueOf(volleyError.getMessage()));
+                        Log.v("이미지 업로드 에러", String.valueOf(volleyError));
                     }
                 }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 //Converting Bitmap to String
                 String image = getStringImage(user.getGalImages()[i]);
+                Log.v("image string",image);
+                Log.v("image 길이", String.valueOf(image.length()));
 
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("mfile",image);
+                Map<String, String> params = new Hashtable<String, String>();
+                params.put("image_string",image);
                 params.put("userid", user.getUserID());
                 params.put("map_id", mapData.getMapid());
                 params.put("store_id", mapData.getStore_id());
                 params.put("image_name", "image" + String.valueOf(imagenum));
                 imagenum++;
+
+                Log.v("param",params.toString());
+
+                Log.v("에러치크","1");
 
                 //returning parameters
                 return params;
@@ -748,6 +758,7 @@ public class review_register extends Activity {
 
         //Adding request to the queue
         requestQueue.add(stringRequest);
+
         /*
         mfile = getImageFile(uriarray[i]);
         if (mfile == null) {
@@ -801,12 +812,45 @@ public class review_register extends Activity {
         return copy;
     }
 
+    // bitmap resize
+    public Bitmap resizeBitmapImage(Bitmap bmpSource, int maxWidth, int maxHeight){
+
+        int iWidth = bmpSource.getWidth();
+        int iHeight = bmpSource.getHeight();
+        int newWidth = iWidth;
+        int newHeight = iHeight;
+        double rate = 0.0f;
+
+        rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
+
+        if(rate <= 1){
+            Log.v("dSJW", "그대로 가로 : " + bmpSource.getWidth() + "\t\t그대로 세로 : " + bmpSource.getHeight());
+            return bmpSource;
+        }else{
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = (int)rate+1;
+
+            Bitmap bitmap_resized = Bitmap.createScaledBitmap(bmpSource,(int)(iWidth/rate), (int)(iHeight/rate), true);
+
+            Log.e("dSJW", "바뀌어서 가로 : " + bitmap_resized.getWidth() + "\t\t바뀌어서 세로 : " + bitmap_resized.getHeight());
+            return bitmap_resized;
+        }
+    }
+
     // get Image encoding
-    public String getStringImage(Bitmap bmp){
+    public String getStringImage(Bitmap bmp){/*
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+        */
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        // Must compress the Image to reduce image size to make upload easy
+        bmp.compress(Bitmap.CompressFormat.PNG, 10, stream);
+        byte[] byte_arr = stream.toByteArray();
+        // Encode Image to String
+        String encodedImage = Base64.encodeToString(byte_arr, 0);
         return encodedImage;
     }
 
