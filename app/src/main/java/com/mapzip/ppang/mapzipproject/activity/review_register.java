@@ -3,11 +3,14 @@ package com.mapzip.ppang.mapzipproject.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -17,8 +20,10 @@ import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -49,6 +54,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -353,7 +359,71 @@ public class review_register extends Activity {
                         oPerlishArray.clear();
                         oncreatelock = true;
                     }
-                    oPerlishArray.add(image_bitmap);
+
+                    //2016.01.11송지원이 바꿈
+
+                    int maxWidth = viewPager.getWidth();
+                    int maxHeight = viewPager.getHeight();
+
+                    Bitmap resized_image_bitmap = resizeBitmapImage(image_uri, image_bitmap, maxWidth, maxHeight);
+
+
+
+
+Log.v("dSJW", "resized_image)bitmap의 가로 : "+resized_image_bitmap.getWidth()+"\t\t"+resized_image_bitmap.getHeight());
+
+
+
+
+
+
+
+
+
+                    int rotation = -1;
+
+                    rotation = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
+
+
+                    Matrix rotator = new Matrix();
+
+                    switch (rotation){
+
+                        case(Surface.ROTATION_0):
+                            break;
+
+                        case(Surface.ROTATION_90):
+                            rotator.postRotate(270);
+                            break;
+
+                        case(Surface.ROTATION_180):
+                            rotator.postRotate(180);
+                            break;
+
+                        case(Surface.ROTATION_270):
+                            rotator.postRotate(90);
+                            break;
+
+                    }
+
+                    resized_image_bitmap = Bitmap.createBitmap(resized_image_bitmap, 0, 0, resized_image_bitmap.getWidth(), resized_image_bitmap.getHeight(), rotator, false);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    //oPerlishArray.add(image_bitmap);
+                    oPerlishArray.add(resized_image_bitmap);
                     bitarr = new Bitmap[oPerlishArray.size()];
                     oPerlishArray.toArray(bitarr);
                     user.inputGalImages(bitarr); // save Image in user Data
@@ -373,6 +443,120 @@ public class review_register extends Activity {
             }
         }
     }
+
+
+
+
+
+    public Bitmap resizeBitmapImage(Uri image_uri, Bitmap bmpSource, int maxWidth, int maxHeight){
+
+        int iWidth = bmpSource.getWidth();
+        int iHeight = bmpSource.getHeight();
+        int newWidth = iWidth;
+        int newHeight = iHeight;
+        double rate = 0.0f;
+
+
+
+      /*  int rotation = -1;
+
+        rotation = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
+
+
+        Matrix rotator = new Matrix();
+
+        switch (rotation){
+
+            case(Surface.ROTATION_0):
+                break;
+
+            case(Surface.ROTATION_90):
+                rotator.postRotate(270);
+                break;
+
+            case(Surface.ROTATION_180):
+                rotator.postRotate(180);
+                break;
+
+            case(Surface.ROTATION_270):
+                rotator.postRotate(90);
+                break;
+
+        }
+
+        bmpSource = Bitmap.createBitmap(bmpSource, 0, 0, iWidth, iHeight, rotator, false);
+*/
+
+Log.e("dSJW", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Log.d("dSJW", "iWidth :" + iWidth + "\tiHeight : " + iHeight + "\tmaxWidth : " + maxWidth + "\tmaxHeight : " + maxHeight);
+
+
+//        if(iWidth > iHeight){//가로가 더 긴경우
+//            Log.d("dSJW","가로로 기 사진");
+//
+//            if(iWidth > maxWidth){
+//
+//                rate = maxWidth/(double)iWidth;Log.d("dSJW", "rate : "+rate+"\n");
+////                newHeight = (int)(iHeight*rate);
+////                newWidth = maxWidth;
+//            }
+//        }
+//        else{//세로가 더 긴경우
+//
+//            Log.d("dSJW", "세로로 더 긴경우");
+//
+//            if(maxHeight < iHeight){
+//
+//                rate = maxHeight/(double)iHeight;Log.d("dSJW", "rate : "+rate+"\n");
+////                newWidth = (int)(iWidth*rate);
+////                newHeight = maxHeight;
+//            }
+//        }
+
+
+
+
+
+       rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
+        Log.d("dSJW", (double)iWidth/maxWidth+"\t\t"+(double)iHeight/maxHeight+"\t\t"+rate);
+
+        if(rate <= 1){
+
+            Log.v("dSJW", "그대로 가로 : " + bmpSource.getWidth() + "\t\t그대로 세로 : " + bmpSource.getHeight());
+            return bmpSource;
+
+
+        }else{
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = (int)rate+1;
+
+            Log.d("dSJW","int)rate : "+((int)rate+1) );
+
+            Bitmap bitmap_src = BitmapFactory.decodeFile(getPathFromUri(image_uri), options);
+
+            Bitmap bitmap_resized = Bitmap.createScaledBitmap(bitmap_src, /*maxWidth, maxHeight*/(int)(iWidth/rate), (int)(iHeight/rate), true);
+
+
+            Log.e("dSJW", "바뀌어서 가로 : " + bitmap_resized.getWidth() + "\t\t바뀌어서 세로 : " + bitmap_resized.getHeight());
+            return bitmap_resized;
+        }
+
+
+    }
+
+    public String getPathFromUri(Uri uri) {
+
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToNext();
+        String path = cursor.getString(cursor.getColumnIndex("_data"));
+        cursor.close();
+
+        return path;
+    }
+
+
+
 
     // in enroll Btn
     public void DoReviewset(View v) {
