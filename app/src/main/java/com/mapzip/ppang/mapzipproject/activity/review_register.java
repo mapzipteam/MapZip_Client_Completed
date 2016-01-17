@@ -389,7 +389,6 @@ public class review_register extends Activity {
 
                     //이미지 데이터를 비트맵으로 받아온다.
                     Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                    image_bitmap = resizeBitmapImage(image_bitmap,image_bitmap.getWidth(),image_bitmap.getHeight());
                     image_uri = data.getData();
                     Uriarr.add(image_uri);
 
@@ -397,7 +396,17 @@ public class review_register extends Activity {
                         oPerlishArray.clear();
                         oncreatelock = true;
                     }
-                    oPerlishArray.add(image_bitmap);
+
+                    //2016.01.11송지원이 바꿈
+                    int maxWidth = viewPager.getWidth();
+                    int maxHeight = viewPager.getHeight();
+
+                    Bitmap resized_image_bitmap = resizeBitmapImage(image_uri, image_bitmap, maxWidth-200, maxHeight-200);
+
+                    Log.v("dSJW", "resized_image)bitmap의 가로 : " + resized_image_bitmap.getWidth() + "\t\t" + resized_image_bitmap.getHeight());
+
+                    //oPerlishArray.add(image_bitmap);
+                    oPerlishArray.add(resized_image_bitmap);
                     bitarr = new Bitmap[oPerlishArray.size()];
                     oPerlishArray.toArray(bitarr);
 
@@ -812,30 +821,42 @@ public class review_register extends Activity {
         return copy;
     }
 
-    // bitmap resize
-    public Bitmap resizeBitmapImage(Bitmap bmpSource, int maxWidth, int maxHeight){
-
+    // resized bitmap
+    public Bitmap resizeBitmapImage(Uri image_uri, Bitmap bmpSource, int maxWidth, int maxHeight){
         int iWidth = bmpSource.getWidth();
         int iHeight = bmpSource.getHeight();
         int newWidth = iWidth;
         int newHeight = iHeight;
         double rate = 0.0f;
 
+        Log.d("dSJW", "iWidth :" + iWidth + "\tiHeight : " + iHeight + "\tmaxWidth : " + maxWidth + "\tmaxHeight : " + maxHeight);
         rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
-
+        Log.d("dSJW", (double)iWidth/maxWidth+"\t\t"+(double)iHeight/maxHeight+"\t\t"+rate);
         if(rate <= 1){
             Log.v("dSJW", "그대로 가로 : " + bmpSource.getWidth() + "\t\t그대로 세로 : " + bmpSource.getHeight());
             return bmpSource;
         }else{
-
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = (int)rate+1;
 
-            Bitmap bitmap_resized = Bitmap.createScaledBitmap(bmpSource,(int)(iWidth/rate), (int)(iHeight/rate), true);
+            Log.d("dSJW","int)rate : "+((int)rate+1) );
+
+            Bitmap bitmap_src = BitmapFactory.decodeFile(getPathFromUri(image_uri), options);
+
+            Bitmap bitmap_resized = Bitmap.createScaledBitmap(bitmap_src, /*maxWidth, maxHeight*/(int)(iWidth/rate), (int)(iHeight/rate), true);
 
             Log.e("dSJW", "바뀌어서 가로 : " + bitmap_resized.getWidth() + "\t\t바뀌어서 세로 : " + bitmap_resized.getHeight());
             return bitmap_resized;
         }
+    }
+
+    public String getPathFromUri(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToNext();
+        String path = cursor.getString(cursor.getColumnIndex("_data"));
+        cursor.close();
+
+        return path;
     }
 
     // get Image encoding
@@ -845,12 +866,29 @@ public class review_register extends Activity {
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
         */
+
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         // Must compress the Image to reduce image size to make upload easy
-        bmp.compress(Bitmap.CompressFormat.PNG, 10, stream);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byte_arr = stream.toByteArray();
         // Encode Image to String
         String encodedImage = Base64.encodeToString(byte_arr, 0);
+
+        /*
+        String encodedImage="";
+        try {
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            // Must compress the Image to reduce image size to make upload easy
+            bmp.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+            byte[] byte_arr = stream.toByteArray();
+            // Encode Image to String
+            encodedImage = new String(byte_arr,"UTF-8");
+
+        }catch (Exception ex){
+            Log.v("에러","utf-8");
+        }
+        */
         return encodedImage;
     }
 
