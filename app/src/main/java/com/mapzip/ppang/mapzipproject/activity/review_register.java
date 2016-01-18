@@ -91,18 +91,15 @@ public class review_register extends Activity {
     private Bitmap[] bitarr; // Image array, oPerlishArray.toArray(bitarr)
     private ImageAdapter imageadapter;
     private Bitmap noimage;
+    private Bitmap[] backupbitarr;
 
     // Image Select
     final int REQ_CODE_SELECT_IMAGE = 100;
     private boolean oncreatelock = false; // image array clear -> false: oPerlishArray.clear() , true: x
-    private List<Uri> Uriarr; // selected Images Uri List
-    private Uri image_uri; // selected Image Uri, Uriarr.add(image_uri);
 
     // Image Send
     private int serverchoice = 0; // Image send check -> 0: default, 1: only text, 2: image send in Loding Background
-    private Uri uriarray[]; // Uriarr.toArray(uriarray), mfile = getImageFile(uriarray[i])
     private int imagenum = 0; // to identify Image -> increase in doUpload
-    private File mfile; // request param - image file
 
     // modify image
     private boolean modifyedcheck = false; // image modify check -> false: no modify, true: modified
@@ -162,7 +159,14 @@ public class review_register extends Activity {
         // state
         if(getIntent().getStringExtra("state").equals("modify") == true) {
             state = 1;
-            mapData = user.getMapData();
+            try{
+            mapData = user.getMapData().clone();
+            }catch (Exception ex){
+                Log.v("mapData","clone ex");
+            }
+
+            backupbitarr = user.getGalImages().clone();
+
             primap_id = mapData.getMapid();
             Log.v("mapid",mapData.getMapid());
         }
@@ -177,7 +181,7 @@ public class review_register extends Activity {
             enrollBtn.setVisibility(View.GONE);
             modifyBtn.setVisibility(View.VISIBLE);
         }
-        Log.v("state",String.valueOf(state));
+        Log.v("state", String.valueOf(state));
 
         // setting mapData to send
         mapData.setStore_x(getIntent().getDoubleExtra("store_x", 0));
@@ -200,7 +204,6 @@ public class review_register extends Activity {
          */
         viewPager = (ViewPager) findViewById(R.id.pager_review_regi);
 
-        Uriarr = new ArrayList<Uri>();
         oPerlishArray = new ArrayList<Bitmap>();
 
         if(state == 0){ // in enroll
@@ -389,8 +392,7 @@ public class review_register extends Activity {
 
                     //이미지 데이터를 비트맵으로 받아온다.
                     Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                    image_uri = data.getData();
-                    Uriarr.add(image_uri);
+                    Uri image_uri = data.getData();
 
                     if (oncreatelock == false || state == 1) { // 사진 여러장 일 때 or modify
                         oPerlishArray.clear();
@@ -423,6 +425,7 @@ public class review_register extends Activity {
                     else
                         user.inputGalImages(bitarr);
 
+                    serverchoice = 2;
                     imageadapter = new ImageAdapter(this,SystemMain.justuser);
                     viewPager.setAdapter(imageadapter);
                     imageadapter.notifyDataSetChanged();
@@ -448,6 +451,9 @@ public class review_register extends Activity {
             if (mapData.getReview_text().isEmpty())
                 mapData.setReview_text(directEdit.getText().toString());
 
+            if(serverchoice == 2)
+                mapData.setImage_num(user.getGalImages().length);
+
             obj.put("userid", user.getUserID());
             obj.put("map_id", mapData.getMapid());
             obj.put("store_x", mapData.getStore_x());
@@ -457,7 +463,7 @@ public class review_register extends Activity {
             obj.put("store_contact", mapData.getStore_contact());
             obj.put("review_emotion", mapData.getReview_emotion());
             obj.put("review_text", mapData.getReview_text());
-            obj.put("image_num", Uriarr.size());
+            obj.put("image_num", mapData.getImage_num());
             obj.put("gu_num", mapData.getGu_num());
 
             Log.v("review 등록 보내기", obj.toString());
@@ -646,7 +652,7 @@ public class review_register extends Activity {
                         // 1번째 통신 성공
                         Log.v("리뷰저장", "OK");
                         mapData.setStore_id(response.getString("store_id"));
-                        if (Uriarr.size() != 0)
+                        if (mapData.getImage_num() != 0)
                             DoReviewset2(); // 이미지 있으면 2번째 통신 시작
                         else {
                             serverchoice = 1; // no image
@@ -741,6 +747,7 @@ public class review_register extends Activity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 //Converting Bitmap to String
+                Log.v("길이길이",String.valueOf(user.getGalImages().length));
                 String image = getStringImage(user.getGalImages()[i]);
                 Log.v("image string",image);
                 Log.v("image 길이", String.valueOf(image.length()));
@@ -831,7 +838,7 @@ public class review_register extends Activity {
 
         Log.d("dSJW", "iWidth :" + iWidth + "\tiHeight : " + iHeight + "\tmaxWidth : " + maxWidth + "\tmaxHeight : " + maxHeight);
         rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
-        Log.d("dSJW", (double)iWidth/maxWidth+"\t\t"+(double)iHeight/maxHeight+"\t\t"+rate);
+        Log.d("dSJW", (double) iWidth / maxWidth + "\t\t" + (double) iHeight / maxHeight + "\t\t"+rate);
         if(rate <= 1){
             Log.v("dSJW", "그대로 가로 : " + bmpSource.getWidth() + "\t\t그대로 세로 : " + bmpSource.getHeight());
             return bmpSource;
@@ -1021,13 +1028,11 @@ public class review_register extends Activity {
         protected Void doInBackground(Void... arg0) {
             if (serverchoice == 1) {
             } else if (serverchoice == 2) {
-                uriarray = new Uri[Uriarr.size()];
-                Uriarr.toArray(uriarray);
 
                 if(state==1) // in modify
                     imagenum=(mapData.getImage_num()-afterimagenum);
 
-                for (int i = 0; i < Uriarr.size(); i++)
+                for (int i = 0; i <mapData.getImage_num(); i++)
                     DoUpload(i);
             }
 
@@ -1094,5 +1099,13 @@ public class review_register extends Activity {
     public void modifyonClick_review_regi(View v){
         reviewtextset();
         DoModifyset(v);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+       /* if(modifyedcheck == true)
+            user.inputGalImages(backupbitarr);*/
     }
 }
