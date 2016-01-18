@@ -2,6 +2,8 @@ package com.mapzip.ppang.mapzipproject.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -262,26 +264,42 @@ public class ReviewActivity extends Activity {
 
     // delete Btn
     public void deleteOnclick(View v){
-        RequestQueue queue = MyVolley.getInstance(this).getRequestQueue();
+        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(ReviewActivity.this);
+        alert_confirm.setMessage("리뷰를 정말 삭제하시겠습니까?\n").setCancelable(false).setPositiveButton("확인",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        RequestQueue queue = MyVolley.getInstance(ReviewActivity.this).getRequestQueue();
 
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("user_id", user.getUserID());
-            obj.put("map_id",mapData.getMapid());
-            obj.put("store_id",mapData.getStore_id());
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("user_id", user.getUserID());
+                            obj.put("map_id",mapData.getMapid());
+                            obj.put("store_id",mapData.getStore_id());
 
-            Log.v("ReviewActivity 보내기", obj.toString());
-        } catch (JSONException e) {
-            Log.v("제이손", "에러");
-        }
+                            Log.v("ReviewActivity 보내기", obj.toString());
+                        } catch (JSONException e) {
+                            Log.v("제이손", "에러");
+                        }
 
-        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
-                SystemMain.SERVER_REVIEWDELETE_URL,
-                obj,
-                createMyReqSuccessListener(),
-                createMyReqErrorListener()) {
-        };
-        queue.add(myReq);
+                        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                                SystemMain.SERVER_REVIEWDELETE_URL,
+                                obj,
+                                createMyReqSuccessListener(),
+                                createMyReqErrorListener()) {
+                        };
+                        queue.add(myReq);
+                    }
+                }).setNegativeButton("취소",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 'No'
+                        return;
+                    }
+                });
+        AlertDialog alert = alert_confirm.create();
+        alert.show();
     }
 
     private Response.Listener<JSONObject> createMyReqSuccessListener() {
