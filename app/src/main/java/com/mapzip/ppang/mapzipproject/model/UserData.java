@@ -34,6 +34,7 @@ public class UserData {
     private MapData mapData;
     private boolean mapRefreshLock = true;
     private boolean modifystate = false;
+    private boolean afterModify = false;
 
     // noimage
     private Bitmap noimage;
@@ -369,7 +370,8 @@ public class UserData {
     }
 
     public void inputGalImages(Bitmap[] Images) {
-        GalImages = Images;
+        GalImages = new Bitmap[Images.length];
+        GalImages = Images.clone();
     }
 
     public void addGalImages(Bitmap[] Images){
@@ -445,5 +447,13 @@ public class UserData {
 
     public void setModifystate(boolean modifystate) {
         this.modifystate = modifystate;
+    }
+
+    public boolean isAfterModify() {
+        return afterModify;
+    }
+
+    public void setAfterModify(boolean afterModify) {
+        this.afterModify = afterModify;
     }
 }

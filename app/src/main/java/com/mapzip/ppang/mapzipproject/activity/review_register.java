@@ -1028,12 +1028,14 @@ public class review_register extends Activity {
         protected Void doInBackground(Void... arg0) {
             if (serverchoice == 1) {
             } else if (serverchoice == 2) {
-
+/*
                 if(state==1) // in modify
                     imagenum=(mapData.getImage_num()-afterimagenum);
-
+*/
                 for (int i = 0; i <mapData.getImage_num(); i++)
                     DoUpload(i);
+
+                user.setAfterModify(true);
             }
 
             if(state == 0) {
