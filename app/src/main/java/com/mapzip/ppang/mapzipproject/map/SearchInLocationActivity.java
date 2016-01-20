@@ -219,6 +219,7 @@ public class SearchInLocationActivity extends NMapActivity implements OnMapState
                         intent.putExtra("store_contact", storecontact.getText().toString());
                         intent.putExtra("store_x", currentLNG);
                         intent.putExtra("store_y", currentLAT);
+                        intent.putExtra("state","enroll");
 
                         startActivity(intent);
                         finish();

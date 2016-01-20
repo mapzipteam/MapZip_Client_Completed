@@ -14,6 +14,7 @@ public class MapData {
     private int review_emotion;
     private String review_text;
     private int gu_num;
+    private int image_num;
 
     public MapData() { this.review_text = ""; }
 
@@ -83,4 +84,11 @@ public class MapData {
 
     public void setGu_num(int gu_num) { this.gu_num = gu_num; }
 
+    public int getImage_num() {
+        return image_num;
+    }
+
+    public void setImage_num(int image_num) {
+        this.image_num = image_num;
+    }
 }

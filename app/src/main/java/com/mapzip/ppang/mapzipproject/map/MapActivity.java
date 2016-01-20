@@ -413,7 +413,7 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
                         if ((getIntent().getStringExtra("fragment_id").equals("home")))
                         {
                             user.initMapData();
-                            user.setMapData(obj.getString("store_id"), obj.getString("map_id"), obj.getString("store_contact"), obj.getString("review_text"), obj.getString("review_emotion"), obj.getString("store_address"), obj.getString("store_name"), obj.getString("gu_num"));
+                            user.setMapData(obj.getString("store_id"), obj.getString("map_id"), obj.getString("store_contact"), obj.getString("review_text"), obj.getString("review_emotion"), obj.getString("store_address"), obj.getString("store_name"), obj.getString("gu_num"),obj.getString("image_num"));
                         }
                         else if ((getIntent().getStringExtra("fragment_id").equals("friend_home")))
                         {
