@@ -13,6 +13,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -389,6 +390,33 @@ public class review_register extends Activity {
                     image_uri = data.getData();
                     Uriarr.add(image_uri);
 
+
+                    ExifInterface exifInfo = new ExifInterface(image_uri.getPath());
+                    showExif(exifInfo);
+
+
+
+
+
+
+                    //이미지에서 exif값(이미지 전달될때 정보 저장하는 객체) 받아와서 이미지의 orientation으로 회전
+                    ExifInterface exifInterface = new ExifInterface(image_uri.getPath());
+                    int exifOrientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                    int exifDegree = exifOrientationToDegrees(exifOrientation);
+                    image_bitmap = rotateBitmapImage(image_bitmap, exifDegree);
+
+                    Log.i("dSJW", "image_bitmap 가로, 세로 : "+image_bitmap.getWidth()+"\t\t"+image_bitmap.getHeight());
+                    Log.v("dSJW", "image_bitmap orientation,degree : " + exifOrientation + "\t\t" + "degree : " + exifDegree);
+
+
+
+
+
+
+
+
+
+
                     if (oncreatelock == false || state == 1) { // 사진 여러장 일 때 or modify
                         oPerlishArray.clear();
                         oncreatelock = true;
@@ -401,60 +429,17 @@ public class review_register extends Activity {
 
                     Bitmap resized_image_bitmap = resizeBitmapImage(image_uri, image_bitmap, maxWidth, maxHeight);
 
-
-
-
-Log.v("dSJW", "resized_image)bitmap의 가로 : "+resized_image_bitmap.getWidth()+"\t\t"+resized_image_bitmap.getHeight());
-
-
-
-
-
-
-
-
-
-                    int rotation = -1;
-
-                    rotation = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
-
-
-                    Matrix rotator = new Matrix();
-
-                    switch (rotation){
-
-                        case(Surface.ROTATION_0):
-                            break;
-
-                        case(Surface.ROTATION_90):
-                            rotator.postRotate(270);
-                            break;
-
-                        case(Surface.ROTATION_180):
-                            rotator.postRotate(180);
-                            break;
-
-                        case(Surface.ROTATION_270):
-                            rotator.postRotate(90);
-                            break;
-
-                    }
-
-                    resized_image_bitmap = Bitmap.createBitmap(resized_image_bitmap, 0, 0, resized_image_bitmap.getWidth(), resized_image_bitmap.getHeight(), rotator, false);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    Log.e("dSJW", "resized_image)bitmap1의 가로 : "+resized_image_bitmap.getWidth()+"\t\t"+resized_image_bitmap.getHeight());
+//
+//
+//                    //이미지에서 exif값(이미지 전달될때 정보 저장하는 객체) 받아와서 이미지의 orientation으로 회전
+//                    ExifInterface exifInterface = new ExifInterface(image_uri.getPath());
+//                    int exifOrientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+//                    int exifDegree = exifOrientationToDegrees(exifOrientation);
+//                    resized_image_bitmap = rotateBitmapImage(resized_image_bitmap, exifDegree);
+//
+//                    Log.v("dSJW", "resized_image)bitmap2의 가로 : "+resized_image_bitmap.getWidth()+"\t\t"+resized_image_bitmap.getHeight());
+//                    Log.v("dSJW", "resized_image)bitmap2의 orientation : "+exifOrientation+"\t\t"+"degree : "+exifDegree);
 
                     //oPerlishArray.add(image_bitmap);
                     oPerlishArray.add(resized_image_bitmap);
@@ -494,6 +479,32 @@ Log.v("dSJW", "resized_image)bitmap의 가로 : "+resized_image_bitmap.getWidth(
 
 
 
+    private void showExif(ExifInterface exifInterface){
+
+
+        Log.d("dSJW", "====================================================");
+        Log.d("dSJW", "exifInterface.equals(null) == "+exifInterface.equals(null));
+        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_DATETIME) : "+ exifInterface.getAttribute(ExifInterface.TAG_DATETIME));
+        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_FLASH) : " + exifInterface.getAttribute(ExifInterface.TAG_FLASH));
+        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE) : " + exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE));
+        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE) : " + exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF));
+        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE) : " + exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE));
+        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF) : " + exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF));
+        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH) : " + exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH));
+        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH) : " + exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH));
+        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_MAKE) : " + exifInterface.getAttribute(ExifInterface.TAG_MAKE));
+        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_MODEL) : " + exifInterface.getAttribute(ExifInterface.TAG_MODEL));
+        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION) : " + exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION));
+        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_WHITE_BALANCE) : " + exifInterface.getAttribute(ExifInterface.TAG_WHITE_BALANCE));
+        Log.d("dSJW", "====================================================");
+
+
+    }
+
+
+
+
+
     public Bitmap resizeBitmapImage(Uri image_uri, Bitmap bmpSource, int maxWidth, int maxHeight){
 
         int iWidth = bmpSource.getWidth();
@@ -503,68 +514,10 @@ Log.v("dSJW", "resized_image)bitmap의 가로 : "+resized_image_bitmap.getWidth(
         double rate = 0.0f;
 
 
-
-      /*  int rotation = -1;
-
-        rotation = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
-
-
-        Matrix rotator = new Matrix();
-
-        switch (rotation){
-
-            case(Surface.ROTATION_0):
-                break;
-
-            case(Surface.ROTATION_90):
-                rotator.postRotate(270);
-                break;
-
-            case(Surface.ROTATION_180):
-                rotator.postRotate(180);
-                break;
-
-            case(Surface.ROTATION_270):
-                rotator.postRotate(90);
-                break;
-
-        }
-
-        bmpSource = Bitmap.createBitmap(bmpSource, 0, 0, iWidth, iHeight, rotator, false);
-*/
-
-Log.e("dSJW", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         Log.d("dSJW", "iWidth :" + iWidth + "\tiHeight : " + iHeight + "\tmaxWidth : " + maxWidth + "\tmaxHeight : " + maxHeight);
 
-
-//        if(iWidth > iHeight){//가로가 더 긴경우
-//            Log.d("dSJW","가로로 기 사진");
-//
-//            if(iWidth > maxWidth){
-//
-//                rate = maxWidth/(double)iWidth;Log.d("dSJW", "rate : "+rate+"\n");
-////                newHeight = (int)(iHeight*rate);
-////                newWidth = maxWidth;
-//            }
-//        }
-//        else{//세로가 더 긴경우
-//
-//            Log.d("dSJW", "세로로 더 긴경우");
-//
-//            if(maxHeight < iHeight){
-//
-//                rate = maxHeight/(double)iHeight;Log.d("dSJW", "rate : "+rate+"\n");
-////                newWidth = (int)(iWidth*rate);
-////                newHeight = maxHeight;
-//            }
-//        }
-
-
-
-
-
-       rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
-        Log.d("dSJW", (double)iWidth/maxWidth+"\t\t"+(double)iHeight/maxHeight+"\t\t"+rate);
+         rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
+        Log.d("dSJW", (double) iWidth / maxWidth + "\t\t" + (double) iHeight / maxHeight + "\t\t" + rate);
 
         if(rate <= 1){
 
@@ -584,7 +537,7 @@ Log.e("dSJW", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             Bitmap bitmap_resized = Bitmap.createScaledBitmap(bitmap_src, /*maxWidth, maxHeight*/(int)(iWidth/rate), (int)(iHeight/rate), true);
 
 
-            Log.e("dSJW", "바뀌어서 가로 : " + bitmap_resized.getWidth() + "\t\t바뀌어서 세로 : " + bitmap_resized.getHeight());
+            Log.v("dSJW", "바뀌어서 가로 : " + bitmap_resized.getWidth() + "\t\t바뀌어서 세로 : " + bitmap_resized.getHeight());
             return bitmap_resized;
         }
 
@@ -602,7 +555,42 @@ Log.e("dSJW", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
 
+    //exifInterface 객체에서 Orientation 값 받아와서 그 값을 보고 회정해야 할 각도 return하는 함수
+    //0 return 하면 exifOrientation 잘못 넘긴것것
+    public int exifOrientationToDegrees(int exifOrientation){
+        int degree = 360;
 
+        switch (exifOrientation){
+
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                degree = 90;
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                degree = 180;
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                degree = 270;
+                break;
+        }
+
+        return degree;
+    }
+
+
+    public Bitmap rotateBitmapImage(Bitmap srcBmp, int degree){
+
+        int width = srcBmp.getWidth();
+        int height = srcBmp.getHeight();
+
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+
+        Bitmap rotatedBmp = Bitmap.createBitmap(srcBmp, 0, 0, width, height, matrix, true);
+
+        return rotatedBmp;
+    }
 
     // in enroll Btn
     public void DoReviewset(View v) {
