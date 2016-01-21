@@ -165,7 +165,7 @@ public class ReviewActivity extends Activity {
         intent.putExtra("store_cx", 0);
         intent.putExtra("store_cy", 0);
         intent.putExtra("store_id",mapData.getStore_id());
-        intent.putExtra("state","modify");
+        intent.putExtra("state", "modify");
         startActivity(intent);
     }
 

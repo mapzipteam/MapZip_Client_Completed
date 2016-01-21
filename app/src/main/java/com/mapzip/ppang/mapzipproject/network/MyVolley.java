@@ -6,6 +6,7 @@ import android.util.Log;
 import android.util.LruCache;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ClearCacheRequest;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
@@ -54,10 +55,35 @@ public class MyVolley {
     }
 
     public void removeCache(String url){
-        Log.v("url name",url);
+        Log.v("마이볼리 캐쉬 사이즈", String .valueOf(cache.size()));
+        Log.v("마이볼리 캐쉬", String .valueOf(cache));
+        Log.v("url name", url);
+
         if(cache.remove(url) == null){
             Log.v("url","null");
         }
+
+        Log.v("마이볼리 캐쉬 사이즈", String .valueOf(cache.size()));
+        Log.v("마이볼리 캐쉬", String.valueOf(cache));
+    }
+
+    public void clearCache() {
+        Log.v("마이볼리 캐쉬 사이즈", String .valueOf(cache.size()));
+        Log.v("마이볼리 캐쉬", String .valueOf(cache));
+/*
+        ClearCacheRequest ccr = new ClearCacheRequest(requestQueue.getCache(),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                    }
+                });
+        ccr.setTag(this);
+        Log.v("캐쉬","클리어");
+        requestQueue.add(ccr);*/
+        cache.evictAll();
+        Log.v("캐쉬","클리어");
+        Log.v("마이볼리 캐쉬 사이즈", String .valueOf(cache.size()));
+        Log.v("마이볼리 캐쉬", String.valueOf(cache));
     }
 
 }

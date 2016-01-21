@@ -472,7 +472,8 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
                                 } else {
                                     String url = SystemMain.SERVER_ROOT_URL + "/client_data/client_" + user.getUserID() + "_" + user.getMapData().getMapid() + "_" + user.getMapData().getStore_id() + "/image" + String.valueOf(i) + ".jpg";
                                     if(user.isAfterModify())
-                                        MyVolley.getInstance(getApplicationContext()).removeCache(url);
+                                        MyVolley.getInstance(getApplicationContext()).clearCache();
+                                    user.setAfterModify(false);
 
                                     imageLoad(i, url);
                                 }
@@ -544,7 +545,7 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
                             Log.v("갤러리",user.getGalImages()[i].toString());
                         }
 
-                        user.setAfterModify(false);
+
                         Intent intent = new Intent(getApplicationContext(), ReviewActivity.class);
                         intent.putExtra("fragment_id", getIntent().getStringExtra("fragment_id"));
                         startActivity(intent);
