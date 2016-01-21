@@ -2,7 +2,11 @@ package com.mapzip.ppang.mapzipproject.map;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +23,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.mapzip.ppang.mapzipproject.adapter.ImageAdapter;
 import com.mapzip.ppang.mapzipproject.model.FriendData;
 import com.mapzip.ppang.mapzipproject.R;
 import com.mapzip.ppang.mapzipproject.activity.ReviewActivity;
@@ -43,6 +49,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.mapzip.ppang.mapzipproject.map.Location.SEOUL;
 import static com.mapzip.ppang.mapzipproject.R.id.map;
 
@@ -53,6 +62,13 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
     // toast
     private View layout_toast;
     private TextView text_toast;
+
+    // image load
+    private List<Bitmap> oPerlishArray;
+    private Bitmap[] bitarr;
+    private Bitmap[] bitarrfornone;
+    private ImageLoader imageLoader;
+    private int image_num=0;
 
     private NMapView mMapView = null;
 
@@ -421,11 +437,47 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
                             fuser.setMapData(obj.getString("store_id"), obj.getString("map_id"), obj.getString("store_contact"), obj.getString("review_text"), obj.getString("review_emotion"), obj.getString("store_address"), obj.getString("store_name"));
                         }
 
-                        Intent intent = new Intent(getApplicationContext(), ReviewActivity.class);
-                        intent.putExtra("fragment_id",getIntent().getStringExtra("fragment_id"));
-                        intent.putExtra("image_num", obj.getString("image_num"));
-                        startActivity(intent);
+                        // get default image
+                        oPerlishArray = new ArrayList<Bitmap>();
 
+                        Bitmap noimage = drawableToBitmap(getResources().getDrawable(R.drawable.noimage));
+
+                        oPerlishArray.add(noimage);
+                        bitarrfornone = new Bitmap[oPerlishArray.size()];
+                        oPerlishArray.toArray(bitarrfornone); // fill the array
+
+                        // set default image
+                        if (getIntent().getStringExtra("fragment_id").equals("friend_home")) {
+                            fuser.inputGalImages(bitarrfornone);
+                        } else {
+                            user.inputGalImages(bitarrfornone);
+                        }
+
+                        image_num = Integer.parseInt(obj.getString("image_num"));
+
+                        // if image exist, get & set Image
+                        if (image_num != 0) {
+                            imageLoader = MyVolley.getInstance(getApplicationContext()).getImageLoader();
+                            for (int i = 0; i < image_num; i++) {
+                                Log.v("imagenum", String.valueOf(i));
+
+                                // if first, clear array. (remove noimage)
+                                if (i == 0) {
+                                    oPerlishArray.clear();
+                                    bitarr = new Bitmap[image_num];
+                                }
+
+                                if (getIntent().getStringExtra("fragment_id").equals("friend_home")) {
+                                    imageLoad(i, SystemMain.SERVER_ROOT_URL + "/client_data/client_" + fuser.getUserID() + "_" + fuser.getMapData().getMapid() + "_" + fuser.getMapData().getStore_id() + "/image" + String.valueOf(i) + ".jpg");
+                                } else {
+                                    String url = SystemMain.SERVER_ROOT_URL + "/client_data/client_" + user.getUserID() + "_" + user.getMapData().getMapid() + "_" + user.getMapData().getStore_id() + "/image" + String.valueOf(i) + ".jpg";
+                                    if(user.isAfterModify())
+                                        MyVolley.getInstance(getApplicationContext()).removeCache(url);
+
+                                    imageLoad(i, url);
+                                }
+                            }
+                        }
                     }
                 } catch (JSONException e) {
                     Log.v("에러", "제이손");
@@ -455,4 +507,72 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
         };
     }
 
+    // get review Image from server
+    public void imageLoad(final int nownum, String imageURL) {
+        Log.v("imageLoader", "함수진입");
+
+        imageLoader.get(imageURL, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                if (response != null && response.getBitmap() != null) {
+                    Log.v("이미지이미지", response.getRequestUrl().toString());
+                    Log.v("어디서멈춰있는걸까", "1");
+
+                    // add image to array
+                    oPerlishArray.add(response.getBitmap());
+                    Log.v("어디서멈춰있는걸까", "2");
+                    Log.v("리스폰스",response.getBitmap().toString());
+                    // set image to user Data, if receive completed.
+                    if (image_num == oPerlishArray.size()) {
+                        Log.v("어디서멈춰있는걸까","3");
+                        //bitarr = new Bitmap[image_num];
+                        Log.v("어디서멈춰있는걸까", "4");
+                        oPerlishArray.toArray(bitarr); // fill the array
+                        Log.v("어디서멈춰있는걸까", "5");
+
+                        if (!getIntent().getStringExtra("fragment_id").equals("friend_home")) {
+                            Log.v("어디서멈춰있는걸까","6");
+                            user.inputGalImages(bitarr);
+                            Log.v("어디서멈춰있는걸까", "7");
+                        } else {
+                            fuser.inputGalImages(bitarr);
+                        }
+
+                        Log.v("어디서멈춰있는걸까", "9");
+
+                        for(int i = 0; i<image_num; i++){
+                            Log.v("갤러리",user.getGalImages()[i].toString());
+                        }
+
+                        user.setAfterModify(false);
+                        Intent intent = new Intent(getApplicationContext(), ReviewActivity.class);
+                        intent.putExtra("fragment_id", getIntent().getStringExtra("fragment_id"));
+                        startActivity(intent);
+                    }
+
+                    Log.v("imageLoad completed", String.valueOf(nownum));
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("imageLoader", "에러");
+            }
+        });
+
+    }
+
+    // drawable to bitmap
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
 }

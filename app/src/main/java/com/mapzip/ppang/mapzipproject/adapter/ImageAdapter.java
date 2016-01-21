@@ -3,6 +3,7 @@ package com.mapzip.ppang.mapzipproject.adapter;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -52,6 +53,7 @@ public class ImageAdapter extends PagerAdapter {
 //        imageView.setPadding(padding, padding, padding, padding);
         //imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        Log.v("이미지 어댑터 포지션",String.valueOf(position));
         if(nowwho == SystemMain.justuser)
             imageView.setImageBitmap(user.getGalImages()[position]);
         else
