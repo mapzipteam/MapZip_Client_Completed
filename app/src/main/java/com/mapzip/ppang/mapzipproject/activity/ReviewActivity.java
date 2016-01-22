@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -66,16 +67,16 @@ public class ReviewActivity extends Activity {
     private TextView store_contact;
 
     // image
-    private int image_num;
     private ImageAdapter imageadapter;
     private ViewPager viewPager;
-    private List<Bitmap> oPerlishArray;
-    private Bitmap[] bitarr;
-    private Bitmap[] bitarrfornone;
 
     // Btn
     private Button modifyBtn;
     private Button deleteBtn;
+
+    // Loading
+   // private LoadingTask loading;
+   // public ProgressDialog asyncDialog;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,41 +143,6 @@ public class ReviewActivity extends Activity {
          *  get & set Image
          */
         viewPager = (ViewPager) findViewById(R.id.pager_review);
-        oPerlishArray = new ArrayList<Bitmap>();
-
-        // get default image
-        Bitmap noimage;
-        if(user.isCheckNoimage() == false) {
-            noimage = drawableToBitmap(getResources().getDrawable(R.drawable.noimage));
-            user.setNoimage(noimage);
-        }
-        else
-            noimage = user.getNoimage();
-
-        oPerlishArray.add(noimage);
-        bitarrfornone = new Bitmap[oPerlishArray.size()];
-        oPerlishArray.toArray(bitarrfornone); // fill the array
-
-        // set default image
-        if (userlock == false) {
-            user.inputGalImages(bitarrfornone);
-        } else {
-            fuser.inputGalImages(bitarrfornone);
-        }
-
-        // if image exist, get & set Image
-        image_num = Integer.parseInt(getIntent().getStringExtra("image_num"));
-        if (image_num != 0) {
-            for (int i = 0; i < image_num; i++) {
-                Log.v("imagenum", String.valueOf(i));
-
-                if (userlock == false) {
-                    imageLoad(i, SystemMain.SERVER_ROOT_URL + "/client_data/client_" + user.getUserID() + "_" + mapData.getMapid() + "_" + mapData.getStore_id() + "/image" + String.valueOf(i) + ".jpg");
-                } else {
-                    imageLoad(i, SystemMain.SERVER_ROOT_URL + "/client_data/client_" + fuser.getUserID() + "_" + mapData.getMapid() + "_" + mapData.getStore_id() + "/image" + String.valueOf(i) + ".jpg");
-                }
-            }
-        }
 
         // set Imageadapter
         if(userlock == false)
@@ -186,65 +152,6 @@ public class ReviewActivity extends Activity {
 
         viewPager.setAdapter(imageadapter);
         imageadapter.notifyDataSetChanged();
-
-    }
-
-    // get review Image from server
-    public void imageLoad(final int nownum, String imageURL) {
-        Log.v("imageLoader", "함수진입");
-        // if first, clear array. (remove noimage)
-        if (nownum == 0)
-            oPerlishArray.clear();
-
-        ImageLoader imageLoader = MyVolley.getInstance(getApplicationContext()).getImageLoader();
-        imageLoader.get(imageURL, new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                if (response != null && response.getBitmap() != null) {
-                    // add image to array
-                    oPerlishArray.add(response.getBitmap());
-
-                    // set image to user Data, if receive completed.
-                    if (image_num == oPerlishArray.size()) {
-                        bitarr = new Bitmap[oPerlishArray.size()];
-                        oPerlishArray.toArray(bitarr); // fill the array
-
-                        if (userlock == false) {
-                            user.inputGalImages(bitarr);
-                            imageadapter = new ImageAdapter(getApplicationContext(), SystemMain.justuser);
-                        } else {
-                            fuser.inputGalImages(bitarr);
-                            imageadapter = new ImageAdapter(getApplicationContext(), SystemMain.justfuser);
-                        }
-
-                        viewPager.setAdapter(imageadapter);
-                        imageadapter.notifyDataSetChanged();
-
-                        Log.v("imageLoad completed", String.valueOf(nownum));
-                    }
-                }
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.v("imageLoader", "에러");
-            }
-        });
-
-    }
-
-    // drawable to bitmap
-    public static Bitmap drawableToBitmap(Drawable drawable) {
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-
-        return bitmap;
     }
 
     // modify Btn
@@ -258,7 +165,7 @@ public class ReviewActivity extends Activity {
         intent.putExtra("store_cx", 0);
         intent.putExtra("store_cy", 0);
         intent.putExtra("store_id",mapData.getStore_id());
-        intent.putExtra("state","modify");
+        intent.putExtra("state", "modify");
         startActivity(intent);
     }
 
@@ -402,4 +309,51 @@ public class ReviewActivity extends Activity {
             finish();
         }
     }
+
+    /*
+     *  Loading
+
+    protected class LoadingTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            asyncDialog = new ProgressDialog(ReviewActivity.this);
+            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            asyncDialog.setMessage("로딩중입니다..");
+            asyncDialog.setCanceledOnTouchOutside(false);
+            asyncDialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Log.v("loading", "success");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            if (asyncDialog != null) {
+                asyncDialog.dismiss();
+            }
+            Log.d("loading", "finish");
+
+            // toast
+            text_toast.setText("리뷰가 등록되었습니다.");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout_toast);
+            toast.show();
+            finish();
+
+            super.onPostExecute(result);
+        }
+    }
+    */
 }

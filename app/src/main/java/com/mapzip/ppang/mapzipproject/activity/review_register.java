@@ -19,6 +19,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -35,11 +36,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.mapzip.ppang.mapzipproject.R;
 import com.mapzip.ppang.mapzipproject.adapter.ImageAdapter;
 import com.mapzip.ppang.mapzipproject.model.MapData;
@@ -52,12 +56,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+<<<<<<< HEAD
 import java.net.URI;
+=======
+import java.io.OutputStream;
+>>>>>>> master
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -89,18 +100,15 @@ public class review_register extends Activity {
     private Bitmap[] bitarr; // Image array, oPerlishArray.toArray(bitarr)
     private ImageAdapter imageadapter;
     private Bitmap noimage;
+    private Bitmap[] backupbitarr;
 
     // Image Select
     final int REQ_CODE_SELECT_IMAGE = 100;
     private boolean oncreatelock = false; // image array clear -> false: oPerlishArray.clear() , true: x
-    private List<Uri> Uriarr; // selected Images Uri List
-    private Uri image_uri; // selected Image Uri, Uriarr.add(image_uri);
 
     // Image Send
     private int serverchoice = 0; // Image send check -> 0: default, 1: only text, 2: image send in Loding Background
-    private Uri uriarray[]; // Uriarr.toArray(uriarray), mfile = getImageFile(uriarray[i])
     private int imagenum = 0; // to identify Image -> increase in doUpload
-    private File mfile; // request param - image file
 
     // modify image
     private boolean modifyedcheck = false; // image modify check -> false: no modify, true: modified
@@ -160,7 +168,14 @@ public class review_register extends Activity {
         // state
         if(getIntent().getStringExtra("state").equals("modify") == true) {
             state = 1;
-            mapData = user.getMapData();
+            try{
+            mapData = user.getMapData().clone();
+            }catch (Exception ex){
+                Log.v("mapData","clone ex");
+            }
+
+            backupbitarr = user.getGalImages().clone();
+
             primap_id = mapData.getMapid();
             Log.v("mapid",mapData.getMapid());
         }
@@ -175,7 +190,7 @@ public class review_register extends Activity {
             enrollBtn.setVisibility(View.GONE);
             modifyBtn.setVisibility(View.VISIBLE);
         }
-        Log.v("state",String.valueOf(state));
+        Log.v("state", String.valueOf(state));
 
         // setting mapData to send
         mapData.setStore_x(getIntent().getDoubleExtra("store_x", 0));
@@ -198,7 +213,6 @@ public class review_register extends Activity {
          */
         viewPager = (ViewPager) findViewById(R.id.pager_review_regi);
 
-        Uriarr = new ArrayList<Uri>();
         oPerlishArray = new ArrayList<Bitmap>();
 
         if(state == 0){ // in enroll
@@ -387,8 +401,7 @@ public class review_register extends Activity {
 
                     //이미지 데이터를 비트맵으로 받아온다.
                     Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                    image_uri = data.getData();
-                    Uriarr.add(image_uri);
+                    Uri image_uri = data.getData();
 
 
                     ExifInterface exifInfo = new ExifInterface(image_uri.getPath());
@@ -423,6 +436,7 @@ public class review_register extends Activity {
                     }
 
                     //2016.01.11송지원이 바꿈
+<<<<<<< HEAD
 
                     int maxWidth = viewPager.getWidth();
                     int maxHeight = viewPager.getHeight();
@@ -440,6 +454,14 @@ public class review_register extends Activity {
 //
 //                    Log.v("dSJW", "resized_image)bitmap2의 가로 : "+resized_image_bitmap.getWidth()+"\t\t"+resized_image_bitmap.getHeight());
 //                    Log.v("dSJW", "resized_image)bitmap2의 orientation : "+exifOrientation+"\t\t"+"degree : "+exifDegree);
+=======
+                    int maxWidth = viewPager.getWidth();
+                    int maxHeight = viewPager.getHeight();
+
+                    Bitmap resized_image_bitmap = resizeBitmapImage(image_uri, image_bitmap, maxWidth-200, maxHeight-200);
+
+                    Log.v("dSJW", "resized_image)bitmap의 가로 : " + resized_image_bitmap.getWidth() + "\t\t" + resized_image_bitmap.getHeight());
+>>>>>>> master
 
                     //oPerlishArray.add(image_bitmap);
                     oPerlishArray.add(resized_image_bitmap);
@@ -459,6 +481,7 @@ public class review_register extends Activity {
                     else
                         user.inputGalImages(bitarr);
 
+                    serverchoice = 2;
                     imageadapter = new ImageAdapter(this,SystemMain.justuser);
                     viewPager.setAdapter(imageadapter);
                     imageadapter.notifyDataSetChanged();
@@ -601,6 +624,9 @@ public class review_register extends Activity {
             if (mapData.getReview_text().isEmpty())
                 mapData.setReview_text(directEdit.getText().toString());
 
+            if(serverchoice == 2)
+                mapData.setImage_num(user.getGalImages().length);
+
             obj.put("userid", user.getUserID());
             obj.put("map_id", mapData.getMapid());
             obj.put("store_x", mapData.getStore_x());
@@ -610,7 +636,7 @@ public class review_register extends Activity {
             obj.put("store_contact", mapData.getStore_contact());
             obj.put("review_emotion", mapData.getReview_emotion());
             obj.put("review_text", mapData.getReview_text());
-            obj.put("image_num", Uriarr.size());
+            obj.put("image_num", mapData.getImage_num());
             obj.put("gu_num", mapData.getGu_num());
 
             Log.v("review 등록 보내기", obj.toString());
@@ -799,7 +825,7 @@ public class review_register extends Activity {
                         // 1번째 통신 성공
                         Log.v("리뷰저장", "OK");
                         mapData.setStore_id(response.getString("store_id"));
-                        if (Uriarr.size() != 0)
+                        if (mapData.getImage_num() != 0)
                             DoReviewset2(); // 이미지 있으면 2번째 통신 시작
                         else {
                             serverchoice = 1; // no image
@@ -875,6 +901,54 @@ public class review_register extends Activity {
 
     // image upload
     public void DoUpload(final int i) {
+        Log.v("에러치크","2");
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SystemMain.SERVER_REVIEWENROLL3_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        //Showing toast message of the response
+                        Log.v("이미지 업로드",s);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Showing toast
+                        Log.v("이미지 업로드 에러", String.valueOf(volleyError));
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //Converting Bitmap to String
+                Log.v("길이길이",String.valueOf(user.getGalImages().length));
+                String image = getStringImage(user.getGalImages()[i]);
+                Log.v("image string",image);
+                Log.v("image 길이", String.valueOf(image.length()));
+
+                Map<String, String> params = new Hashtable<String, String>();
+                params.put("image_string",image);
+                params.put("userid", user.getUserID());
+                params.put("map_id", mapData.getMapid());
+                params.put("store_id", mapData.getStore_id());
+                params.put("image_name", "image" + String.valueOf(imagenum));
+                imagenum++;
+
+                Log.v("param",params.toString());
+
+                Log.v("에러치크","1");
+
+                //returning parameters
+                return params;
+            }
+        };
+
+        //Creating a Request Queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        //Adding request to the queue
+        requestQueue.add(stringRequest);
+
+        /*
         mfile = getImageFile(uriarray[i]);
         if (mfile == null) {
             Toast.makeText(getApplicationContext(), "이미지가 선택되지 않았습니다", Toast.LENGTH_SHORT).show();
@@ -908,6 +982,7 @@ public class review_register extends Activity {
         }, mfile, params);
         Log.v("사진 보내기", mRequest.toString());
         queue.add(mRequest);
+        */
     }
 
     /*
@@ -924,6 +999,77 @@ public class review_register extends Activity {
             if (i != index) copy.put(source.get(i));
         }
         return copy;
+    }
+
+    // resized bitmap
+    public Bitmap resizeBitmapImage(Uri image_uri, Bitmap bmpSource, int maxWidth, int maxHeight){
+        int iWidth = bmpSource.getWidth();
+        int iHeight = bmpSource.getHeight();
+        int newWidth = iWidth;
+        int newHeight = iHeight;
+        double rate = 0.0f;
+
+        Log.d("dSJW", "iWidth :" + iWidth + "\tiHeight : " + iHeight + "\tmaxWidth : " + maxWidth + "\tmaxHeight : " + maxHeight);
+        rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
+        Log.d("dSJW", (double) iWidth / maxWidth + "\t\t" + (double) iHeight / maxHeight + "\t\t"+rate);
+        if(rate <= 1){
+            Log.v("dSJW", "그대로 가로 : " + bmpSource.getWidth() + "\t\t그대로 세로 : " + bmpSource.getHeight());
+            return bmpSource;
+        }else{
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = (int)rate+1;
+
+            Log.d("dSJW","int)rate : "+((int)rate+1) );
+
+            Bitmap bitmap_src = BitmapFactory.decodeFile(getPathFromUri(image_uri), options);
+
+            Bitmap bitmap_resized = Bitmap.createScaledBitmap(bitmap_src, /*maxWidth, maxHeight*/(int)(iWidth/rate), (int)(iHeight/rate), true);
+
+            Log.e("dSJW", "바뀌어서 가로 : " + bitmap_resized.getWidth() + "\t\t바뀌어서 세로 : " + bitmap_resized.getHeight());
+            return bitmap_resized;
+        }
+    }
+
+    public String getPathFromUri(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToNext();
+        String path = cursor.getString(cursor.getColumnIndex("_data"));
+        cursor.close();
+
+        return path;
+    }
+
+    // get Image encoding
+    public String getStringImage(Bitmap bmp){/*
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+        */
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        // Must compress the Image to reduce image size to make upload easy
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byte_arr = stream.toByteArray();
+        // Encode Image to String
+        String encodedImage = Base64.encodeToString(byte_arr, 0);
+
+        /*
+        String encodedImage="";
+        try {
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            // Must compress the Image to reduce image size to make upload easy
+            bmp.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+            byte[] byte_arr = stream.toByteArray();
+            // Encode Image to String
+            encodedImage = new String(byte_arr,"UTF-8");
+
+        }catch (Exception ex){
+            Log.v("에러","utf-8");
+        }
+        */
+        return encodedImage;
     }
 
     // for no Image
@@ -1055,14 +1201,14 @@ public class review_register extends Activity {
         protected Void doInBackground(Void... arg0) {
             if (serverchoice == 1) {
             } else if (serverchoice == 2) {
-                uriarray = new Uri[Uriarr.size()];
-                Uriarr.toArray(uriarray);
-
+/*
                 if(state==1) // in modify
                     imagenum=(mapData.getImage_num()-afterimagenum);
-
-                for (int i = 0; i < Uriarr.size(); i++)
+*/
+                for (int i = 0; i <mapData.getImage_num(); i++)
                     DoUpload(i);
+
+                user.setAfterModify(true);
             }
 
             if(state == 0) {
@@ -1128,5 +1274,13 @@ public class review_register extends Activity {
     public void modifyonClick_review_regi(View v){
         reviewtextset();
         DoModifyset(v);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+       /* if(modifyedcheck == true)
+            user.inputGalImages(backupbitarr);*/
     }
 }
