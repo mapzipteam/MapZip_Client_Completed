@@ -61,11 +61,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-<<<<<<< HEAD
-import java.net.URI;
-=======
-import java.io.OutputStream;
->>>>>>> master
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -402,69 +398,34 @@ public class review_register extends Activity {
                     //이미지 데이터를 비트맵으로 받아온다.
                     Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
                     Uri image_uri = data.getData();
-
-
-                    ExifInterface exifInfo = new ExifInterface(image_uri.getPath());
-                    showExif(exifInfo);
-
-
-
-
-
-
-                    //이미지에서 exif값(이미지 전달될때 정보 저장하는 객체) 받아와서 이미지의 orientation으로 회전
-                    ExifInterface exifInterface = new ExifInterface(image_uri.getPath());
-                    int exifOrientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                    int exifDegree = exifOrientationToDegrees(exifOrientation);
-                    image_bitmap = rotateBitmapImage(image_bitmap, exifDegree);
-
-                    Log.i("dSJW", "image_bitmap 가로, 세로 : "+image_bitmap.getWidth()+"\t\t"+image_bitmap.getHeight());
-                    Log.v("dSJW", "image_bitmap orientation,degree : " + exifOrientation + "\t\t" + "degree : " + exifDegree);
-
-
-
-
-
-
-
-
-
-
+                        
                     if (oncreatelock == false || state == 1) { // 사진 여러장 일 때 or modify
                         oPerlishArray.clear();
                         oncreatelock = true;
                     }
 
                     //2016.01.11송지원이 바꿈
-<<<<<<< HEAD
-
                     int maxWidth = viewPager.getWidth();
                     int maxHeight = viewPager.getHeight();
 
                     Bitmap resized_image_bitmap = resizeBitmapImage(image_uri, image_bitmap, maxWidth, maxHeight);
 
-                    Log.e("dSJW", "resized_image)bitmap1의 가로 : "+resized_image_bitmap.getWidth()+"\t\t"+resized_image_bitmap.getHeight());
-//
-//
-//                    //이미지에서 exif값(이미지 전달될때 정보 저장하는 객체) 받아와서 이미지의 orientation으로 회전
-//                    ExifInterface exifInterface = new ExifInterface(image_uri.getPath());
-//                    int exifOrientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-//                    int exifDegree = exifOrientationToDegrees(exifOrientation);
-//                    resized_image_bitmap = rotateBitmapImage(resized_image_bitmap, exifDegree);
-//
-//                    Log.v("dSJW", "resized_image)bitmap2의 가로 : "+resized_image_bitmap.getWidth()+"\t\t"+resized_image_bitmap.getHeight());
-//                    Log.v("dSJW", "resized_image)bitmap2의 orientation : "+exifOrientation+"\t\t"+"degree : "+exifDegree);
-=======
-                    int maxWidth = viewPager.getWidth();
-                    int maxHeight = viewPager.getHeight();
 
-                    Bitmap resized_image_bitmap = resizeBitmapImage(image_uri, image_bitmap, maxWidth-200, maxHeight-200);
+                    //2016.01.26 송지원이 추가
+                    String[] orientationColumn = {MediaStore.Images.Media.ORIENTATION};
+                    Cursor cursor = managedQuery(image_uri, orientationColumn, null, null, null);
+                    int orientationDegree = -1;
 
-                    Log.v("dSJW", "resized_image)bitmap의 가로 : " + resized_image_bitmap.getWidth() + "\t\t" + resized_image_bitmap.getHeight());
->>>>>>> master
+                    if(cursor != null && cursor.moveToFirst()){
+                        orientationDegree = cursor.getInt(cursor.getColumnIndex(orientationColumn[0]));
+                    }
+
+                    Bitmap rotated_resized_image_bitmap = rotateBitmapImage(resized_image_bitmap,  orientationDegree);
+
+
 
                     //oPerlishArray.add(image_bitmap);
-                    oPerlishArray.add(resized_image_bitmap);
+                    oPerlishArray.add(rotated_resized_image_bitmap);
                     bitarr = new Bitmap[oPerlishArray.size()];
                     oPerlishArray.toArray(bitarr);
 
@@ -500,56 +461,21 @@ public class review_register extends Activity {
 
 
 
-
-
-    private void showExif(ExifInterface exifInterface){
-
-
-        Log.d("dSJW", "====================================================");
-        Log.d("dSJW", "exifInterface.equals(null) == "+exifInterface.equals(null));
-        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_DATETIME) : "+ exifInterface.getAttribute(ExifInterface.TAG_DATETIME));
-        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_FLASH) : " + exifInterface.getAttribute(ExifInterface.TAG_FLASH));
-        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE) : " + exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE));
-        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE) : " + exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF));
-        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE) : " + exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE));
-        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF) : " + exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF));
-        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH) : " + exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH));
-        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH) : " + exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH));
-        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_MAKE) : " + exifInterface.getAttribute(ExifInterface.TAG_MAKE));
-        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_MODEL) : " + exifInterface.getAttribute(ExifInterface.TAG_MODEL));
-        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION) : " + exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION));
-        Log.d("dSJW", "exifInterface.getAttribute(ExifInterface.TAG_WHITE_BALANCE) : " + exifInterface.getAttribute(ExifInterface.TAG_WHITE_BALANCE));
-        Log.d("dSJW", "====================================================");
-
-
-    }
-
-
-
-
-
+    // resized bitmap
     public Bitmap resizeBitmapImage(Uri image_uri, Bitmap bmpSource, int maxWidth, int maxHeight){
-
         int iWidth = bmpSource.getWidth();
         int iHeight = bmpSource.getHeight();
         int newWidth = iWidth;
         int newHeight = iHeight;
         double rate = 0.0f;
 
-
         Log.d("dSJW", "iWidth :" + iWidth + "\tiHeight : " + iHeight + "\tmaxWidth : " + maxWidth + "\tmaxHeight : " + maxHeight);
-
-         rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
-        Log.d("dSJW", (double) iWidth / maxWidth + "\t\t" + (double) iHeight / maxHeight + "\t\t" + rate);
-
+        rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
+        Log.d("dSJW", (double) iWidth / maxWidth + "\t\t" + (double) iHeight / maxHeight + "\t\t"+rate);
         if(rate <= 1){
-
             Log.v("dSJW", "그대로 가로 : " + bmpSource.getWidth() + "\t\t그대로 세로 : " + bmpSource.getHeight());
             return bmpSource;
-
-
         }else{
-
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = (int)rate+1;
 
@@ -559,16 +485,12 @@ public class review_register extends Activity {
 
             Bitmap bitmap_resized = Bitmap.createScaledBitmap(bitmap_src, /*maxWidth, maxHeight*/(int)(iWidth/rate), (int)(iHeight/rate), true);
 
-
-            Log.v("dSJW", "바뀌어서 가로 : " + bitmap_resized.getWidth() + "\t\t바뀌어서 세로 : " + bitmap_resized.getHeight());
+            Log.e("dSJW", "바뀌어서 가로 : " + bitmap_resized.getWidth() + "\t\t바뀌어서 세로 : " + bitmap_resized.getHeight());
             return bitmap_resized;
         }
-
-
     }
 
     public String getPathFromUri(Uri uri) {
-
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
         cursor.moveToNext();
         String path = cursor.getString(cursor.getColumnIndex("_data"));
@@ -577,36 +499,13 @@ public class review_register extends Activity {
         return path;
     }
 
-
-    //exifInterface 객체에서 Orientation 값 받아와서 그 값을 보고 회정해야 할 각도 return하는 함수
-    //0 return 하면 exifOrientation 잘못 넘긴것것
-    public int exifOrientationToDegrees(int exifOrientation){
-        int degree = 360;
-
-        switch (exifOrientation){
-
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                degree = 90;
-                break;
-
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                degree = 180;
-                break;
-
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                degree = 270;
-                break;
-        }
-
-        return degree;
-    }
-
-
+    //이미지 degree만큼 회전 해서 return하는 함수
     public Bitmap rotateBitmapImage(Bitmap srcBmp, int degree){
 
         int width = srcBmp.getWidth();
         int height = srcBmp.getHeight();
 
+        Log.d("dSJW", "아여기보시게"+degree);
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
 
@@ -614,6 +513,13 @@ public class review_register extends Activity {
 
         return rotatedBmp;
     }
+
+
+
+
+
+
+
 
     // in enroll Btn
     public void DoReviewset(View v) {
@@ -1001,43 +907,6 @@ public class review_register extends Activity {
         return copy;
     }
 
-    // resized bitmap
-    public Bitmap resizeBitmapImage(Uri image_uri, Bitmap bmpSource, int maxWidth, int maxHeight){
-        int iWidth = bmpSource.getWidth();
-        int iHeight = bmpSource.getHeight();
-        int newWidth = iWidth;
-        int newHeight = iHeight;
-        double rate = 0.0f;
-
-        Log.d("dSJW", "iWidth :" + iWidth + "\tiHeight : " + iHeight + "\tmaxWidth : " + maxWidth + "\tmaxHeight : " + maxHeight);
-        rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
-        Log.d("dSJW", (double) iWidth / maxWidth + "\t\t" + (double) iHeight / maxHeight + "\t\t"+rate);
-        if(rate <= 1){
-            Log.v("dSJW", "그대로 가로 : " + bmpSource.getWidth() + "\t\t그대로 세로 : " + bmpSource.getHeight());
-            return bmpSource;
-        }else{
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = (int)rate+1;
-
-            Log.d("dSJW","int)rate : "+((int)rate+1) );
-
-            Bitmap bitmap_src = BitmapFactory.decodeFile(getPathFromUri(image_uri), options);
-
-            Bitmap bitmap_resized = Bitmap.createScaledBitmap(bitmap_src, /*maxWidth, maxHeight*/(int)(iWidth/rate), (int)(iHeight/rate), true);
-
-            Log.e("dSJW", "바뀌어서 가로 : " + bitmap_resized.getWidth() + "\t\t바뀌어서 세로 : " + bitmap_resized.getHeight());
-            return bitmap_resized;
-        }
-    }
-
-    public String getPathFromUri(Uri uri) {
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToNext();
-        String path = cursor.getString(cursor.getColumnIndex("_data"));
-        cursor.close();
-
-        return path;
-    }
 
     // get Image encoding
     public String getStringImage(Bitmap bmp){/*
