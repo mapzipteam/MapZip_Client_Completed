@@ -27,6 +27,7 @@ public class SystemMain {
     public static final String SERVER_SUGGEST_URL = SERVER_ROOT_URL +"/interact/post_user_sound.php";
     public static final String SERVER_REVIEWDELETE_URL = SERVER_ROOT_URL+"/client_data/client_review_delete.php";
     public static final String SERVER_REVIEWMODIFY_URL = SERVER_ROOT_URL+"/client_data/client_review_update.php";
+    public static final String SERVER_DELETEUSER_URL = SERVER_ROOT_URL+"/client_data/user_leave.php";
 
     // state define -1~
     public static final int NON_KNOWN_ERROR = -1;
@@ -35,12 +36,15 @@ public class SystemMain {
     public static final int DB_CONNECTION_ERROR = 101; // db connection error
     public static final int SQL_QUERY_ERROR = 103; // sql query fail
 
-    // state define 200~ : about Login/Join
+    // state define 200~ : about Login/Join/Leave
     public static final int LOGIN_SUCCESS = 200; // login success
     public static final int LOGIN_FAIL = 201; // login fail
     public static final int JOIN_SUCCESS = 210; // join success
     public static final int JOIN_FAIL_ALREADY_ERROR = 211; // already joined id
     public static final int JOIN_FAIL_INSERT_ERROR = 212; // cannot insert info to DB
+    public static final int LEAVE_ALL_SUCCESS = 221; // 회원 탈퇴 성공
+    public static final int LEAVE_ERROR_IGNORE = 222; // 회원 탈퇴 중 무시할 수 있는 오류 발생
+    public static final int LEAVE_FAIL_SERIOUS = 223; // 회원 탈퇴 중 치명적 오류 발생
 
     // state define 500~ : about map_search
     public static final int MAP_SEARCH_SUCCESS = 501;

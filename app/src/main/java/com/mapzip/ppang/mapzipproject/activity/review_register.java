@@ -1084,6 +1084,12 @@ public class review_register extends Activity {
         startActivityForResult(intent, REQ_CODE_SELECT_IMAGE);
     }
 
+    // 사진제거 버튼
+    public void deleteImageonClick(View v){
+        //Bitmap[] fordelbitarr = user.getGalImages();
+        Log.v("이미지카운트", String.valueOf(imageadapter.getCount()));
+    }
+
     // 리뷰등록 버튼
     public void enrollonClick_review_regi(View v) {
             if(reviewtextset() == 1) {

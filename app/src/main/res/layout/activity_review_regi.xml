@@ -30,7 +30,14 @@
                 android:layout_alignParentLeft="true"
                 android:onClick="findImageonClick"/>
 
-
+            <Button
+                android:id="@+id/deleteImage_review_regi"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/picture_minus"
+                android:layout_alignParentRight="true"
+                android:onClick="deleteImageonClick"/>
 
             <ImageView
                 android:id="@+id/emotion_review_regi"

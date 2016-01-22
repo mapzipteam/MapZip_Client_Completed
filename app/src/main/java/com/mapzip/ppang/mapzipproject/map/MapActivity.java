@@ -478,6 +478,10 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
                                     imageLoad(i, url);
                                 }
                             }
+                        }else {
+                            Intent intent = new Intent(getApplicationContext(), ReviewActivity.class);
+                            intent.putExtra("fragment_id", getIntent().getStringExtra("fragment_id"));
+                            startActivity(intent);
                         }
                     }
                 } catch (JSONException e) {
