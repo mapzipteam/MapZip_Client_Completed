@@ -417,7 +417,11 @@ public class review_register extends Activity {
                     {
                         Log.v("image modify", "ok");
                         Log.v("image_length1",String.valueOf(user.getGalImages().length));
-                        user.addGalImages(bitarr);
+                        if((mapData.getImage_num()==0) && (afterimagenum==0))
+                            user.inputGalImages(bitarr);
+                        else
+                            user.addGalImages(bitarr);
+
                         modifyedcheck = true;
                         afterimagenum++;
                         Log.v("image_length2",String.valueOf(user.getGalImages().length));
@@ -838,7 +842,7 @@ public class review_register extends Activity {
 
         Log.d("dSJW", "iWidth :" + iWidth + "\tiHeight : " + iHeight + "\tmaxWidth : " + maxWidth + "\tmaxHeight : " + maxHeight);
         rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
-        Log.d("dSJW", (double) iWidth / maxWidth + "\t\t" + (double) iHeight / maxHeight + "\t\t"+rate);
+        Log.d("dSJW", (double) iWidth / maxWidth + "\t\t" + (double) iHeight / maxHeight + "\t\t" + rate);
         if(rate <= 1){
             Log.v("dSJW", "그대로 가로 : " + bmpSource.getWidth() + "\t\t그대로 세로 : " + bmpSource.getHeight());
             return bmpSource;
@@ -1086,8 +1090,33 @@ public class review_register extends Activity {
 
     // 사진제거 버튼
     public void deleteImageonClick(View v){
-        //Bitmap[] fordelbitarr = user.getGalImages();
-        Log.v("이미지카운트", String.valueOf(imageadapter.getCount()));
+        Log.v("이미지카운트", String.valueOf(viewPager.getCurrentItem()));
+        int delposition = viewPager.getCurrentItem();
+        Bitmap[] fordelbitarr = user.getGalImages();
+
+        //add userGal. removed image arr
+        oPerlishArray.clear();
+
+        if(fordelbitarr.length == 1) {
+            // no Image
+            noimage = drawableToBitmap(getResources().getDrawable(R.drawable.noimage));
+            oPerlishArray.add(noimage);
+        }
+        else{
+            for (int i = 0; i < fordelbitarr.length; i++)
+                oPerlishArray.add(fordelbitarr[i]);
+            oPerlishArray.remove(delposition);
+        }
+        bitarr = new Bitmap[oPerlishArray.size()];
+        oPerlishArray.toArray(bitarr);
+        user.inputGalImages(bitarr);
+
+        //set imageadapter
+        imageadapter = new ImageAdapter(this,SystemMain.justuser);
+        viewPager.setAdapter(imageadapter);
+        imageadapter.notifyDataSetChanged();
+
+        afterimagenum--;
     }
 
     // 리뷰등록 버튼

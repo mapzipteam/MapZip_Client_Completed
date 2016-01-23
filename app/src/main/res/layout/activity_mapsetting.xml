@@ -132,8 +132,6 @@
             android:textSize="17dp"
             android:textColor="@color/white"/>
 
-
-
         <Button
             android:id="@+id/cancelBtn_setting"
             android:layout_width="wrap_content"
@@ -143,6 +141,18 @@
             android:layout_marginLeft="15dp"
             android:background="@color/mainOrange"
             android:text="취  소"
+            android:textSize="17dp"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/resetBtn_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginTop="30dp"
+            android:onClick="resetOnClick"
+            android:layout_marginLeft="15dp"
+            android:background="@color/mainOrange"
+            android:text="초기화"
             android:textSize="17dp"
             android:textColor="@color/white"/>
     </LinearLayout>
