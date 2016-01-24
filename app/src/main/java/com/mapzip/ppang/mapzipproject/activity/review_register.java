@@ -557,6 +557,30 @@ public class review_register extends Activity {
         queue.add(myReq);
     }
 
+    // in modify Btn -> response, 이미지 있을때 (in noimage)
+    public void DoModifyset2() {
+        RequestQueue queue = MyVolley.getInstance(this).getRequestQueue();
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("userid", user.getUserID());
+            obj.put("map_id", mapData.getMapid());
+            obj.put("store_id", mapData.getStore_id());
+
+            Log.v("review 등록2 보내기", obj.toString());
+        } catch (JSONException e) {
+            Log.v("제이손", "에러");
+        }
+
+        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                SystemMain.SERVER_REVIEWENROLL2_URL,
+                obj,
+                createMyReqSuccessListener_modify(),
+                createMyReqErrorListener()) {
+        };
+        queue.add(myReq);
+    }
+
     // for modify response
     private Response.Listener<JSONObject> createMyReqSuccessListener_modify() {
         return new Response.Listener<JSONObject>() {
@@ -564,22 +588,8 @@ public class review_register extends Activity {
             public void onResponse(JSONObject response) {
                 Log.v("review_modify 받기", response.toString());
                 try {
-                    if (response.getString("state").equals("607")) {
+                    if(response.getInt("state") == SystemMain.CLIENT_REVIEW_DATA_UPDATE_SUCCESS) { // 607
                         user.setModifystate(true);
-
-                        if(modifyedcheck == true){
-                            Log.v("리뷰수정", "OK");
-                            serverchoice = 2;
-                            loading.execute();
-                            // 2번째통신 이미지갯수만큼 반복
-                        }
-
-                        // toast
-                        text_toast.setText("리뷰가 수정되었습니다.");
-                        Toast toast = new Toast(getApplicationContext());
-                        toast.setDuration(Toast.LENGTH_SHORT);
-                        toast.setView(layout_toast);
-                        toast.show();
 
                         // if Map Id modified (지도 변경시)
                         if(primap_id.equals(mapData.getMapid()) == false){
@@ -652,7 +662,30 @@ public class review_register extends Activity {
                             user.setMapRefreshLock(false);
                         }
 
-                        finish();
+                        if(modifyedcheck == true){
+                            Log.v("리뷰수정", "OK");
+                            if((mapData.getImage_num()-afterimagenum) == 0)
+                                DoModifyset2();
+                            else{
+                                serverchoice = 2;
+                                loading.execute();
+                                // 2번째통신 이미지갯수만큼 반복
+                            }
+                        }else{
+                            // toast
+                            text_toast.setText("리뷰가 수정되었습니다.");
+                            Toast toast = new Toast(getApplicationContext());
+                            toast.setDuration(Toast.LENGTH_SHORT);
+                            toast.setView(layout_toast);
+                            toast.show();
+                            
+                            finish();
+                        }
+                    }
+                    else if ((response.getInt("state") == SystemMain.CLIENT_REVIEW_IMAGE_MKDIR_SUCCESS) || (response.getInt("state") == SystemMain.CLIENT_REVIEW_IMAGE_MKDIR_EXIST)){ // 602 || 621
+                        serverchoice = 2;
+                        loading.execute();
+                        // 2번째통신 이미지갯수만큼 반복
                     }
                 }catch (JSONException e){
                     Log.e("제이손","에러");
@@ -1097,12 +1130,22 @@ public class review_register extends Activity {
             }
             Log.d("loading", "finish");
 
-            // toast
-            text_toast.setText("리뷰가 등록되었습니다.");
-            Toast toast = new Toast(getApplicationContext());
-            toast.setDuration(Toast.LENGTH_SHORT);
-            toast.setView(layout_toast);
-            toast.show();
+            if(state == 0) {
+                // toast
+                text_toast.setText("리뷰가 등록되었습니다.");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setView(layout_toast);
+                toast.show();
+            }
+            else{
+                // toast
+                text_toast.setText("리뷰가 수정되었습니다.");
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setView(layout_toast);
+                toast.show();
+            }
             finish();
             
             super.onPostExecute(result);
