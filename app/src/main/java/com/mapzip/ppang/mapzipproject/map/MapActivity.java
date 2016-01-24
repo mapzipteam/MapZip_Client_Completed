@@ -521,34 +521,26 @@ public class MapActivity extends NMapActivity implements NMapView.OnMapStateChan
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                 if (response != null && response.getBitmap() != null) {
                     Log.v("이미지이미지", response.getRequestUrl().toString());
-                    Log.v("어디서멈춰있는걸까", "1");
 
                     // add image to array
                     oPerlishArray.add(response.getBitmap());
-                    Log.v("어디서멈춰있는걸까", "2");
                     Log.v("리스폰스",response.getBitmap().toString());
                     // set image to user Data, if receive completed.
                     if (image_num == oPerlishArray.size()) {
-                        Log.v("어디서멈춰있는걸까","3");
                         //bitarr = new Bitmap[image_num];
-                        Log.v("어디서멈춰있는걸까", "4");
                         oPerlishArray.toArray(bitarr); // fill the array
-                        Log.v("어디서멈춰있는걸까", "5");
 
                         if (!getIntent().getStringExtra("fragment_id").equals("friend_home")) {
-                            Log.v("어디서멈춰있는걸까","6");
                             user.inputGalImages(bitarr);
-                            Log.v("어디서멈춰있는걸까", "7");
+                            for(int i = 0; i<image_num; i++){
+                                Log.v("갤러리",user.getGalImages()[i].toString());
+                            }
                         } else {
                             fuser.inputGalImages(bitarr);
+                            for(int i = 0; i<image_num; i++){
+                                Log.v("갤러리",fuser.getGalImages()[i].toString());
+                            }
                         }
-
-                        Log.v("어디서멈춰있는걸까", "9");
-
-                        for(int i = 0; i<image_num; i++){
-                            Log.v("갤러리",user.getGalImages()[i].toString());
-                        }
-
 
                         Intent intent = new Intent(getApplicationContext(), ReviewActivity.class);
                         intent.putExtra("fragment_id", getIntent().getStringExtra("fragment_id"));
