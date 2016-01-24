@@ -1,6 +1,7 @@
 package com.mapzip.ppang.mapzipproject.main;
 
 import com.mapzip.ppang.mapzipproject.R;
+import com.mapzip.ppang.mapzipproject.model.SystemMain;
 import com.mapzip.ppang.mapzipproject.model.UserData;
 import com.mapzip.ppang.mapzipproject.adapter.NavDrawerListAdapter;
 import com.mapzip.ppang.mapzipproject.model.NavDrawerItem;
@@ -120,7 +121,7 @@ public class slidingTap extends FragmentActivity{
         // Auto_Login Setting Process
         userData = UserData.getInstance();
         if(userData.getIsAuto() == 1){
-            SharedPreferences pref = getSharedPreferences("auto_login", MODE_PRIVATE);
+            SharedPreferences pref = getSharedPreferences(SystemMain.SHARED_PREFERENCE_AUTOFILE, MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
             editor.putInt("isAuto",1);
             editor.putString("auto_id",userData.getUserID());

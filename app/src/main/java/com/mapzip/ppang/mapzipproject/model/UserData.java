@@ -27,8 +27,7 @@ public class UserData {
     private int mapmetaNum; // 지도정보 수정 시 홈화면 리프레시
     private int[][] pingCount; //25개 지역별 핑 갯수(색 지정에 쓰임)
     private Bitmap[] result; //map
-    private Bitmap[] GalImages = new Bitmap[]{
-    };
+    private Bitmap[] GalImages = new Bitmap[]{};
     private boolean friendlock;
     private boolean reviewListlock;
     private MapData mapData;
@@ -42,6 +41,9 @@ public class UserData {
 
     // auto_login
     private int isAuto;
+
+    // gcm-key
+    private String gcm_token;
 
     public static UserData getInstance() {
         if (ourInstance == null) {
@@ -71,6 +73,9 @@ public class UserData {
 
         //auto_login
         isAuto = -1;
+
+        //gcm-key
+        gcm_token = null;
     }
 
     //서버에서 리뷰 갯슈 받아오기(지역별 index는 구글드라이브 지도번호 -1 하면 됨)
@@ -455,5 +460,12 @@ public class UserData {
 
     public void setAfterModify(boolean afterModify) {
         this.afterModify = afterModify;
+    }
+
+    public void setGcm_token(String token){
+        this.gcm_token = token;
+    }
+    public String getGcm_token(){
+        return this.gcm_token;
     }
 }

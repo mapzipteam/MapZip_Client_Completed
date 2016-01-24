@@ -124,9 +124,16 @@ public class SplashActivity extends Activity {
                     Toast.makeText(getApplicationContext(),"GCM 토큰 생성중",Toast.LENGTH_SHORT).show();
                 } else if(action.equals(QuickstartPreferences.REGISTRATION_COMPLETE)){
                     // 액션이 COMPLETE일 경우
-                    String token = intent.getStringExtra("token");
+                    Log.d(TAG,intent.getStringExtra("token"));
                     Toast.makeText(getApplicationContext(),"GCM 생성완료",Toast.LENGTH_SHORT).show();
                 }else if(action.equals(QuickstartPreferences.REGISTRATION_NOCHANGE)){
+                    String token = intent.getStringExtra("token");
+                    if(token == null){
+                        Log.d(TAG,"gcm token empty");
+                    }else{
+                        Log.d(TAG,intent.getStringExtra("token"));
+                    }
+
                     Toast.makeText(getApplicationContext(),"GCM 패키지 변화없음",Toast.LENGTH_SHORT).show();
                 }
 
@@ -135,7 +142,7 @@ public class SplashActivity extends Activity {
     }
 
     /**
-     * Google Play Service를 사용할 수 있는 환경이지를 체크한다.
+     * Google Play Service를 사용할 수 있는 환경인지를 체크한다.
      */
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);

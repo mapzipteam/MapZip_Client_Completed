@@ -14,6 +14,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.mapzip.ppang.mapzipproject.R;
 import com.mapzip.ppang.mapzipproject.model.SystemMain;
+import com.mapzip.ppang.mapzipproject.model.UserData;
 
 import java.io.IOException;
 
@@ -25,6 +26,8 @@ public class RegistrationIntentService extends IntentService{
     private static final String TAG = "RegistrationIntentService";
 
     private SharedPreferences pref;
+
+    private UserData userdata = UserData.getInstance();
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -45,9 +48,17 @@ public class RegistrationIntentService extends IntentService{
         int old_version = pref.getInt("version_code",0);
         int current_version = getAppVersion(getApplicationContext());
 
+        String token = null;
+
         if(old_version == current_version){
             // 이럴경우 굳이 gcmkey를 요청할 필요가 없다.
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(QuickstartPreferences.REGISTRATION_NOCHANGE));
+
+            token = pref.getString("GCM_token",null);
+            Intent registrationNoChange = new Intent(QuickstartPreferences.REGISTRATION_NOCHANGE);
+            registrationNoChange.putExtra("token", token);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(registrationNoChange);
+
+            userdata.setGcm_token(token);
             return;
         }
         else{
@@ -56,7 +67,7 @@ public class RegistrationIntentService extends IntentService{
                     .sendBroadcast(new Intent(QuickstartPreferences.REGISTRATION_GENERATING));
             // GCM을 위한 Instance ID를 가져온다.
             InstanceID instanceID = InstanceID.getInstance(this);
-            String token = null;
+
             try {
                 synchronized (TAG) {
                     // GCM 앱을 등록하고 획득한 설정파일인 google-services.json을 기반으로 SenderID를 자동으로 가져온다.
@@ -81,7 +92,10 @@ public class RegistrationIntentService extends IntentService{
             // 새로운 gcmkey를 받았으니, version_code 를 갈아 낀다
             SharedPreferences.Editor editor = pref.edit();
             editor.putInt("version_code", current_version);
+            editor.putString("GCM_token", token);
             editor.commit();
+
+            userdata.setGcm_token(token); // gcm-key 를 userdata에 세팅
         }
     }
 
