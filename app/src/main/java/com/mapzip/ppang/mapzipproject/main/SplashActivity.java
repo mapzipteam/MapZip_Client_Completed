@@ -28,7 +28,7 @@ import com.mapzip.ppang.mapzipproject.gcm.RegistrationIntentService;
 public class SplashActivity extends Activity {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private static final String TAG = "SplashActivity22";
+    private static final String TAG = "SplashActivity";
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
@@ -44,6 +44,8 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        Log.d(TAG, "on Create");
 
         gcmInit();
 
@@ -65,7 +67,8 @@ public class SplashActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        gcmInit();
+        Log.d(TAG, "on Resume");
+        //gcmInit();
 
     }
 
@@ -87,6 +90,8 @@ public class SplashActivity extends Activity {
                 new IntentFilter(QuickstartPreferences.REGISTRATION_GENERATING));
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(QuickstartPreferences.REGISTRATION_NOCHANGE));
     }
 
     /**
@@ -95,7 +100,7 @@ public class SplashActivity extends Activity {
     private void getInstanceIdToken() {
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
-            Toast.makeText(getApplicationContext(),"currVersion : "+getAppVersion(getApplicationContext()),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),"currVersion : "+getAppVersion(getApplicationContext()),Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
@@ -113,23 +118,16 @@ public class SplashActivity extends Activity {
 
                 if(action.equals(QuickstartPreferences.REGISTRATION_READY)){
                     // 액션이 READY일 경우
-                    //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
-                    //mInformationTextView.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(),"GCM 준비완료",Toast.LENGTH_SHORT).show();
                 } else if(action.equals(QuickstartPreferences.REGISTRATION_GENERATING)){
                     // 액션이 GENERATING일 경우
-                    //mRegistrationProgressBar.setVisibility(ProgressBar.VISIBLE);
-                    //mInformationTextView.setVisibility(View.VISIBLE);
-                    //mInformationTextView.setText("준비중..");
                     Toast.makeText(getApplicationContext(),"GCM 토큰 생성중",Toast.LENGTH_SHORT).show();
                 } else if(action.equals(QuickstartPreferences.REGISTRATION_COMPLETE)){
                     // 액션이 COMPLETE일 경우
-                    //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
-                    //mRegistrationButton.setText("완료..!");
-                    //mRegistrationButton.setEnabled(false);
                     String token = intent.getStringExtra("token");
-                    //mInformationTextView.setText(token);
                     Toast.makeText(getApplicationContext(),"GCM 생성완료",Toast.LENGTH_SHORT).show();
+                }else if(action.equals(QuickstartPreferences.REGISTRATION_NOCHANGE)){
+                    Toast.makeText(getApplicationContext(),"GCM 패키지 변화없음",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -154,15 +152,7 @@ public class SplashActivity extends Activity {
         return true;
     }
 
-    private int getAppVersion(Context context){
-        try {
-            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(),0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Could not get package name: " + e);
-        }
-    }
+
 
 
 

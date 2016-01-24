@@ -63,7 +63,7 @@ public class MainActivity extends FragmentActivity {
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
 
-        pref = getSharedPreferences("auto_login", MODE_PRIVATE);
+        pref = getSharedPreferences(SystemMain.SHARED_PREFERENCE_AUTOFILE, MODE_PRIVATE);
         isAuto = pref.getInt("isAuto", -1);
 
         UserData userData = UserData.getInstance();

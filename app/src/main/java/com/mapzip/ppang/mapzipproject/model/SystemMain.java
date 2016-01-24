@@ -29,6 +29,13 @@ public class SystemMain {
     public static final String SERVER_REVIEWMODIFY_URL = SERVER_ROOT_URL+"/client_data/client_review_update.php";
     public static final String SERVER_DELETEUSER_URL = SERVER_ROOT_URL+"/client_data/user_leave.php";
 
+    /**
+     * SharedPreferences name define
+     */
+
+    public static final String SHARED_PREFERENCE_AUTOFILE = "auto_login"; // 자동로그인 SharedPreferences
+    public static final String SHARED_PREFERENCE_GCMFILE = "gcm_check"; // GCM 을 위한 SharedPreferences
+
     // state define -1~
     public static final int NON_KNOWN_ERROR = -1;
 
