@@ -188,6 +188,36 @@ public class map_setting extends Activity {
         this.finish();
     }
 
+    public void resetOnClick(View v){
+
+        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if(!(mobile.isConnected() || wifi.isConnected()))
+        {
+            // toast
+            text_toast.setText("인터넷 연결이 필요합니다.");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout_toast);
+            toast.show();
+
+            return;
+        }
+        hashtag1.setText("해");
+        hashtag2.setText("쉬");
+        hashtag3.setText("태");
+        hashtag4.setText("그");
+        hashtag5.setText("맛집");
+
+        hashtag_send = "#해#쉬#태#그#맛집";
+        mapname.setText("나만의 지도"+mapid);
+        mapkindnum = SystemMain.SEOUL_MAP_NUM;
+
+        DoMapset(v);
+    }
+
     public void DoMapset(View v) {
         RequestQueue queue = MyVolley.getInstance(this).getRequestQueue();
 
@@ -245,6 +275,9 @@ public class map_setting extends Activity {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                hashtag_send = "";
+
                 try {
                     // toast
                     text_toast.setText("인터넷 연결이 필요합니다.");

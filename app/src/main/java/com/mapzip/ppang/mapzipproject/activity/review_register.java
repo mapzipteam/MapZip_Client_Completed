@@ -434,7 +434,11 @@ public class review_register extends Activity {
                     {
                         Log.v("image modify", "ok");
                         Log.v("image_length1",String.valueOf(user.getGalImages().length));
-                        user.addGalImages(bitarr);
+                        if((mapData.getImage_num()==0) && (afterimagenum==0))
+                            user.inputGalImages(bitarr);
+                        else
+                            user.addGalImages(bitarr);
+
                         modifyedcheck = true;
                         afterimagenum++;
                         Log.v("image_length2",String.valueOf(user.getGalImages().length));
@@ -458,68 +462,6 @@ public class review_register extends Activity {
             }
         }
     }
-
-
-
-    // resized bitmap
-    public Bitmap resizeBitmapImage(Uri image_uri, Bitmap bmpSource, int maxWidth, int maxHeight){
-        int iWidth = bmpSource.getWidth();
-        int iHeight = bmpSource.getHeight();
-        int newWidth = iWidth;
-        int newHeight = iHeight;
-        double rate = 0.0f;
-
-        Log.d("dSJW", "iWidth :" + iWidth + "\tiHeight : " + iHeight + "\tmaxWidth : " + maxWidth + "\tmaxHeight : " + maxHeight);
-        rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
-        Log.d("dSJW", (double) iWidth / maxWidth + "\t\t" + (double) iHeight / maxHeight + "\t\t"+rate);
-        if(rate <= 1){
-            Log.v("dSJW", "그대로 가로 : " + bmpSource.getWidth() + "\t\t그대로 세로 : " + bmpSource.getHeight());
-            return bmpSource;
-        }else{
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = (int)rate+1;
-
-            Log.d("dSJW","int)rate : "+((int)rate+1) );
-
-            Bitmap bitmap_src = BitmapFactory.decodeFile(getPathFromUri(image_uri), options);
-
-            Bitmap bitmap_resized = Bitmap.createScaledBitmap(bitmap_src, /*maxWidth, maxHeight*/(int)(iWidth/rate), (int)(iHeight/rate), true);
-
-            Log.e("dSJW", "바뀌어서 가로 : " + bitmap_resized.getWidth() + "\t\t바뀌어서 세로 : " + bitmap_resized.getHeight());
-            return bitmap_resized;
-        }
-    }
-
-    public String getPathFromUri(Uri uri) {
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToNext();
-        String path = cursor.getString(cursor.getColumnIndex("_data"));
-        cursor.close();
-
-        return path;
-    }
-
-    //이미지 degree만큼 회전 해서 return하는 함수
-    public Bitmap rotateBitmapImage(Bitmap srcBmp, int degree){
-
-        int width = srcBmp.getWidth();
-        int height = srcBmp.getHeight();
-
-        Log.d("dSJW", "아여기보시게"+degree);
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
-
-        Bitmap rotatedBmp = Bitmap.createBitmap(srcBmp, 0, 0, width, height, matrix, true);
-
-        return rotatedBmp;
-    }
-
-
-
-
-
-
-
 
     // in enroll Btn
     public void DoReviewset(View v) {
@@ -907,6 +849,58 @@ public class review_register extends Activity {
         return copy;
     }
 
+    // resized bitmap
+    public Bitmap resizeBitmapImage(Uri image_uri, Bitmap bmpSource, int maxWidth, int maxHeight){
+        int iWidth = bmpSource.getWidth();
+        int iHeight = bmpSource.getHeight();
+        int newWidth = iWidth;
+        int newHeight = iHeight;
+        double rate = 0.0f;
+
+        Log.d("dSJW", "iWidth :" + iWidth + "\tiHeight : " + iHeight + "\tmaxWidth : " + maxWidth + "\tmaxHeight : " + maxHeight);
+        rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
+        Log.d("dSJW", (double) iWidth / maxWidth + "\t\t" + (double) iHeight / maxHeight + "\t\t" + rate);
+        if(rate <= 1){
+            Log.v("dSJW", "그대로 가로 : " + bmpSource.getWidth() + "\t\t그대로 세로 : " + bmpSource.getHeight());
+            return bmpSource;
+        }else{
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = (int)rate+1;
+
+            Log.d("dSJW","int)rate : "+((int)rate+1) );
+
+            Bitmap bitmap_src = BitmapFactory.decodeFile(getPathFromUri(image_uri), options);
+
+            Bitmap bitmap_resized = Bitmap.createScaledBitmap(bitmap_src, /*maxWidth, maxHeight*/(int)(iWidth/rate), (int)(iHeight/rate), true);
+
+            Log.e("dSJW", "바뀌어서 가로 : " + bitmap_resized.getWidth() + "\t\t바뀌어서 세로 : " + bitmap_resized.getHeight());
+            return bitmap_resized;
+        }
+    }
+
+    public String getPathFromUri(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToNext();
+        String path = cursor.getString(cursor.getColumnIndex("_data"));
+        cursor.close();
+
+        return path;
+    }
+
+    //이미지 degree만큼 회전 해서 return하는 함수
+    public Bitmap rotateBitmapImage(Bitmap srcBmp, int degree){
+
+        int width = srcBmp.getWidth();
+        int height = srcBmp.getHeight();
+
+        Log.d("dSJW", "아여기보시게" + degree);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+
+        Bitmap rotatedBmp = Bitmap.createBitmap(srcBmp, 0, 0, width, height, matrix, true);
+
+        return rotatedBmp;
+    }
 
     // get Image encoding
     public String getStringImage(Bitmap bmp){/*
@@ -1128,8 +1122,33 @@ public class review_register extends Activity {
 
     // 사진제거 버튼
     public void deleteImageonClick(View v){
-        //Bitmap[] fordelbitarr = user.getGalImages();
-        Log.v("이미지카운트", String.valueOf(imageadapter.getCount()));
+        Log.v("이미지카운트", String.valueOf(viewPager.getCurrentItem()));
+        int delposition = viewPager.getCurrentItem();
+        Bitmap[] fordelbitarr = user.getGalImages();
+
+        //add userGal. removed image arr
+        oPerlishArray.clear();
+
+        if(fordelbitarr.length == 1) {
+            // no Image
+            noimage = drawableToBitmap(getResources().getDrawable(R.drawable.noimage));
+            oPerlishArray.add(noimage);
+        }
+        else{
+            for (int i = 0; i < fordelbitarr.length; i++)
+                oPerlishArray.add(fordelbitarr[i]);
+            oPerlishArray.remove(delposition);
+        }
+        bitarr = new Bitmap[oPerlishArray.size()];
+        oPerlishArray.toArray(bitarr);
+        user.inputGalImages(bitarr);
+
+        //set imageadapter
+        imageadapter = new ImageAdapter(this,SystemMain.justuser);
+        viewPager.setAdapter(imageadapter);
+        imageadapter.notifyDataSetChanged();
+
+        afterimagenum--;
     }
 
     // 리뷰등록 버튼

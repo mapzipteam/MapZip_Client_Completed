@@ -68,4 +68,10 @@ public class ImageAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         ((ViewPager) container).removeView((ImageView) object);
     }
+
+    @Override
+    public int getItemPosition(Object object) {
+        Log.v("이미지어댑터","겟포지션");
+        return super.getItemPosition(object);
+    }
 }
