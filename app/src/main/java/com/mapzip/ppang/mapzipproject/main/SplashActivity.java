@@ -123,23 +123,20 @@ public class SplashActivity extends Activity {
 
                 if(action.equals(QuickstartPreferences.REGISTRATION_READY)){
                     // 액션이 READY일 경우
-                    Toast.makeText(getApplicationContext(),"GCM 준비완료",Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "GCM 준비완료");
                 } else if(action.equals(QuickstartPreferences.REGISTRATION_GENERATING)){
                     // 액션이 GENERATING일 경우
-                    Toast.makeText(getApplicationContext(),"GCM 토큰 생성중",Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "GCM 토큰생성중");
                 } else if(action.equals(QuickstartPreferences.REGISTRATION_COMPLETE)){
                     // 액션이 COMPLETE일 경우
-                    Log.d(TAG,intent.getStringExtra("token"));
-                    Toast.makeText(getApplicationContext(),"GCM 생성완료",Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "GCM 생성완료" + intent.getStringExtra("token"));
                 }else if(action.equals(QuickstartPreferences.REGISTRATION_NOCHANGE)){
                     String token = intent.getStringExtra("token");
                     if(token == null){
-                        Log.d(TAG,"gcm token empty");
+                        Log.d(TAG,"GCM 패키지 변화없음 : gcm token empty");
                     }else{
-                        Log.d(TAG,"userdata:"+userdata.getGcm_token());
+                        Log.d(TAG,"GCM 패키지 변화없음 : "+userdata.getGcm_token());
                     }
-
-                    Toast.makeText(getApplicationContext(),"GCM 패키지 변화없음",Toast.LENGTH_SHORT).show();
                 }
 
             }
