@@ -1,5 +1,6 @@
 package com.mapzip.ppang.mapzipproject.main;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -151,12 +152,15 @@ public class loginFragment extends Fragment {
         }
     };
 
-
+    @SuppressLint("LongLogTag")
     public void DoLogin(View v) {
         RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();
 
         final String userid = inputID.getText().toString();
         final String userpw = inputPW.getText().toString();
+        final String gcm_key = user.getGcm_token();
+
+
         if (userid != null && !userid.equals("") && userpw != null && !userpw.equals("")) {
 
             InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -168,6 +172,7 @@ public class loginFragment extends Fragment {
             try {
                 obj.put("userid", userid);
                 obj.put("userpw", userpw);
+                obj.put("gcm_key", gcm_key);
                 Log.v("제이손 보내기", obj.toString());
             } catch (JSONException e) {
                 Log.v("제이손", "에러");

@@ -56,7 +56,7 @@ public class UserData {
         init();
     }
 
-    public void init() {
+    private void init() {
         LoginPermission = false; // ó�� instanceȭ �Ҷ��� �α����㰡 false
         UserID = null;
         UserName = null;

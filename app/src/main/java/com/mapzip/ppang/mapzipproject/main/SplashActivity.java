@@ -24,6 +24,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.mapzip.ppang.mapzipproject.R;
 import com.mapzip.ppang.mapzipproject.gcm.QuickstartPreferences;
 import com.mapzip.ppang.mapzipproject.gcm.RegistrationIntentService;
+import com.mapzip.ppang.mapzipproject.model.UserData;
 
 public class SplashActivity extends Activity {
 
@@ -40,6 +41,8 @@ public class SplashActivity extends Activity {
     private Animation start_flag_ani_1;
     private Animation start_flag_ani_2;
 
+    private UserData userdata;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,8 @@ public class SplashActivity extends Activity {
         Log.d(TAG, "on Create");
 
         gcmInit();
+
+        userdata = UserData.getInstance();
 
         StartImage_ma = (ImageView)findViewById(R.id.start_ma_image);
         StartImage_flag1 = (ImageView)findViewById(R.id.start_flag1_image);
@@ -131,7 +136,7 @@ public class SplashActivity extends Activity {
                     if(token == null){
                         Log.d(TAG,"gcm token empty");
                     }else{
-                        Log.d(TAG,intent.getStringExtra("token"));
+                        Log.d(TAG,"userdata:"+userdata.getGcm_token());
                     }
 
                     Toast.makeText(getApplicationContext(),"GCM 패키지 변화없음",Toast.LENGTH_SHORT).show();

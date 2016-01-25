@@ -29,6 +29,8 @@ public class RegistrationIntentService extends IntentService{
 
     private UserData userdata = UserData.getInstance();
 
+
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
@@ -59,6 +61,7 @@ public class RegistrationIntentService extends IntentService{
             LocalBroadcastManager.getInstance(this).sendBroadcast(registrationNoChange);
 
             userdata.setGcm_token(token);
+            Log.d(TAG, "userdatagcmkey:" + userdata.getGcm_token());
             return;
         }
         else{
@@ -97,6 +100,7 @@ public class RegistrationIntentService extends IntentService{
 
             userdata.setGcm_token(token); // gcm-key 를 userdata에 세팅
         }
+        Log.d(TAG,"userdatagcmkey:"+userdata.getGcm_token());
     }
 
     @SuppressLint("LongLogTag")

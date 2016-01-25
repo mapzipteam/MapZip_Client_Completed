@@ -67,7 +67,7 @@ public class MainActivity extends FragmentActivity {
         isAuto = pref.getInt("isAuto", -1);
 
         UserData userData = UserData.getInstance();
-        userData.init();
+
 
         userData.setIsAuto(isAuto);
 
