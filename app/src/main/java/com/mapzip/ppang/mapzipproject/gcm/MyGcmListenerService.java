@@ -14,6 +14,9 @@ import com.google.android.gms.gcm.GcmListenerService;
 import com.mapzip.ppang.mapzipproject.R;
 import com.mapzip.ppang.mapzipproject.main.SplashActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by myZZUNG on 2016. 1. 24..
  */
@@ -30,10 +33,18 @@ public class MyGcmListenerService extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
         String title = data.getString("title");
         String message = data.getString("message");
+        JSONObject json_extra=null;
+        try {
+            json_extra = new JSONObject(data.getString("extra"));
+            Log.d(TAG, "From: " + from);
+            Log.d(TAG, "Title: " + title);
+            Log.d(TAG, "Message: " + message);
+            Log.d(TAG, "extra : "+json_extra.toString());
+            Log.d(TAG,"extra : "+json_extra.getString("customkey1"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        Log.d(TAG, "From: " + from);
-        Log.d(TAG, "Title: " + title);
-        Log.d(TAG, "Message: " + message);
 
         // GCM으로 받은 메세지를 디바이스에 알려주는 sendNotification()을 호출한다.
         sendNotification(title, message);
