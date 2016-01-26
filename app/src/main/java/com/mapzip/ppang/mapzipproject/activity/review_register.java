@@ -410,7 +410,6 @@ public class review_register extends Activity {
 
                     Bitmap resized_image_bitmap = resizeBitmapImage(image_uri, image_bitmap, maxWidth, maxHeight);
 
-
                     //2016.01.26 송지원이 추가
                     String[] orientationColumn = {MediaStore.Images.Media.ORIENTATION};
                     Cursor cursor = managedQuery(image_uri, orientationColumn, null, null, null);
@@ -422,8 +421,6 @@ public class review_register extends Activity {
 
                     Bitmap rotated_resized_image_bitmap = rotateBitmapImage(resized_image_bitmap,  orientationDegree);
 
-
-
                     //oPerlishArray.add(image_bitmap);
                     oPerlishArray.add(rotated_resized_image_bitmap);
                     bitarr = new Bitmap[oPerlishArray.size()];
@@ -434,7 +431,7 @@ public class review_register extends Activity {
                     {
                         Log.v("image modify", "ok");
                         Log.v("image_length1",String.valueOf(user.getGalImages().length));
-                        if((mapData.getImage_num()==0) && (afterimagenum==0))
+                        if((mapData.getImage_num()+afterimagenum) == 0)
                             user.inputGalImages(bitarr);
                         else
                             user.addGalImages(bitarr);
@@ -1165,6 +1162,17 @@ public class review_register extends Activity {
 
     // 사진제거 버튼
     public void deleteImageonClick(View v){
+        if((mapData.getImage_num()+afterimagenum) == 0){ // 이미지가 없는 상태
+            // toast
+            text_toast.setText("제거할 이미지가 없습니다.");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout_toast);
+            toast.show();
+
+            return;
+        }
+
         Log.v("이미지카운트", String.valueOf(viewPager.getCurrentItem()));
         int delposition = viewPager.getCurrentItem();
         Bitmap[] fordelbitarr = user.getGalImages();
