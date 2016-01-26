@@ -898,7 +898,7 @@ public class friend_home  extends Activity implements View.OnClickListener {
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("userid", user.getUserID());
+            obj.put("user_id", user.getUserID());
             obj.put("friend_id",fuser.getUserID());
             obj.put("user_name",user.getUserName());
 
@@ -945,7 +945,7 @@ public class friend_home  extends Activity implements View.OnClickListener {
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("userid", user.getUserID());
+            obj.put("user_id", user.getUserID());
             obj.put("friend_id",fuser.getUserID());
 
             Log.v("addfriend_search 보내기", obj.toString());

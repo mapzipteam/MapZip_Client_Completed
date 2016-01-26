@@ -107,7 +107,7 @@ public class addfriend extends Activity {
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("userid", user.getUserID());
+            obj.put("user_id", user.getUserID());
             obj.put("friend_id",searchText.getText().toString());
 
             Log.v("addfriend_search 보내기", obj.toString());
@@ -129,7 +129,7 @@ public class addfriend extends Activity {
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("userid", user.getUserID());
+            obj.put("user_id", user.getUserID());
             obj.put("friend_id",friendID);
             obj.put("user_name",user.getUserName());
 
