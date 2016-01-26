@@ -97,7 +97,7 @@ public class friend_Fragment extends Fragment implements AbsListView.OnScrollLis
         fuser = FriendData.getInstance();
         user = UserData.getInstance();
 
-        getActivity().getActionBar().setTitle("     친구");
+        getActivity().getActionBar().setTitle("     맵갈피");
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
 

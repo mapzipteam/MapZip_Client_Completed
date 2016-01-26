@@ -131,6 +131,7 @@ public class addfriend extends Activity {
         try {
             obj.put("userid", user.getUserID());
             obj.put("friend_id",friendID);
+            obj.put("user_name",user.getUserName());
 
             Log.v("addfriend_enroll 보내기", obj.toString());
         } catch (JSONException e) {
@@ -201,7 +202,7 @@ public class addfriend extends Activity {
                 friendadd.setVisibility(View.VISIBLE);
 
                 // toast
-                text_toast.setText(friendID+"님과 친구가 되었습니다.");
+                text_toast.setText(friendID+"님을 맵갈피에 추가하였습니다.");
                 Toast toast = new Toast(getApplicationContext());
                 toast.setDuration(Toast.LENGTH_LONG);
                 toast.setView(layout_toast);

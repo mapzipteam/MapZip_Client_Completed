@@ -900,6 +900,7 @@ public class friend_home  extends Activity implements View.OnClickListener {
         try {
             obj.put("userid", user.getUserID());
             obj.put("friend_id",fuser.getUserID());
+            obj.put("user_name",user.getUserName());
 
             Log.v("addfriend_enroll 보내기", obj.toString());
         } catch (JSONException e) {
@@ -928,7 +929,7 @@ public class friend_home  extends Activity implements View.OnClickListener {
                 mapsetting.setVisibility(View.VISIBLE);
 
                 // toast
-                text_toast.setText(fuser.getUserID()+"님과 친구가 되었습니다.");
+                text_toast.setText(fuser.getUserID()+"님을 맵갈피에 추가하였습니다.");
                 Toast toast = new Toast(getApplicationContext());
                 toast.setDuration(Toast.LENGTH_LONG);
                 toast.setView(layout_toast);
