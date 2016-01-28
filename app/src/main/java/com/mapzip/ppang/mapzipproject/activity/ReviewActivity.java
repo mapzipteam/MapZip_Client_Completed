@@ -167,6 +167,8 @@ public class ReviewActivity extends Activity {
         intent.putExtra("store_id",mapData.getStore_id());
         intent.putExtra("state", "modify");
         startActivity(intent);
+
+        finish();
     }
 
     // delete Btn
@@ -298,16 +300,6 @@ public class ReviewActivity extends Activity {
             if (i != index) copy.put(source.get(i));
         }
         return copy;
-    }
-
-    // after modify
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(user.isModifystate()) {
-            user.setModifystate(false);
-            finish();
-        }
     }
 
     /*

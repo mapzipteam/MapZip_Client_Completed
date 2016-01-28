@@ -536,7 +536,7 @@ public class review_register extends Activity {
             obj.put("map_id", mapData.getMapid());
             obj.put("review_emotion", mapData.getReview_emotion());
             obj.put("review_text", mapData.getReview_text());
-            obj.put("store_id",getIntent().getStringExtra("store_id"));
+            obj.put("store_id", getIntent().getStringExtra("store_id"));
             obj.put("image_num", mapData.getImage_num());
             Log.v("image_num", String.valueOf(mapData.getImage_num()));
 
@@ -586,8 +586,6 @@ public class review_register extends Activity {
                 Log.v("review_modify 받기", response.toString());
                 try {
                     if(response.getInt("state") == SystemMain.CLIENT_REVIEW_DATA_UPDATE_SUCCESS) { // 607
-                        user.setModifystate(true);
-
                         // if Map Id modified (지도 변경시)
                         if(primap_id.equals(mapData.getMapid()) == false){
                             int pmap_id = Integer.parseInt(primap_id); // 수정 전
@@ -888,7 +886,7 @@ public class review_register extends Activity {
         double rate = 0.0f;
 
         Log.d("dSJW", "iWidth :" + iWidth + "\tiHeight : " + iHeight + "\tmaxWidth : " + maxWidth + "\tmaxHeight : " + maxHeight);
-        rate = Math.max((double)iWidth/maxWidth, (double)iHeight/maxHeight);
+        rate = Math.max((double)iWidth/maxWidth, (double)iHeight / maxHeight);
         Log.d("dSJW", (double) iWidth / maxWidth + "\t\t" + (double) iHeight / maxHeight + "\t\t" + rate);
         if(rate <= 1){
             Log.v("dSJW", "그대로 가로 : " + bmpSource.getWidth() + "\t\t그대로 세로 : " + bmpSource.getHeight());
@@ -1111,7 +1109,7 @@ public class review_register extends Activity {
             }
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -1172,6 +1170,7 @@ public class review_register extends Activity {
 
             return;
         }
+        modifyedcheck = true;
 
         Log.v("이미지카운트", String.valueOf(viewPager.getCurrentItem()));
         int delposition = viewPager.getCurrentItem();
@@ -1219,13 +1218,5 @@ public class review_register extends Activity {
     public void modifyonClick_review_regi(View v){
         reviewtextset();
         DoModifyset(v);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-       /* if(modifyedcheck == true)
-            user.inputGalImages(backupbitarr);*/
     }
 }
