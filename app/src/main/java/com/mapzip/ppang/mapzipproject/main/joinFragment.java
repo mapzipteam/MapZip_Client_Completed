@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,15 +33,20 @@ import java.util.regex.Pattern;
  */
 public class joinFragment extends Fragment {
 
-    private TextView state;
-
     private EditText inputID;
     private EditText inputName;
     private EditText inputPW;
+    private EditText inputPW2;
 
     private int mPageNumber;
 
     private Button JoinBtn;
+
+    // head
+    private ImageView joinhead;
+    private ImageView joinhead2;
+    private ImageView joinhead3;
+    private ImageView joinhead4;
 
     // toast
     private View layout_toast;
@@ -69,15 +75,55 @@ public class joinFragment extends Fragment {
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.join_layout, container, false);
 
-        state = (TextView) rootView.findViewById(R.id.TextState2);
-        inputID = (EditText) rootView.findViewById(R.id.InputID2);
-        inputName = (EditText) rootView.findViewById(R.id.InputName2);
-        inputPW = (EditText) rootView.findViewById(R.id.InputPW2);
+        inputID = (EditText) rootView.findViewById(R.id.InputID);
+        inputName = (EditText) rootView.findViewById(R.id.InputName);
+        inputPW = (EditText) rootView.findViewById(R.id.InputPW);
+        inputPW2 = (EditText) rootView.findViewById(R.id.InputPW2);
         JoinBtn = (Button) rootView.findViewById(R.id.btnJoin);
+        joinhead = (ImageView) rootView.findViewById(R.id.joinhead);
+        joinhead2 = (ImageView) rootView.findViewById(R.id.joinhead2);
+        joinhead3 = (ImageView) rootView.findViewById(R.id.joinhead3);
+        joinhead4 = (ImageView) rootView.findViewById(R.id.joinhead4);
 
-        inputID.setOnFocusChangeListener(ofcl);
-        inputName.setOnFocusChangeListener(ofcl);
-        inputPW.setOnFocusChangeListener(ofcl);
+        inputID.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)
+                    joinhead.setBackgroundResource(R.drawable.joinedithead);
+                else
+                    joinhead.setBackgroundResource(R.color.transparent);
+            }
+        });
+
+        inputName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)
+                    joinhead2.setBackgroundResource(R.drawable.joinedithead);
+                else
+                    joinhead2.setBackgroundResource(R.color.transparent);
+            }
+        });
+
+        inputPW.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)
+                    joinhead3.setBackgroundResource(R.drawable.joinedithead);
+                else
+                    joinhead3.setBackgroundResource(R.color.transparent);
+            }
+        });
+
+        inputPW2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)
+                    joinhead4.setBackgroundResource(R.drawable.joinedithead);
+                else
+                    joinhead4.setBackgroundResource(R.color.transparent);
+            }
+        });
 
         JoinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,17 +140,6 @@ public class joinFragment extends Fragment {
 
         return rootView;
     }
-
-
-    View.OnFocusChangeListener ofcl = new View.OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            if(hasFocus)
-                v.setBackgroundResource(R.drawable.editback2);
-            else
-                v.setBackgroundResource(R.drawable.editback);
-        }
-    };
 
     public void DoJoin(View v) {
         RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();
@@ -130,6 +165,17 @@ public class joinFragment extends Fragment {
         if(userpw.length() < 8){
             // toast
             text_toast.setText("ID는 5자, Password는 8자이상 입니다.");
+            Toast toast = new Toast(getActivity());
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout_toast);
+            toast.show();
+
+            return;
+        }
+
+        if(userpw.equals(inputPW2.getText().toString()) == false){
+            // toast
+            text_toast.setText("비밀번호확인을 틀리셨습니다.");
             Toast toast = new Toast(getActivity());
             toast.setDuration(Toast.LENGTH_LONG);
             toast.setView(layout_toast);

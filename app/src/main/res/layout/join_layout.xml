@@ -1,62 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/joinbg"
     android:gravity="center"
-    android:background="#f9f9d6"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
-    <EditText
-        android:layout_width="200dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/InputID2"
-        android:layout_gravity="center"
-        android:background="@drawable/editback"
-        android:singleLine="true"
-        android:maxLength="15"
-        android:hint=" ID"/>
+        android:gravity="center">
 
-    <EditText
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/InputName2"
-        android:layout_gravity="center"
-        android:background="@drawable/editback"
-        android:singleLine="true"
-        android:maxLength="10"
-        android:hint=" Name"/>
+        <ImageView
+            android:id="@+id/paper"
+            android:layout_width="match_parent"
+            android:layout_height="510dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/joinpaper0" />
 
-    <EditText
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:layout_gravity="center"
-        android:background="@drawable/editback"
-        android:hint=" Password"
-        android:singleLine="true"
-        android:maxLength="15"
-        android:id="@+id/InputPW2" />
+        <ImageView
+            android:id="@+id/joinus"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/joinus"/>
 
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        android:background="@drawable/joinbtn"
-        android:layout_gravity="center"
-        android:id="@+id/btnJoin" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/joinus"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:gravity="center">
 
-    <TextView
-        android:id="@+id/TextState2"
-        android:layout_marginTop="50dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text=""/>
+            <RelativeLayout
+                android:id="@+id/idlayout"
+                android:layout_width="240dp"
+                android:layout_height="46dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/jointxt">
 
+                <ImageView
+                    android:id="@+id/joinhead"
+                    android:layout_width="38dp"
+                    android:layout_height="46dp" />
 
-    <TextView
-        android:id="@+id/TextState"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="ID는 5~15자\nPassword는 8~15자 입니다."/>
+                <EditText
+                    android:id="@+id/InputID"
+                    android:layout_width="200dp"
+                    android:layout_height="46dp"
+                    android:layout_marginLeft="33dp"
+                    android:background="@color/transparent"
+                    android:hint="ID( 5-15자 )"
+                    android:maxLength="15"
+                    android:singleLine="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/namelayout"
+                android:background="@drawable/jointxt"
+                android:layout_width="240dp"
+                android:layout_height="46dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/idlayout"
+                android:layout_marginTop="3dp">
+
+                <ImageView
+                    android:id="@+id/joinhead2"
+                    android:layout_width="38dp"
+                    android:layout_height="46dp" />
+
+                <EditText
+                android:id="@+id/InputName"
+                android:layout_width="200dp"
+                android:layout_height="46dp"
+                android:layout_marginLeft="33dp"
+                android:background="@color/transparent"
+                android:hint="Name"
+                android:maxLength="15"
+                android:singleLine="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/pwlayout"
+                android:background="@drawable/jointxt"
+                android:layout_width="240dp"
+                android:layout_height="46dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/namelayout"
+                android:layout_marginTop="3dp">
+
+                <ImageView
+                    android:id="@+id/joinhead3"
+                    android:layout_width="38dp"
+                    android:layout_height="46dp" />
+
+                <EditText
+                    android:id="@+id/InputPW"
+                    android:layout_width="200dp"
+                    android:layout_height="46dp"
+                    android:layout_marginLeft="33dp"
+                    android:background="@color/transparent"
+                    android:hint="PASSWORD( 8-15자 )"
+                    android:inputType="textPassword"
+                    android:maxLength="15"
+                    android:singleLine="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/confirmlayout"
+                android:background="@drawable/jointxt"
+                android:layout_width="240dp"
+                android:layout_height="46dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/pwlayout"
+                android:layout_marginTop="3dp">
+
+                <ImageView
+                    android:id="@+id/joinhead4"
+                    android:layout_width="38dp"
+                    android:layout_height="46dp" />
+
+                <EditText
+                    android:id="@+id/InputPW2"
+                    android:layout_width="200dp"
+                    android:layout_height="46dp"
+                    android:layout_marginLeft="33dp"
+                    android:background="@color/transparent"
+                    android:hint="CONFIRM PASSWORD"
+                    android:inputType="textPassword"
+                    android:maxLength="15"
+                    android:singleLine="true" />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnJoin"
+                android:layout_width="240dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/confirmlayout"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/joinbtn" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>

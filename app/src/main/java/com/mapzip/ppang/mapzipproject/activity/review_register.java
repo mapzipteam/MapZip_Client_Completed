@@ -484,6 +484,7 @@ public class review_register extends Activity {
             obj.put("review_text", mapData.getReview_text());
             obj.put("image_num", mapData.getImage_num());
             obj.put("gu_num", mapData.getGu_num());
+            obj.put("user_name",user.getUserName());
 
             Log.v("review 등록 보내기", obj.toString());
         } catch (JSONException e) {
