@@ -77,7 +77,7 @@ public class UserData {
         gcm_token = null;
     }
 
-    //서버에서 리뷰 갯슈 받아오기(지역별 index는 구글드라이브 지도번호 -1 하면 됨)
+    //서버에서 리뷰 갯슈 받아오기(지역별 index는 구글드라이브 지도번호 -1 하면 됨) // pingCount
     public void setReviewCount(int mapnum, int index, int num) { pingCount[mapnum][index] = num; }
 
     public Bitmap getResult(int mapnum) {

@@ -778,6 +778,40 @@ public class review_register extends Activity {
     // image upload
     public void DoUpload(final int i) {
         Log.v("에러치크","2");
+
+        RequestQueue queue = MyVolley.getInstance(this).getRequestQueue();
+
+        JSONObject obj = new JSONObject();
+        try {
+            Log.v("길이길이",String.valueOf(user.getGalImages().length));
+            String image = getStringImage(user.getGalImages()[i]);
+            Log.v("image string",image);
+            Log.v("image 길이", String.valueOf(image.length()));
+
+            obj.put("image_string",image);
+            obj.put("userid", user.getUserID());
+            obj.put("map_id", mapData.getMapid());
+            obj.put("store_id", mapData.getStore_id());
+            obj.put("image_name", "image" + String.valueOf(imagenum));
+            imagenum++;
+
+            Log.v("param",obj.toString());
+
+            Log.v("에러치크","1");
+
+        } catch (JSONException e) {
+            Log.v("제이손", "에러");
+        }
+
+        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                SystemMain.SERVER_REVIEWENROLL3_URL,
+                obj,
+                createMyReqSuccessListener_image(),
+                createMyReqErrorListener_image()) {
+        };
+        queue.add(myReq);
+
+   /*
         StringRequest stringRequest = new StringRequest(Request.Method.POST, SystemMain.SERVER_REVIEWENROLL3_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -823,6 +857,7 @@ public class review_register extends Activity {
 
         //Adding request to the queue
         requestQueue.add(stringRequest);
+        */
 
         /*
         mfile = getImageFile(uriarray[i]);
@@ -859,6 +894,29 @@ public class review_register extends Activity {
         Log.v("사진 보내기", mRequest.toString());
         queue.add(mRequest);
         */
+    }
+
+    private Response.Listener<JSONObject> createMyReqSuccessListener_image() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("이미지 업로드", response.toString());
+            }
+        };
+    }
+
+    private Response.ErrorListener createMyReqErrorListener_image() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    Log.e("이미지 업로드", error.getMessage());
+                } catch (NullPointerException ex) {
+                    // toast
+                    Log.e("review_register", "nullpointexception");
+                }
+            }
+        };
     }
 
     /*

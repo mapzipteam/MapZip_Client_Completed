@@ -798,6 +798,12 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
 
     public void refresh() {
         Log.v("리프레쉬", "확인");
+        Bitmap result = user.getResult(Integer.parseInt(mapid));
+        //2016.01.08        imageview.setImageBitmap(result);
+        imageview.setEnabled(false);
+        Drawable drawable = new BitmapDrawable(result);
+        scalableLayout.setBackground(drawable);
+
         mapnum = user.getMapmetaArray().length();
         sppinerList = new ArrayList<String>();
         try {

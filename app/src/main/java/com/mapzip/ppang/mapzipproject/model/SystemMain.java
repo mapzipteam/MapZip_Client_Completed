@@ -28,6 +28,7 @@ public class SystemMain {
     public static final String SERVER_REVIEWDELETE_URL = SERVER_ROOT_URL+"/client_data/client_review_delete.php";
     public static final String SERVER_REVIEWMODIFY_URL = SERVER_ROOT_URL+"/client_data/client_review_update.php";
     public static final String SERVER_DELETEUSER_URL = SERVER_ROOT_URL+"/client_data/user_leave.php";
+    public static final String SERVER_RESETMAPDATA_URL = SERVER_ROOT_URL+"/client_data/client_map_clear.php";
 
     /**
      * SharedPreferences name define

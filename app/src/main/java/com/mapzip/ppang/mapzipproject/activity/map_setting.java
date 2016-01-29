@@ -3,6 +3,10 @@ package com.mapzip.ppang.mapzipproject.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -180,7 +184,7 @@ public class map_setting extends Activity {
         // title <= mapname.getText().toString();
         // map_id <= mapid
 
-        DoMapset(v);
+        DoMapset();
         hashtag_send = "";
     }
 
@@ -205,20 +209,28 @@ public class map_setting extends Activity {
 
             return;
         }
-        hashtag1.setText("해");
-        hashtag2.setText("쉬");
-        hashtag3.setText("태");
-        hashtag4.setText("그");
-        hashtag5.setText("맛집");
 
-        hashtag_send = "#해#쉬#태#그#맛집";
-        mapname.setText("나만의 지도"+mapid);
-        mapkindnum = SystemMain.SEOUL_MAP_NUM;
+        RequestQueue queue = MyVolley.getInstance(this).getRequestQueue();
 
-        DoMapset(v);
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("user_id", user.getUserID());
+            obj.put("map_id", mapid);
+            Log.v("mapsetting_reset 보내기", obj.toString());
+        } catch (JSONException e) {
+            Log.v("제이손", "에러");
+        }
+
+        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                SystemMain.SERVER_RESETMAPDATA_URL,
+                obj,
+                createMyReqSuccessListener_MapReset(),
+                createMyReqErrorListener()) {
+        };
+        queue.add(myReq);
     }
 
-    public void DoMapset(View v) {
+    public void DoMapset() {
         RequestQueue queue = MyVolley.getInstance(this).getRequestQueue();
 
         JSONObject obj = new JSONObject();
@@ -240,6 +252,36 @@ public class map_setting extends Activity {
                 createMyReqErrorListener()) {
         };
         queue.add(myReq);
+    }
+
+    private Response.Listener<JSONObject> createMyReqSuccessListener_MapReset() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                Log.v("mapsetting_reset 받기", response.toString());
+
+                for (int gunumber = 1; gunumber <= SystemMain.SeoulGuCount; gunumber++)
+                    user.setReviewCount(Integer.parseInt(mapid), gunumber, 0);
+
+                user.setMapforpinNum(Integer.parseInt(mapid), 2); // no review
+
+                Resources res = getResources();
+                user.setMapImage(Integer.parseInt(mapid),res);
+
+                hashtag1.setText("해");
+                hashtag2.setText("쉬");
+                hashtag3.setText("태");
+                hashtag4.setText("그");
+                hashtag5.setText("맛집");
+
+                hashtag_send = "#해#쉬#태#그#맛집";
+                mapname.setText("나만의 지도"+mapid);
+                mapkindnum = SystemMain.SEOUL_MAP_NUM;
+
+                DoMapset();
+            }
+        };
     }
 
     private Response.Listener<JSONObject> createMyReqSuccessListener() {
