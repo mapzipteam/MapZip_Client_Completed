@@ -437,12 +437,13 @@ public class review_register extends Activity {
                             user.addGalImages(bitarr);
 
                         modifyedcheck = true;
-                        afterimagenum++;
                         Log.v("image_length2",String.valueOf(user.getGalImages().length));
                     }
                     else
                         user.inputGalImages(bitarr);
 
+
+                    afterimagenum++;
                     serverchoice = 2;
                     imageadapter = new ImageAdapter(this,SystemMain.justuser);
                     viewPager.setAdapter(imageadapter);
@@ -1210,6 +1211,17 @@ public class review_register extends Activity {
      */
     // 사진찾기 버튼
     public void findImageonClick(View v) {
+        if(user.getGalImages().length >= SystemMain.MAXIMAGENUM){
+            // toast
+            text_toast.setText("더이상 이미지를 추가할 수 없습니다.");
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout_toast);
+            toast.show();
+
+            return;
+        }
+
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
         intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -1219,6 +1231,8 @@ public class review_register extends Activity {
     // 사진제거 버튼
     public void deleteImageonClick(View v){
         if((mapData.getImage_num()+afterimagenum) == 0){ // 이미지가 없는 상태
+            Log.v("imagenum",String.valueOf(mapData.getImage_num()));
+            Log.v("afterimagenum",String.valueOf(afterimagenum));
             // toast
             text_toast.setText("제거할 이미지가 없습니다.");
             Toast toast = new Toast(getApplicationContext());

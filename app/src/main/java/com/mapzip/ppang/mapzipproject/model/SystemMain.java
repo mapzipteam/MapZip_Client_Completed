@@ -108,6 +108,7 @@ public class SystemMain {
     // for imageadapter
     public static final int justuser = 1;
     public static final int justfuser = 2;
+    public static final int MAXIMAGENUM = 10;
 
     // GU number DEFAULT
     public static final int SeoulGuCount = 25;
