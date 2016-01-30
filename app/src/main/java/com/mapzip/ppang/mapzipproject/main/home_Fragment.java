@@ -211,7 +211,8 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
 //2016.01.08        imageview.setImageBitmap(result);
                     imageview.setEnabled(false);
                     Drawable drawable = new BitmapDrawable(result);
-                    scalableLayout.setBackground(drawable);
+                    scalableLayout.setBackgroundResource(R.drawable.seoul2);
+                    //scalableLayout.setBackground(drawable);
                     //scalableLayout.setBackground(new BitmapDrawable(getActivity().getResources(), result));
 
 

@@ -62,6 +62,7 @@ public class MainActivity extends FragmentActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setCurrentItem(1);
 
         pref = getSharedPreferences(SystemMain.SHARED_PREFERENCE_AUTOFILE, MODE_PRIVATE);
         isAuto = pref.getInt("isAuto", -1);
@@ -97,9 +98,10 @@ public class MainActivity extends FragmentActivity {
         public Fragment getItem(int position) {
             // �ش��ϴ� page�� Fragment�� �����մϴ�.
             if(position == 0)
-                return loginFragment.create(position,isAuto,auto_id,auto_pw);
-            else
                 return joinFragment.create(position);
+            else
+                return loginFragment.create(position,isAuto,auto_id,auto_pw);
+
         }
 
         @Override
