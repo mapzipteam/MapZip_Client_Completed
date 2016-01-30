@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,15 +41,17 @@ public class loginFragment extends Fragment {
 
     private boolean lockBtn;
     private LoadingTask Loading;
-    private TextView state;
     private Resources res;
     private EditText inputID;
     private EditText inputPW;
-    private int mPageNumber;
     private Button LoginBtn;
     public UserData user;
     public int map;
     public ProgressDialog  asyncDialog;
+
+    // head
+    private ImageView idicon;
+    private ImageView pwicon;
 
     // toast
     private View layout_toast;
@@ -75,7 +79,6 @@ public class loginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPageNumber = getArguments().getInt("page");
         isAuto = getArguments().getInt("isAuto");
         if(isAuto == 1){
             auto_id = getArguments().getString("auto_id","");
@@ -99,10 +102,14 @@ public class loginFragment extends Fragment {
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.login_layout, container, false);
 
-        state = (TextView) rootView.findViewById(R.id.TextState);
         inputID = (EditText) rootView.findViewById(R.id.InputID);
         inputPW = (EditText) rootView.findViewById(R.id.InputPW);
         LoginBtn = (Button) rootView.findViewById(R.id.btnLogin);
+        idicon = (ImageView) rootView.findViewById(R.id.idicon);
+        pwicon = (ImageView) rootView.findViewById(R.id.pwicon);
+
+        idicon.setBackgroundResource(R.drawable.idicongray);
+        pwicon.setBackgroundResource(R.drawable.pwicongray);
 
         // Auto_Login CheckBox
         check_auto = (CheckBox)rootView.findViewById(R.id.check_auto);
@@ -118,8 +125,24 @@ public class loginFragment extends Fragment {
             }
         });
 
-        inputID.setOnFocusChangeListener(ofcl);
-        inputPW.setOnFocusChangeListener(ofcl);
+        inputID.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)
+                    idicon.setBackgroundResource(R.drawable.idiconyellow);
+                else
+                    idicon.setBackgroundResource(R.drawable.idicongray);
+            }
+        });
+        inputPW.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)
+                    pwicon.setBackgroundResource(R.drawable.pwiconyellow);
+                else
+                    pwicon.setBackgroundResource(R.drawable.pwicongray);
+            }
+        });
 
         if(user.getIsAuto() == 1){
             check_auto.setChecked(true);
@@ -137,20 +160,8 @@ public class loginFragment extends Fragment {
             }
         });
 
-
-
         return rootView;
     }
-
-    View.OnFocusChangeListener ofcl = new View.OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            if(hasFocus)
-                v.setBackgroundResource(R.drawable.editback2);
-            else
-                v.setBackgroundResource(R.drawable.editback);
-        }
-    };
 
     @SuppressLint("LongLogTag")
     public void DoLogin(View v) {
@@ -211,8 +222,6 @@ public class loginFragment extends Fragment {
 
                         JSONObject jar = response.getJSONObject("gu_enroll_num");
                         Log.v("구넘버", String.valueOf(jar));
-
-
 
                         Log.v("구넘버", "진입");
 

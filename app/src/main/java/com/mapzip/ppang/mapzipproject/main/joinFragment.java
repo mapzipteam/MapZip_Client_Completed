@@ -3,6 +3,8 @@ package com.mapzip.ppang.mapzipproject.main;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +43,10 @@ public class joinFragment extends Fragment {
     private int mPageNumber;
 
     private Button JoinBtn;
+
+    // TextWatcher
+    private TextWatcher textWatcher;
+    private int textcount=0;
 
     // head
     private ImageView joinhead;
@@ -85,6 +91,8 @@ public class joinFragment extends Fragment {
         joinhead3 = (ImageView) rootView.findViewById(R.id.joinhead3);
         joinhead4 = (ImageView) rootView.findViewById(R.id.joinhead4);
 
+
+
         inputID.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -108,7 +116,7 @@ public class joinFragment extends Fragment {
         inputPW.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus)
+                if (hasFocus)
                     joinhead3.setBackgroundResource(R.drawable.joinedithead);
                 else
                     joinhead3.setBackgroundResource(R.color.transparent);
@@ -118,12 +126,34 @@ public class joinFragment extends Fragment {
         inputPW2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus)
+                if (hasFocus)
                     joinhead4.setBackgroundResource(R.drawable.joinedithead);
                 else
                     joinhead4.setBackgroundResource(R.color.transparent);
             }
         });
+
+        textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                joinCheck();
+            }
+        };
+
+        inputID.addTextChangedListener(textWatcher);
+        inputName.addTextChangedListener(textWatcher);
+        inputPW.addTextChangedListener(textWatcher);
+        inputPW2.addTextChangedListener(textWatcher);
 
         JoinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +169,37 @@ public class joinFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    public void joinCheck(){
+        boolean idok = false;
+        boolean nameok = false;
+        boolean pwok = false;
+        boolean pw2ok = false;
+
+        if(inputID.getText().toString().length() >= 5){
+            idok = true;
+        }
+
+        if(inputName.getText().toString().length() >= 1){
+            nameok = true;
+        }
+
+        if (inputPW.getText().toString().length() >= 8){
+            pwok = true;
+        }
+
+        if(inputPW2.getText().toString().length() >= 8){
+            pw2ok = true;
+        }
+
+        if(idok && nameok && pwok && pw2ok){
+            JoinBtn.setEnabled(true);
+            JoinBtn.setBackgroundResource(R.drawable.joinbtn2);
+        }else{
+            JoinBtn.setEnabled(false);
+            JoinBtn.setBackgroundResource(R.drawable.joinbtn);
+        }
     }
 
     public void DoJoin(View v) {
