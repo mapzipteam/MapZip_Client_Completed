@@ -94,6 +94,7 @@ public class UserData {
         Bitmap bit3 = bd3.getBitmap();
 
         result[mapnum] = bit3;
+        Log.v("bitmap",result[mapnum].toString());
 
         for (int index = 1; index < pingCount[mapnum].length; index++) {
             boolean bitlock = true;
