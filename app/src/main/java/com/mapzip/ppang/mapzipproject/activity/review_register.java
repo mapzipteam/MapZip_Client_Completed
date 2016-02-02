@@ -395,8 +395,7 @@ public class review_register extends Activity {
                     //Uri에서 이미지 이름을 얻어온다.
                     //String name_Str = getImageNameToUri(data.getData());
 
-                    //이미지 데이터를 비트맵으로 받아온다.
-                    Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                    //이미지 데이터를 리사이징된 비트맵으로 받아온다.
                     Uri image_uri = data.getData();
 
                     if (oncreatelock == false || state == 1) { // 사진 여러장 일 때 or modify
@@ -408,9 +407,9 @@ public class review_register extends Activity {
                     int maxWidth = viewPager.getWidth();
                     int maxHeight = viewPager.getHeight();
 
-                    Bitmap resized_image_bitmap = resizeBitmapImage(image_uri, image_bitmap, maxWidth, maxHeight);
+                    Bitmap resized_image_bitmap = resizeBitmapImage(image_uri, maxWidth, maxHeight);
 
-                    //2016.01.26 송지원이 추가
+                    //2016.01.26 송지원이 추가. 이미지 자동회전 오류 잡는 코드.
                     String[] orientationColumn = {MediaStore.Images.Media.ORIENTATION};
                     Cursor cursor = managedQuery(image_uri, orientationColumn, null, null, null);
                     int orientationDegree = -1;
@@ -421,7 +420,6 @@ public class review_register extends Activity {
 
                     Bitmap rotated_resized_image_bitmap = rotateBitmapImage(resized_image_bitmap,  orientationDegree);
 
-                    //oPerlishArray.add(image_bitmap);
                     oPerlishArray.add(rotated_resized_image_bitmap);
                     bitarr = new Bitmap[oPerlishArray.size()];
                     oPerlishArray.toArray(bitarr);
@@ -449,12 +447,12 @@ public class review_register extends Activity {
                     imageadapter = new ImageAdapter(this,SystemMain.justuser);
                     viewPager.setAdapter(imageadapter);
                     imageadapter.notifyDataSetChanged();
-                } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+//                } catch (FileNotFoundException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -939,32 +937,22 @@ public class review_register extends Activity {
     }
 
     // resized bitmap
-    public Bitmap resizeBitmapImage(Uri image_uri, Bitmap bmpSource, int maxWidth, int maxHeight){
-        int iWidth = bmpSource.getWidth();
-        int iHeight = bmpSource.getHeight();
-        int newWidth = iWidth;
-        int newHeight = iHeight;
-        double rate = 0.0f;
+    public Bitmap resizeBitmapImage(Uri image_uri, int maxWidth, int maxHeight){
 
-        Log.d("dSJW", "iWidth :" + iWidth + "\tiHeight : " + iHeight + "\tmaxWidth : " + maxWidth + "\tmaxHeight : " + maxHeight);
-        rate = Math.max((double)iWidth/maxWidth, (double)iHeight / maxHeight);
-        Log.d("dSJW", (double) iWidth / maxWidth + "\t\t" + (double) iHeight / maxHeight + "\t\t" + rate);
-        if(rate <= 1){
-            Log.v("dSJW", "그대로 가로 : " + bmpSource.getWidth() + "\t\t그대로 세로 : " + bmpSource.getHeight());
-            return bmpSource;
-        }else{
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = (int)rate+1;
+        String imagePath = getPathFromUri(image_uri);
 
-            Log.d("dSJW","int)rate : "+((int)rate+1) );
+        BitmapFactory.Options options = new BitmapFactory.Options();
 
-            Bitmap bitmap_src = BitmapFactory.decodeFile(getPathFromUri(image_uri), options);
+        options.inSampleSize = 4;
+        options.outWidth = maxWidth;
+        options.outHeight = maxHeight;
 
-            Bitmap bitmap_resized = Bitmap.createScaledBitmap(bitmap_src, /*maxWidth, maxHeight*/(int)(iWidth/rate), (int)(iHeight/rate), true);
 
-            Log.e("dSJW", "바뀌어서 가로 : " + bitmap_resized.getWidth() + "\t\t바뀌어서 세로 : " + bitmap_resized.getHeight());
-            return bitmap_resized;
-        }
+        Bitmap bitmap_resized = BitmapFactory.decodeFile(imagePath, options);
+
+
+        return bitmap_resized;
+
     }
 
     public String getPathFromUri(Uri uri) {

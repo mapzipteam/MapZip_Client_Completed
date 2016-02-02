@@ -221,8 +221,19 @@ public class SearchInLocationActivity extends NMapActivity implements OnMapState
                         intent.putExtra("store_y", currentLAT);
                         intent.putExtra("state","enroll");
 
-                        startActivity(intent);
-                        finish();
+                        String storeAddressBeforeReviewRegister = storeaddress.getText().toString().trim();
+                        if(storeAddressBeforeReviewRegister.contains("서울")){
+                            startActivity(intent);
+                            finish();
+                        }
+                        else{
+                            text_toast.setText("서울 이외의 지역애는 리뷰를 등록 할 수 없습니다");
+                            Toast toast = new Toast(getApplicationContext());
+                            toast.setDuration(Toast.LENGTH_SHORT);
+                            toast.setView(layout_toast);
+                            toast.show();
+                        }
+
                 }
 
             }
