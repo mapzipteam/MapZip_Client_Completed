@@ -31,6 +31,7 @@ import com.mapzip.ppang.mapzipproject.model.FriendData;
 import com.mapzip.ppang.mapzipproject.R;
 import com.mapzip.ppang.mapzipproject.model.SystemMain;
 import com.mapzip.ppang.mapzipproject.activity.friend_home;
+import com.mapzip.ppang.mapzipproject.model.UserData;
 import com.mapzip.ppang.mapzipproject.network.MyVolley;
 
 import org.json.JSONArray;
@@ -45,6 +46,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
 
     private View v;
     private FriendData fuser;
+    private UserData user;
 
     // search
     private EditText searchhash;
@@ -96,6 +98,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fuser = FriendData.getInstance();
+        user = UserData.getInstance();
 
         layout_toast = inflater.inflate(R.layout.my_custom_toast, (ViewGroup) getActivity().findViewById(R.id.custom_toast_layout));
         text_toast = (TextView) layout_toast.findViewById(R.id.textToShow);
@@ -303,6 +306,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
             JSONObject obj = new JSONObject();
             try {
                 obj.put("target", searchhash.getText().toString());
+                obj.put("user_id",user.getUserID());
                 obj.put("more", seq);
                 Log.v("searchmap 보내기", obj.toString());
             } catch (JSONException e) {
