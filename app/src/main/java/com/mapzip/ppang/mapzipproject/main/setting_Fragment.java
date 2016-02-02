@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,12 +41,17 @@ public class setting_Fragment extends Fragment {
     private View layout_toast;
     private TextView text_toast;
 
+    // notice
+    private SharedPreferences pref;
+    private String noticeString = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         getActivity().getActionBar().setTitle("     설정");
         user = UserData.getInstance();
+        pref = getActivity().getSharedPreferences(SystemMain.SHARED_PREFERENCE_AUTOFILE, getActivity().MODE_PRIVATE);
     }
 
     @Override
@@ -109,6 +115,16 @@ public class setting_Fragment extends Fragment {
             }
         });
 
+        ViewGroup layout3 = (ViewGroup) v.findViewById(R.id.fetchLayout);
+        layout3.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                getNotice();
+            }
+        });
+
         return v;
     }
 
@@ -165,6 +181,79 @@ public class setting_Fragment extends Fragment {
                 }catch (NullPointerException ex){
                     // toast
                     Log.e("user_del", "nullpointexception");
+                }
+            }
+        };
+    }
+    // notice get method
+    private void getNotice() {
+        RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("state", 1);
+            Log.v("mainActivity 보내기", obj.toString());
+        } catch (JSONException e) {
+            Log.v("제이손", "에러");
+        }
+
+        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                SystemMain.SERVER_NOTICE_URL,
+                obj,
+                createNoticeReqSuccessListener(),
+                createNoticeReqErrorListener()) {
+        };
+        queue.add(myReq);
+    }
+
+    private Response.Listener<JSONObject> createNoticeReqSuccessListener() {
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                Log.v("mainActivity 받기", response.toString());
+
+                try{
+
+                        noticeString = "버전: " + response.get("version").toString() + "\n\n";
+
+                        noticeString += response.get("contents").toString()+"\n\n";
+                        noticeString += "@이 창은 공지사항탭에서 다시 확인할 수 있습니다.";
+
+                        AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
+                        ab.setTitle("새로운 MapZip의 패치소식 ^0^/");
+                        ab.setMessage(noticeString);
+                        ab.setPositiveButton("확인", null);
+
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString("notice_version", response.get("version").toString());
+                        editor.commit();
+
+                        ab.show();
+
+                }catch (JSONException e){
+                    Log.v("제이손", "에러");
+                }
+            }
+        };
+    }
+
+    private Response.ErrorListener createNoticeReqErrorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    // toast
+                    text_toast.setText("인터넷 연결이 필요합니다.");
+                    Toast toast = new Toast(getActivity());
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(layout_toast);
+                    toast.show();
+
+                    Log.e("mainActivity", error.getMessage());
+                }catch (NullPointerException ex){
+                    // toast
+                    Log.e("mainActivity", "nullpointexception");
                 }
             }
         };
