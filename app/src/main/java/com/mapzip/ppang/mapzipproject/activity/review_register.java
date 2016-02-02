@@ -398,7 +398,7 @@ public class review_register extends Activity {
                     //이미지 데이터를 비트맵으로 받아온다.
                     Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
                     Uri image_uri = data.getData();
-                        
+
                     if (oncreatelock == false || state == 1) { // 사진 여러장 일 때 or modify
                         oPerlishArray.clear();
                         oncreatelock = true;
@@ -439,8 +439,9 @@ public class review_register extends Activity {
                         modifyedcheck = true;
                         Log.v("image_length2",String.valueOf(user.getGalImages().length));
                     }
-                    else
+                    else{
                         user.inputGalImages(bitarr);
+                    }
 
 
                     afterimagenum++;
@@ -1272,6 +1273,10 @@ public class review_register extends Activity {
         imageadapter.notifyDataSetChanged();
 
         afterimagenum--;
+
+        if(afterimagenum==0)
+            oncreatelock=false;
+        Log.v("afterimagenum_d",String.valueOf(afterimagenum));
     }
 
     // 리뷰등록 버튼
