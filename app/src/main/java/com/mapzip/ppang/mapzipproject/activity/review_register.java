@@ -213,7 +213,10 @@ public class review_register extends Activity {
 
         if(state == 0){ // in enroll
             // no Image
-            noimage = drawableToBitmap(getResources().getDrawable(R.drawable.noimage));
+            //noimage = drawableToBitmap(getResources().getDrawable(R.drawable.noimage));
+            noimage = BitmapFactory.decodeResource(getResources(), R.drawable.noimage);
+            //여기서 아웃오브 메모리 한번났어용
+
             oPerlishArray.add(noimage);
 
             bitarr = new Bitmap[oPerlishArray.size()];

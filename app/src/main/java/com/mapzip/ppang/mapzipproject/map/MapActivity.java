@@ -26,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.games.GamesMetadata;
+import com.google.android.gms.location.internal.LocationRequestUpdateData;
 import com.mapzip.ppang.mapzipproject.adapter.ImageAdapter;
 import com.mapzip.ppang.mapzipproject.model.FriendData;
 import com.mapzip.ppang.mapzipproject.R;
@@ -70,7 +71,7 @@ public class MapActivity extends NMapActivity {
     //아마 튜토리얼을 찬찬히 읽어보시면 이해가 되실거라고 믿어 의심치 않습니다.
 
     private static final String LOG_TAG = "MapActivity";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     public static final String API_KEY = "1205a9af6f6c01148e2d24a2f39c03de";
 
@@ -203,15 +204,14 @@ public class MapActivity extends NMapActivity {
             if(DEBUG) {
                 Log.e("dSJW :" + LOG_TAG, "NMapPOIdataOVerlay.OnstateChangListener onFocusChanged");
             }
-            Log.i("몰랑","123123213");
 
             if (nMapPOIitem != null) {
                 if(DEBUG){
-                    Log.i("NMAP", "onFocusChanged: " + nMapPOIitem.toString());
+                    Log.i("dSJW :" + LOG_TAG, "onFocusChanged: " + nMapPOIitem.toString());
                 }
             } else {
                 if(DEBUG){
-                    Log.i("NMAP", "onFocusChanged: ");
+                    Log.i("dSJW :" + LOG_TAG, "onFocusChanged: ");
                 }
             }
         }
@@ -253,14 +253,7 @@ public class MapActivity extends NMapActivity {
 
 
 
-
-
-
-
     NGeoPoint current_point = SEOUL;
-
-    LinearLayout MapContainer;
-
 
 
 
@@ -311,6 +304,8 @@ public class MapActivity extends NMapActivity {
         mOverlayManager = new NMapOverlayManager(this, mMapView, mMapViewerResourceProvider);
 
 
+
+
         int markerId = NMapPOIflagType.PIN;
 
         poiData = new NMapPOIdata(5, mMapViewerResourceProvider);
@@ -327,8 +322,6 @@ public class MapActivity extends NMapActivity {
 
         poiDataOverlay.setOnStateChangeListener(onPOIdataStateChangeListener);
 
-        /**/
-        //////////////////2016.01.28/////////// mOverlayManager.setOnCalloutOverlayListener(onCalloutOverlayListener);
 
 
         mOverlayManager.setOnCalloutOverlayViewListener(onCalloutOverlayViewListener);
@@ -338,48 +331,89 @@ public class MapActivity extends NMapActivity {
 
     public NMapPOIdata getRightPOIdata(NMapPOIdata poiData, int markerId){
 
-        if (getIntent().getStringExtra("fragment_id").equals("home")) {
+        String fragment_id = getIntent().getStringExtra("fragment_id");
+        String mapid = getIntent().getStringExtra("mapid");//review_Fragement에서 날라오는거는 mapid 값 안써서 이부분이 에러 날수도있을것같다 확인해보자
+
+        if (fragment_id.equals("home")) {
             try {
                 poiData.beginPOIdata(0);
-                String mapid = getIntent().getStringExtra("mapid");
+                //String mapid = getIntent().getStringExtra("mapid");
                 JSONArray jarr = new JSONArray();
                 jarr = user.getMapforpinArray(Integer.parseInt(mapid));
                 if(DEBUG) {
-                    Log.v("맵 어레이", String.valueOf(user.getMapforpinArray(Integer.parseInt(mapid))));
+                    Log.v(LOG_TAG+"맵 어레이", String.valueOf(user.getMapforpinArray(Integer.parseInt(mapid))));
                 }
                 int arrnum = 0;
+
                 for (arrnum = 0; arrnum < jarr.length(); arrnum++) {
-                    poiData.addPOIitem(Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x")), Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y")), jarr.getJSONObject(arrnum).getString("store_name"), markerId, 0, Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id")));
+
+                    double store_x = Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x"));
+                    double store_y = Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y"));
+                    String store_name = jarr.getJSONObject(arrnum).getString("store_name");
+                    int store_id = Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id"));
+
+                    //NMapPOIitem addPOIitem(NGeoPoint point, String title, int markerId, Object tag, int id)
+                    /*POI 아이템을 추가한다. 아이템이 표시될 좌표와 마커 Id는 필수 인자이며, title을 null로 전달하면 마커 선택 시 말풍선이 표시되지 않는다.
+                    tag와 id는 마커 및 말풍선 선택 시 호출되는 콜백 인터페이스에서 사용하기 위해 전달한다.
+                    객체로 추가적인 정보를 설정할 수 있다.*/
+
+                    //poiData.addPOIitem(Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x")), Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y")), jarr.getJSONObject(arrnum).getString("store_name"), markerId, 0, Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id")));
+                    poiData.addPOIitem(store_x, store_y, store_name, markerId, 0, store_id);
                 }
                 poiData.endPOIdata();
             } catch (JSONException ex) {
                 if(DEBUG) {
-                    Log.v("맵액티비티", "JSONEX");
+                    Log.v(LOG_TAG+"맵액티비티", "JSONEX");
                 }
 
             }
-        } else if (getIntent().getStringExtra("fragment_id").equals("friend_home")) {
+        } else if (fragment_id.equals("friend_home")) {
             try {
                 poiData.beginPOIdata(0);
-                String mapid = getIntent().getStringExtra("mapid");
+                //String mapid = getIntent().getStringExtra("mapid");
                 JSONArray jarr = new JSONArray();
                 jarr = fuser.getMapforpinArray(Integer.parseInt(mapid));
                 if(DEBUG) {
-                    Log.v("맵 어레이", String.valueOf(fuser.getMapforpinArray(Integer.parseInt(mapid))));
+                    Log.v(LOG_TAG+"맵 어레이", String.valueOf(fuser.getMapforpinArray(Integer.parseInt(mapid))));
                 }
                 int arrnum = 0;
                 for (arrnum = 0; arrnum < jarr.length(); arrnum++) {
-                    poiData.addPOIitem(Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x")), Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y")), jarr.getJSONObject(arrnum).getString("store_name"), markerId, 0, Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id")));
+
+                    double store_x = Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x"));
+                    double store_y = Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y"));
+                    String store_name = jarr.getJSONObject(arrnum).getString("store_name");
+                    int store_id = Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id"));
+
+                    //NMapPOIitem addPOIitem(NGeoPoint point, String title, int markerId, Object tag, int id)
+                    /*POI 아이템을 추가한다. 아이템이 표시될 좌표와 마커 Id는 필수 인자이며, title을 null로 전달하면 마커 선택 시 말풍선이 표시되지 않는다.
+                    tag와 id는 마커 및 말풍선 선택 시 호출되는 콜백 인터페이스에서 사용하기 위해 전달한다.
+                    객체로 추가적인 정보를 설정할 수 있다.*/
+
+                    //poiData.addPOIitem(Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x")), Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y")), jarr.getJSONObject(arrnum).getString("store_name"), markerId, 0, Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id")));
+                    poiData.addPOIitem(store_x, store_y, store_name, markerId, 0, store_id);
                 }
                 poiData.endPOIdata();
             } catch (JSONException ex) {
                 if(DEBUG) {
-                    Log.v("맵액티비티", "JSONEX");
+                    Log.v(LOG_TAG+"맵액티비티", "JSONEX");
                 }
             }
-        } else if (getIntent().getStringExtra("fragment_id").equals("review")) {
+        } else if (fragment_id.equals("review")) {
             poiData.beginPOIdata(0);
-            poiData.addPOIitem(getIntent().getDoubleExtra("store_x", 0.0), getIntent().getDoubleExtra("store_y", 0.0), getIntent().getStringExtra("store_name"), markerId, 0);
+
+            double store_x = getIntent().getDoubleExtra("store_x", 0.0);
+            double store_y = getIntent().getDoubleExtra("store_y", 0.0);
+            String store_name = getIntent().getStringExtra("store_name");
+
+
+            //NMapPOIitem addPOIitem(NGeoPoint point, String title, int markerId, Object tag, int id)
+            /*POI 아이템을 추가한다. 아이템이 표시될 좌표와 마커 Id는 필수 인자이며, title을 null로 전달하면 마커 선택 시 말풍선이 표시되지 않는다.
+            tag와 id는 마커 및 말풍선 선택 시 호출되는 콜백 인터페이스에서 사용하기 위해 전달한다.
+            객체로 추가적인 정보를 설정할 수 있다.*/
+
+            //poiData.addPOIitem(getIntent().getDoubleExtra("store_x", 0.0), getIntent().getDoubleExtra("store_y", 0.0), getIntent().getStringExtra("store_name"), markerId, 0);
+            poiData.addPOIitem(store_x, store_y, store_name, markerId, 0);
+
             poiData.endPOIdata();
         }
 
@@ -412,67 +446,36 @@ public class MapActivity extends NMapActivity {
     protected void onResume() {
         super.onResume();
 
-        if(user.isMapRefreshLock() == true)
-            return;
-
         if(DEBUG){
             Log.v("맵 온리쥼","스타트");
         }
 
-        poiDataOverlay.setHidden(true);
-        poiData = new NMapPOIdata(5, mMapViewerResourceProvider);
-        int markerId = NMapPOIflagType.PIN;
-        if (getIntent().getStringExtra("fragment_id").equals("home")) {
-            try {
-                poiData.beginPOIdata(0);
-                String mapid = getIntent().getStringExtra("mapid");
-                JSONArray jarr = new JSONArray();
-                jarr = user.getMapforpinArray(Integer.parseInt(mapid));
-                if(DEBUG) {
-                    Log.v("맵 어레이", String.valueOf(user.getMapforpinArray(Integer.parseInt(mapid))));
-                }
-                int arrnum = 0;
-                for (arrnum = 0; arrnum < jarr.length(); arrnum++) {
-                    poiData.addPOIitem(Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x")), Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y")), jarr.getJSONObject(arrnum).getString("store_name"), markerId, 0, Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id")));
-                }
-                poiData.endPOIdata();
-            } catch (JSONException ex) {
-                if(DEBUG) {
-                    Log.v("맵액티비티", "JSONEX");
-                }
+        if(user.isMapRefreshLock() == true)
+            return;
 
-            }
-        } else if (getIntent().getStringExtra("fragment_id").equals("friend_home")) {
-            try {
-                poiData.beginPOIdata(0);
-                String mapid = getIntent().getStringExtra("mapid");
-                JSONArray jarr = new JSONArray();
-                jarr = fuser.getMapforpinArray(Integer.parseInt(mapid));
-                if(DEBUG) {
-                    Log.v("맵 어레이", String.valueOf(fuser.getMapforpinArray(Integer.parseInt(mapid))));
-                }
-                int arrnum = 0;
-                for (arrnum = 0; arrnum < jarr.length(); arrnum++) {
-                    poiData.addPOIitem(Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_x")), Double.parseDouble(jarr.getJSONObject(arrnum).getString("store_y")), jarr.getJSONObject(arrnum).getString("store_name"), markerId, 0, Integer.parseInt(jarr.getJSONObject(arrnum).getString("store_id")));
-                }
-                poiData.endPOIdata();
-            } catch (JSONException ex) {
-                if(DEBUG) {
-                    Log.v("맵액티비티", "JSONEX");
-                }
-            }
-        } else if (getIntent().getStringExtra("fragment_id").equals("review")) {
-            poiData.beginPOIdata(0);
-            poiData.addPOIitem(getIntent().getDoubleExtra("store_x", 0.0), getIntent().getDoubleExtra("store_y", 0.0), getIntent().getStringExtra("store_name"), markerId, 0);
-            poiData.endPOIdata();
-        }
+
+
+        mOverlayManager.removeOverlay(poiDataOverlay);
+        //poiDataOverlay.setHidden(true);
+
+
+        int markerId = NMapPOIflagType.PIN;
+
+        poiData = new NMapPOIdata(5, mMapViewerResourceProvider);
+
+        poiData = getRightPOIdata(poiData, markerId);
+
+
 
         poiDataOverlay = /**/mOverlayManager.createPOIdataOverlay(poiData, null);
 
         //poiDataOverlay.showAllPOIdata(0);
         poiDataOverlay.showAllItems();
 
+        poiDataOverlay.setOnStateChangeListener(onPOIdataStateChangeListener);
+
         user.setMapRefreshLock(true);
+
         if(DEBUG) {
             Log.v("맵 온리쥼", "엔드");
         }
@@ -481,9 +484,7 @@ public class MapActivity extends NMapActivity {
 
 
     public void GetMapDetail(int poiid) {
-        if(DEBUG) {
-            Log.i("please", "GetMapDetail 호출");
-        }
+
         RequestQueue queue = MyVolley.getInstance(getApplicationContext()).getRequestQueue();
 
         JSONObject obj = new JSONObject();
@@ -495,12 +496,11 @@ public class MapActivity extends NMapActivity {
             obj.put("store_id", poiid);
 
             if(DEBUG) {
-                Log.d("please", "GetMapDetail 호출중 //" + getIntent().getStringExtra("fragment_id") + "//" + poiid);
-                Log.v("MapActivity 제이손 보내기", obj.toString());
+                Log.v(LOG_TAG+"MapActivity 제이손 보내기", obj.toString());
             }
         } catch (JSONException e) {
             if(DEBUG) {
-                Log.v("제이손", "에러");
+                Log.v(LOG_TAG+"제이손", "에러");
             }
         }
 
@@ -518,16 +518,8 @@ public class MapActivity extends NMapActivity {
             @Override
             public void onResponse(JSONObject response) {
 
-                if(DEBUG) {
-                    Log.d("please", "createMyReqSuccessListener()");
-                    Log.v("MapActivity", response.toString());
-                }
-
                 try {
 
-                    if(DEBUG) {
-                        Log.d("please", response.getString("state").toString().trim());
-                    }
                     if (response.getString("state").equals("702")) {
 
                         JSONArray jarr = response.getJSONArray("map_detail");
@@ -565,62 +557,52 @@ public class MapActivity extends NMapActivity {
                         // if image exist, get & set Image
                         if (image_num != 0) {
 
-                            if(DEBUG) {
-                                Log.e("please", "WHERE!!");
-                            }
                             imageLoader = MyVolley.getInstance(getApplicationContext()).getImageLoader();
-                            if(DEBUG) {
-                                Log.e("please", "1");
-                            }
 
                             for (int i = 0; i < image_num; i++) {
                                 if(DEBUG) {
-                                    Log.e("please", "2 , image_num : " + image_num);
-                                    Log.v("imagenum", String.valueOf(i));
+                                    Log.v(LOG_TAG+"imagenum", String.valueOf(i));
                                 }
 
                                 // if first, clear array. (remove noimage)
                                 if (i == 0) {
-                                    if(DEBUG) {
-                                        Log.e("please", "3");
-                                    }
                                     oPerlishArray.clear();
                                     bitarr = new Bitmap[image_num];
                                 }
 
-                                if(DEBUG){ Log.e("please", "4");}
                                 if (getIntent().getStringExtra("fragment_id").equals("friend_home")) {
-                                    if(DEBUG){ Log.e("please", "5");}
+
                                     imageLoad(i, SystemMain.SERVER_ROOT_URL + "/client_data/client_" + fuser.getUserID() + "_" + fuser.getMapData().getMapid() + "_" + fuser.getMapData().getStore_id() + "/image" + String.valueOf(i) + ".jpg");
+
                                 } else {
-                                    if(DEBUG){ Log.e("please", "6");}
+
                                     String url = SystemMain.SERVER_ROOT_URL + "/client_data/client_" + user.getUserID() + "_" + user.getMapData().getMapid() + "_" + user.getMapData().getStore_id() + "/image" + String.valueOf(i) + ".jpg";
+
                                     if(user.isAfterModify()) {
-                                        if(DEBUG){ Log.e("please", "7");}
+
                                         MyVolley.getInstance(getApplicationContext()).clearCache();
                                     }
-                                    if(DEBUG){ Log.e("please", "8");}
                                     user.setAfterModify(false);
 
                                     imageLoad(i, url);
                                 }
                             }
                         }else {
-                            if(DEBUG){ Log.e("please", "HERE!!");}
                             Intent intent = new Intent(getApplicationContext(), ReviewActivity.class);
                             intent.putExtra("fragment_id", getIntent().getStringExtra("fragment_id"));
                             startActivity(intent);
+                            onResume();
+
                         }
                     }
                 } catch (JSONException e) {
-                    if(DEBUG){ Log.v("에러", "제이손");}
+                    if(DEBUG){ Log.v(LOG_TAG+"에러", "제이손");}
                 }
             }
         };
     }
 
     private Response.ErrorListener createMyReqErrorListener() {
-        if(DEBUG){ Log.d("please", "createMyReqErrorListener()");}
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -632,10 +614,10 @@ public class MapActivity extends NMapActivity {
                     toast.setView(layout_toast);
                     toast.show();
 
-                    if(DEBUG){ Log.e("MapActivity", error.getMessage());}
+                    if(DEBUG){ Log.e(LOG_TAG+"MapActivity", error.getMessage());}
                 } catch (NullPointerException ex) {
                     // toast
-                    if(DEBUG){ Log.e("MapActivity", "nullpointexception");}
+                    if(DEBUG){ Log.e(LOG_TAG+"MapActivity", "nullpointexception");}
                 }
             }
         };
@@ -643,39 +625,44 @@ public class MapActivity extends NMapActivity {
 
     // get review Image from server
     public void imageLoad(final int nownum, String imageURL) {
-        if(DEBUG){ Log.v("imageLoader", "함수진입");}
+        if(DEBUG){ Log.v(LOG_TAG+"imageLoader", "함수진입");}
 
-        if(DEBUG){ Log.d("please", "imageLoad() 0");}
         imageLoader.get(imageURL, new ImageLoader.ImageListener() {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                if(DEBUG){ Log.d("please", "imageLoad() 0_1");}
-                if(DEBUG){ Log.e("please","response가 널인가? " + (response==null?"true":"false") + "\t\t response.getBitmap()가 널인가? " + (response.getBitmap()==null?"true":"false"));}
+
                 if (response != null && response.getBitmap() != null) {
-                    if(DEBUG){ Log.d("please", "imageLoad() 1");}
-                    if(DEBUG){ Log.v("이미지이미지", response.getRequestUrl().toString());}
+
+                    if (DEBUG) {
+                        Log.v(LOG_TAG+"이미지이미지", response.getRequestUrl().toString());
+                    }
 
                     // add image to array
                     oPerlishArray.add(response.getBitmap());
-                    if(DEBUG){ Log.v("리스폰스", response.getBitmap().toString());}
+                    if (DEBUG) {
+                        Log.v(LOG_TAG+"리스폰스", response.getBitmap().toString());
+                    }
                     // set image to user Data, if receive completed.
                     if (image_num == oPerlishArray.size()) {
-                        if(DEBUG){ Log.d("please", "imageLoad() 2");}
+
                         //bitarr = new Bitmap[image_num];
                         oPerlishArray.toArray(bitarr); // fill the array
 
                         if (!getIntent().getStringExtra("fragment_id").equals("friend_home")) {
-                            if(DEBUG){ Log.d("please", "imageLoad() 3 친구에서");}
+
                             user.inputGalImages(bitarr);
                             for (int i = 0; i < image_num; i++) {
-                                if(DEBUG){ Log.v("갤러리", user.getGalImages()[i].toString());}
+                                if (DEBUG) {
+                                    Log.v(LOG_TAG+"갤러리", user.getGalImages()[i].toString());
+                                }
                             }
                         } else {
-                            if (DEBUG) {
-                                Log.d("please", "imageLoad() 4 내꺼에서");}
+
                             fuser.inputGalImages(bitarr);
                             for (int i = 0; i < image_num; i++) {
-                                if(DEBUG){ Log.v("갤러리", fuser.getGalImages()[i].toString());}
+                                if (DEBUG) {
+                                    Log.v(LOG_TAG+"갤러리", fuser.getGalImages()[i].toString());
+                                }
                             }
                         }
 
@@ -684,13 +671,17 @@ public class MapActivity extends NMapActivity {
                         startActivity(intent);
                     }
 
-                    if(DEBUG){ Log.v("imageLoad completed", String.valueOf(nownum));}
+                    if (DEBUG) {
+                        Log.v(LOG_TAG+"imageLoad completed", String.valueOf(nownum));
+                    }
                 }
             }
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (DEBUG){ Log.v("imageLoader", "에러");}
+                if (DEBUG) {
+                    Log.v(LOG_TAG+"imageLoader", "에러");
+                }
             }
         });
 
@@ -709,5 +700,7 @@ public class MapActivity extends NMapActivity {
 
         return bitmap;
     }
+
+
 
 }
