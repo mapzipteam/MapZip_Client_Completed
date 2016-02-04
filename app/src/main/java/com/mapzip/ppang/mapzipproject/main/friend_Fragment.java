@@ -1,8 +1,10 @@
 package com.mapzip.ppang.mapzipproject.main;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
@@ -60,10 +62,15 @@ public class friend_Fragment extends Fragment implements AbsListView.OnScrollLis
     private ListView mListView;
     private MyItem items;
     private View footer;
+    private Button delmapmark;
 
     // 스크롤 로딩
     private LayoutInflater mInflater;
     private boolean mLockListView;
+
+    // 친구삭제
+    private Button delfriend_btn;
+    private boolean delfriend_flag=false;
 
     private boolean mLockBtn;
     private boolean mSendLock;
@@ -104,12 +111,31 @@ public class friend_Fragment extends Fragment implements AbsListView.OnScrollLis
         v = inflater.inflate(R.layout.fragment_friend, container, false);
 
         mListView = (ListView) v.findViewById(R.id.friendList_friend);
+        mListView.setFocusable(true); // for btn
         mListView.setOnItemClickListener(new ListViewItemClickListener());
         marItem = new ArrayList<MyItem>();
 
         mLockListView = true;
         mLockBtn = true;
         mSendLock = false;
+
+        delfriend_btn = (Button) v.findViewById(R.id.delBtn_friend);
+        delfriend_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(delfriend_flag)
+                    delfriend_flag=false;
+                else
+                    delfriend_flag=true;
+
+                Log.v("delflag", String.valueOf(delfriend_flag));
+
+               // mMyAdapte = new MyListAdapter(getActivity(), R.layout.custom_listview, marItem);
+                //mListView.addFooterView(footer);
+                //mListView.setAdapter(mMyAdapte);
+                mMyAdapte.notifyDataSetChanged();
+            }
+        });
 
         final Button addfriend = (Button) v.findViewById(R.id.addBtn_friend);
         addfriend.setOnClickListener(new View.OnClickListener() {
@@ -200,11 +226,43 @@ public class friend_Fragment extends Fragment implements AbsListView.OnScrollLis
 
         // 각 뷰의 항목 생성
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             final int pos = position;
             if (convertView == null) {
                 convertView = lInflater.inflate(layout, parent, false);
             }
+
+            delmapmark = (Button) convertView.findViewById(R.id.delete_mapmark);
+            if(delfriend_flag)
+                delmapmark.setVisibility(View.VISIBLE);
+            else
+                delmapmark.setVisibility(View.GONE);
+
+            delmapmark.setFocusable(false);
+            delmapmark.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alert_confirm = new AlertDialog.Builder(getActivity());
+                    alert_confirm.setMessage(mMyAdapte.getName(position)+"님을 맵갈피에서 삭제하시겠습니까?\n").setCancelable(false).setPositiveButton("확인",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // 'YES' target_id,
+                                    marItem.remove(position);
+                                    mMyAdapte.notifyDataSetChanged();
+                                }
+                            }).setNegativeButton("취소",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // 'No'
+                                    return;
+                                }
+                            });
+                    AlertDialog alert = alert_confirm.create();
+                    alert.show();
+                }
+            });
 
             final String getCustId = alSrc.get(pos).sCustId;
 

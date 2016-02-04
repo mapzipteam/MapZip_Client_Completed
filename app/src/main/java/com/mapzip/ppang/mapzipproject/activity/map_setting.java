@@ -2,7 +2,9 @@ package com.mapzip.ppang.mapzipproject.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -192,7 +194,7 @@ public class map_setting extends Activity {
         this.finish();
     }
 
-    public void resetOnClick(View v){
+    public void resetOnClick(View v){ // 초기화
 
         ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
@@ -210,24 +212,41 @@ public class map_setting extends Activity {
             return;
         }
 
-        RequestQueue queue = MyVolley.getInstance(this).getRequestQueue();
+        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
+        alert_confirm.setMessage("초기화시 그 동안 작성한 지도와 리뷰정보가 모두 소멸됩니다.\n정말 초기화하시겠습니까?\n").setCancelable(false).setPositiveButton("확인",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 'YES' target_id,
+                        RequestQueue queue = MyVolley.getInstance(getApplicationContext()).getRequestQueue();
 
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("user_id", user.getUserID());
-            obj.put("map_id", mapid);
-            Log.v("mapsetting_reset 보내기", obj.toString());
-        } catch (JSONException e) {
-            Log.v("제이손", "에러");
-        }
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("user_id", user.getUserID());
+                            obj.put("map_id", mapid);
+                            Log.v("mapsetting_reset 보내기", obj.toString());
+                        } catch (JSONException e) {
+                            Log.v("제이손", "에러");
+                        }
 
-        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
-                SystemMain.SERVER_RESETMAPDATA_URL,
-                obj,
-                createMyReqSuccessListener_MapReset(),
-                createMyReqErrorListener()) {
-        };
-        queue.add(myReq);
+                        JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                                SystemMain.SERVER_RESETMAPDATA_URL,
+                                obj,
+                                createMyReqSuccessListener_MapReset(),
+                                createMyReqErrorListener()) {
+                        };
+                        queue.add(myReq);
+                    }
+                }).setNegativeButton("취소",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 'No'
+                        return;
+                    }
+                });
+        AlertDialog alert = alert_confirm.create();
+        alert.show();
     }
 
     public void DoMapset() {
