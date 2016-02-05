@@ -19,8 +19,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +65,13 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
 
     private TextView topstate; // user info
     private ImageView imageview; // map image
-    private TextView hashstate; // hashtag
+    private String hashString;
+    private TextView hashstate1; // hashtag
+    private TextView hashstate2; // hashtag
+    private TextView hashstate3; // hashtag
+    private TextView hashstate4; // hashtag
+    private TextView hashstate5; // hashtag
+    private LinearLayout hashtaglayout;
     private String mapcurname = ""; // 현재 지도 이름
     private String mapkindnum; // 현재 지도 속성 번호
     private String mapid; // 현재 지도 pid값
@@ -153,7 +162,12 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
 
 
         imageview = (ImageView) v.findViewById(R.id.mapimage);
-        hashstate = (TextView) v.findViewById(R.id.tagText);
+        hashstate1 = (TextView) v.findViewById(R.id.tagText);
+        hashstate2 = (TextView) v.findViewById(R.id.tagText2);
+        hashstate3 = (TextView) v.findViewById(R.id.tagText3);
+        hashstate4 = (TextView) v.findViewById(R.id.tagText4);
+        hashstate5 = (TextView) v.findViewById(R.id.tagText5);
+        hashtaglayout = (LinearLayout) v.findViewById(R.id.taglayout);
         mapsetting = (Button) v.findViewById(R.id.mapsetting);
 
         // Seoul Btn init
@@ -198,8 +212,9 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                     imageLayout.setMargins(0, realHeight / 10, 0, 0);
                     imageview.setLayoutParams(imageLayout);
                     RelativeLayout.LayoutParams tagLayout = new RelativeLayout.LayoutParams(realWidth, realHeight / 14);// width, height
-                    tagLayout.setMargins(0, (int) realHeight / 24 * 17, 0, 0);
-                    hashstate.setLayoutParams(tagLayout);
+                    tagLayout.setMargins(10, (int) realHeight / 24 * 17, 10, 0);
+                    hashtaglayout.setLayoutParams(tagLayout);
+                    //hashstate.setLayoutParams(tagLayout);
 
                     JSONObject mapmeta = null;
                     mapmeta = user.getMapmetaArray().getJSONObject(position);
@@ -215,12 +230,34 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
                     scalableLayout.setBackground(drawable);
                     //scalableLayout.setBackground(new BitmapDrawable(getActivity().getResources(), result));
 
+                    hashString =  mapmeta.get("hash_tag").toString();
+                    String[] hasharr = hashString.split("#");
+
+                    for (int i = 1; i < hasharr.length; i++) {
+                        switch (i) {
+                            case 1:
+                                hashstate1.setText(hasharr[i]);
+                                break;
+                            case 2:
+                                hashstate2.setText(hasharr[i]);
+                                break;
+                            case 3:
+                                hashstate3.setText(hasharr[i]);
+                                break;
+                            case 4:
+                                hashstate4.setText(hasharr[i]);
+                                break;
+                            case 5:
+                                hashstate5.setText(hasharr[i]);
+                                break;
+                        }
+                    }
+
 
                     // category select (SEOUL)
                     if (Integer.parseInt(mapmeta.get("category").toString()) == SystemMain.SEOUL_MAP_NUM) {
 
-                        seoulBtnVisibility("visible",mapid);
-                        hashstate.setText(mapmeta.get("hash_tag").toString());
+                        seoulBtnVisibility("visible", mapid);
                     }
                 } catch (JSONException ex) {
                 }
@@ -264,7 +301,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), map_setting.class);
                 intent.putExtra("mapcurname", mapcurname);
-                intent.putExtra("hashtag", hashstate.getText().toString());
+                intent.putExtra("hashtag", hashString);
                 intent.putExtra("mapkindnum", mapkindnum);
                 intent.putExtra("mapid", mapid);
                 startActivity(intent);

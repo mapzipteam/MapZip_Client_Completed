@@ -4,152 +4,159 @@
     android:layout_height="match_parent"
     android:background="@drawable/joinbg"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/paper"
-            android:layout_width="match_parent"
-            android:layout_height="510dp"
-            android:layout_marginTop="50dp"
-            android:src="@drawable/joinpaper0" />
-
-        <ImageView
-            android:id="@+id/joinus"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/joinus"/>
+        android:layout_height="match_parent">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/joinus"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
             android:gravity="center">
 
-            <RelativeLayout
-                android:id="@+id/idlayout"
-                android:layout_width="240dp"
-                android:layout_height="46dp"
+            <ImageView
+                android:id="@+id/paper"
+                android:layout_width="match_parent"
+                android:layout_height="510dp"
+                android:layout_marginTop="50dp"
+                android:src="@drawable/joinpaper0" />
+
+            <ImageView
+                android:id="@+id/joinus"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/jointxt">
+                android:src="@drawable/joinus" />
 
-                <ImageView
-                    android:id="@+id/joinhead"
-                    android:layout_width="38dp"
-                    android:layout_height="46dp" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/joinus"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+                android:gravity="center">
 
-                <EditText
-                    android:id="@+id/InputID"
-                    android:layout_width="200dp"
+                <RelativeLayout
+                    android:id="@+id/idlayout"
+                    android:layout_width="240dp"
                     android:layout_height="46dp"
-                    android:layout_marginLeft="33dp"
-                    android:background="@color/transparent"
-                    android:hint="ID( 5-15자 )"
-                    android:maxLength="15"
-                    android:singleLine="true" />
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/jointxt">
 
-            </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/joinhead"
+                        android:layout_width="38dp"
+                        android:layout_height="46dp" />
 
-            <RelativeLayout
-                android:id="@+id/namelayout"
-                android:background="@drawable/jointxt"
-                android:layout_width="240dp"
-                android:layout_height="46dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/idlayout"
-                android:layout_marginTop="3dp">
+                    <EditText
+                        android:id="@+id/InputID"
+                        android:layout_width="200dp"
+                        android:layout_height="46dp"
+                        android:layout_marginLeft="33dp"
+                        android:background="@color/transparent"
+                        android:hint="ID( 5-15자 )"
+                        android:maxLength="15"
+                        android:singleLine="true" />
 
-                <ImageView
-                    android:id="@+id/joinhead2"
-                    android:layout_width="38dp"
-                    android:layout_height="46dp" />
+                </RelativeLayout>
 
-                <EditText
-                android:id="@+id/InputName"
-                android:layout_width="200dp"
-                android:layout_height="46dp"
-                android:layout_marginLeft="33dp"
-                android:background="@color/transparent"
-                android:hint="Name"
-                android:maxLength="15"
-                android:singleLine="true" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/pwlayout"
-                android:background="@drawable/jointxt"
-                android:layout_width="240dp"
-                android:layout_height="46dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/namelayout"
-                android:layout_marginTop="3dp">
-
-                <ImageView
-                    android:id="@+id/joinhead3"
-                    android:layout_width="38dp"
-                    android:layout_height="46dp" />
-
-                <EditText
-                    android:id="@+id/InputPW"
-                    android:layout_width="200dp"
+                <RelativeLayout
+                    android:id="@+id/namelayout"
+                    android:layout_width="240dp"
                     android:layout_height="46dp"
-                    android:layout_marginLeft="33dp"
-                    android:background="@color/transparent"
-                    android:hint="PASSWORD( 8-15자 )"
-                    android:inputType="textPassword"
-                    android:maxLength="15"
-                    android:singleLine="true" />
+                    android:layout_below="@+id/idlayout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/jointxt">
 
-            </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/joinhead2"
+                        android:layout_width="38dp"
+                        android:layout_height="46dp" />
 
-            <RelativeLayout
-                android:id="@+id/confirmlayout"
-                android:background="@drawable/jointxt"
-                android:layout_width="240dp"
-                android:layout_height="46dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/pwlayout"
-                android:layout_marginTop="3dp">
+                    <EditText
+                        android:id="@+id/InputName"
+                        android:layout_width="200dp"
+                        android:layout_height="46dp"
+                        android:layout_marginLeft="33dp"
+                        android:background="@color/transparent"
+                        android:hint="Name"
+                        android:maxLength="15"
+                        android:singleLine="true" />
 
-                <ImageView
-                    android:id="@+id/joinhead4"
-                    android:layout_width="38dp"
-                    android:layout_height="46dp" />
+                </RelativeLayout>
 
-                <EditText
-                    android:id="@+id/InputPW2"
-                    android:layout_width="200dp"
+                <RelativeLayout
+                    android:id="@+id/pwlayout"
+                    android:layout_width="240dp"
                     android:layout_height="46dp"
-                    android:layout_marginLeft="33dp"
-                    android:background="@color/transparent"
-                    android:hint="CONFIRM PASSWORD"
-                    android:inputType="textPassword"
-                    android:maxLength="15"
-                    android:singleLine="true" />
+                    android:layout_below="@+id/namelayout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/jointxt">
+
+                    <ImageView
+                        android:id="@+id/joinhead3"
+                        android:layout_width="38dp"
+                        android:layout_height="46dp" />
+
+                    <EditText
+                        android:id="@+id/InputPW"
+                        android:layout_width="200dp"
+                        android:layout_height="46dp"
+                        android:layout_marginLeft="33dp"
+                        android:background="@color/transparent"
+                        android:hint="PASSWORD( 8-15자 )"
+                        android:inputType="textPassword"
+                        android:maxLength="15"
+                        android:singleLine="true" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/confirmlayout"
+                    android:layout_width="240dp"
+                    android:layout_height="46dp"
+                    android:layout_below="@+id/pwlayout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/jointxt">
+
+                    <ImageView
+                        android:id="@+id/joinhead4"
+                        android:layout_width="38dp"
+                        android:layout_height="46dp" />
+
+                    <EditText
+                        android:id="@+id/InputPW2"
+                        android:layout_width="200dp"
+                        android:layout_height="46dp"
+                        android:layout_marginLeft="33dp"
+                        android:background="@color/transparent"
+                        android:hint="CONFIRM PASSWORD"
+                        android:inputType="textPassword"
+                        android:maxLength="15"
+                        android:singleLine="true" />
+
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/btnJoin"
+                    android:layout_width="240dp"
+                    android:layout_height="48dp"
+                    android:layout_below="@+id/confirmlayout"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/joinbtn"
+                    android:enabled="false" />
 
             </RelativeLayout>
-
-            <Button
-                android:id="@+id/btnJoin"
-                android:layout_width="240dp"
-                android:layout_height="48dp"
-                android:layout_below="@+id/confirmlayout"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/joinbtn"
-                android:enabled="false"/>
 
         </RelativeLayout>
-
-    </RelativeLayout>
+    </ScrollView>
 
 </LinearLayout>

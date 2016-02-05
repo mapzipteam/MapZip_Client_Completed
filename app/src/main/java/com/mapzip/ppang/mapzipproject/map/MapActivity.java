@@ -496,7 +496,7 @@ public class MapActivity extends NMapActivity {
             obj.put("store_id", poiid);
 
             if(DEBUG) {
-                Log.v(LOG_TAG+"MapActivity 제이손 보내기", obj.toString());
+                Log.v(LOG_TAG+"Map제이손보내기", obj.toString());
             }
         } catch (JSONException e) {
             if(DEBUG) {
@@ -572,11 +572,11 @@ public class MapActivity extends NMapActivity {
 
                                 if (getIntent().getStringExtra("fragment_id").equals("friend_home")) {
 
-                                    imageLoad(i, SystemMain.SERVER_ROOT_URL + "/client_data/client_" + fuser.getUserID() + "_" + fuser.getMapData().getMapid() + "_" + fuser.getMapData().getStore_id() + "/image" + String.valueOf(i) + ".jpg");
+                                    imageLoad(i, SystemMain.SERVER_ROOT_URL + "/client_data/client_" + fuser.getUserID() + "/store_" +fuser.getMapData().getStore_id() + "/image" + String.valueOf(i) + ".jpg");
 
                                 } else {
 
-                                    String url = SystemMain.SERVER_ROOT_URL + "/client_data/client_" + user.getUserID() + "_" + user.getMapData().getMapid() + "_" + user.getMapData().getStore_id() + "/image" + String.valueOf(i) + ".jpg";
+                                    String url = SystemMain.SERVER_ROOT_URL + "/client_data/client_" + user.getUserID() + "/store_" + user.getMapData().getStore_id() + "/image" + String.valueOf(i) + ".jpg";
 
                                     if(user.isAfterModify()) {
 
@@ -672,7 +672,7 @@ public class MapActivity extends NMapActivity {
                     }
 
                     if (DEBUG) {
-                        Log.v(LOG_TAG+"imageLoad completed", String.valueOf(nownum));
+                        Log.v(LOG_TAG+"imageLoad c", String.valueOf(nownum));
                     }
                 }
             }

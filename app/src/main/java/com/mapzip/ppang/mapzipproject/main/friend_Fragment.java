@@ -248,8 +248,24 @@ public class friend_Fragment extends Fragment implements AbsListView.OnScrollLis
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     // 'YES' target_id,
-                                    marItem.remove(position);
-                                    mMyAdapte.notifyDataSetChanged();
+                                    RequestQueue queue = MyVolley.getInstance(getActivity()).getRequestQueue();
+
+                                    JSONObject obj = new JSONObject();
+                                    try {
+                                        obj.put("user_id", user.getUserID());
+                                        obj.put("target_id", mMyAdapte.getID(position));
+                                        Log.v("mapmark 보내기", obj.toString());
+                                    } catch (JSONException e) {
+                                        Log.v("제이손", "에러");
+                                    }
+
+                                    JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.POST,
+                                            SystemMain.SERVER_REMOVEMAPMARK_URL,
+                                            obj,
+                                            createMyReqSuccessListener_remove(position),
+                                            createMyReqErrorListener()) {
+                                    };
+                                    queue.add(myReq);
                                 }
                             }).setNegativeButton("취소",
                             new DialogInterface.OnClickListener() {
@@ -277,6 +293,20 @@ public class friend_Fragment extends Fragment implements AbsListView.OnScrollLis
             hashText_search.append(getReviewCount(pos));
 
             return convertView;
+        }
+
+        private Response.Listener<JSONObject> createMyReqSuccessListener_remove(final int position) {
+            return new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+
+                    Log.v("mapmark 받기", response.toString());
+
+                    marItem.remove(position);
+                    mMyAdapte.notifyDataSetChanged();
+
+                }
+            };
         }
     }
 
