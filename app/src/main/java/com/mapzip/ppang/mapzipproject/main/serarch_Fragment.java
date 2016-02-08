@@ -425,16 +425,29 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
                 Log.v("searchmap_friend 받기", response.toString());
                 try {
                     if (response.get("state").toString().equals("801")) {
-                        fuser.setMapmetaArray(response.getJSONArray("mapmeta_info"));
+                        int mapcount = response.getJSONArray("mapmeta_info").length();
+                        map = mapcount;
+
+                        // 지도 순서 맞추기
+                        int metaorder[] = new int[mapcount+1];
+                        metaorder[0] = -1;
+                        for(int i=0; i<mapcount; i++){
+                            metaorder[Integer.parseInt(response.getJSONArray("mapmeta_info").getJSONObject(i).getString("map_id"))] = i;
+                        }
+
+                        JSONArray newmetaarr = new JSONArray();
+                        for(int j=1; j<metaorder.length; j++){
+                            newmetaarr.put(response.getJSONArray("mapmeta_info").getJSONObject(metaorder[j]));
+                        }
+
+                        fuser.setMapmetaArray(newmetaarr);
+                        Log.v("맵메타",String.valueOf(user.getMapmetaArray()));
+
 
                         JSONObject jar = response.getJSONObject("gu_enroll_num");
                         Log.v("구넘버", String.valueOf(jar));
 
                         Log.v("구넘버", "진입");
-
-                        int mapcount = response.getJSONArray("mapmeta_info").length();
-                        map = mapcount;
-
                         for (int mapnum = 1; mapnum <= mapcount; mapnum++) {
                             if (jar.has(String.valueOf(mapnum))) {
                                 JSONObject tmp = jar.getJSONObject(String.valueOf(mapnum));

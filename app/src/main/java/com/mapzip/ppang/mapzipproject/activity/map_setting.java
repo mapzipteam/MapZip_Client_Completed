@@ -34,6 +34,7 @@ import com.mapzip.ppang.mapzipproject.model.SystemMain;
 import com.mapzip.ppang.mapzipproject.model.UserData;
 import com.mapzip.ppang.mapzipproject.network.MyVolley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -311,7 +312,22 @@ public class map_setting extends Activity {
                 Log.v("mapsetting 받기", response.toString());
 
                 try {
-                    user.setMapmetaArray(response.getJSONArray("mapmeta_info"));
+                    int mapcount = response.getJSONArray("mapmeta_info").length();
+
+                    // 지도 순서 맞추기
+                    int metaorder[] = new int[mapcount+1];
+                    metaorder[0] = -1;
+                    for(int i=0; i<mapcount; i++){
+                        metaorder[Integer.parseInt(response.getJSONArray("mapmeta_info").getJSONObject(i).getString("map_id"))] = i;
+                    }
+
+                    JSONArray newmetaarr = new JSONArray();
+                    for(int j=1; j<metaorder.length; j++){
+                        newmetaarr.put(response.getJSONArray("mapmeta_info").getJSONObject(metaorder[j]));
+                    }
+
+                    user.setMapmetaArray(newmetaarr);
+                    Log.v("맵메타",String.valueOf(user.getMapmetaArray()));
                 } catch (JSONException ex) {
 
                 }

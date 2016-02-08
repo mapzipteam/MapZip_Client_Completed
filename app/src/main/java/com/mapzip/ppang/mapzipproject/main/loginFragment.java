@@ -31,6 +31,7 @@ import com.mapzip.ppang.mapzipproject.model.SystemMain;
 import com.mapzip.ppang.mapzipproject.model.UserData;
 import com.mapzip.ppang.mapzipproject.network.MyVolley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -218,15 +219,28 @@ public class loginFragment extends Fragment {
                         Log.v("테스트 로그인", String.valueOf(user.getLoginPermission()));
                         Log.v("테스트 이름", user.getUserName());
 
-                        user.setMapmetaArray(response.getJSONArray("mapmeta_info"));
+                        int mapcount = response.getJSONArray("mapmeta_info").length();
+                        map = mapcount;
+
+                        // 지도 순서 맞추기
+                        int metaorder[] = new int[mapcount+1];
+                        metaorder[0] = -1;
+                        for(int i=0; i<mapcount; i++){
+                            metaorder[Integer.parseInt(response.getJSONArray("mapmeta_info").getJSONObject(i).getString("map_id"))] = i;
+                        }
+
+                        JSONArray newmetaarr = new JSONArray();
+                        for(int j=1; j<metaorder.length; j++){
+                            newmetaarr.put(response.getJSONArray("mapmeta_info").getJSONObject(metaorder[j]));
+                        }
+
+                        user.setMapmetaArray(newmetaarr);
+                        Log.v("맵메타",String.valueOf(user.getMapmetaArray()));
 
                         JSONObject jar = response.getJSONObject("gu_enroll_num");
                         Log.v("구넘버", String.valueOf(jar));
 
                         Log.v("구넘버", "진입");
-
-                        int mapcount = response.getJSONArray("mapmeta_info").length();
-                        map = mapcount;
 
                         for (int mapnum = 1; mapnum <= mapcount; mapnum++) {
                             if (jar.has(String.valueOf(mapnum))) {
