@@ -49,7 +49,7 @@ public class setting_Fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        getActivity().getActionBar().setTitle("     설정");
+        //getActivity().getActionBar().setTitle("설정");
         user = UserData.getInstance();
         pref = getActivity().getSharedPreferences(SystemMain.SHARED_PREFERENCE_AUTOFILE, getActivity().MODE_PRIVATE);
     }

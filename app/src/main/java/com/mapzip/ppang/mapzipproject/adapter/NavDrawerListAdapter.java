@@ -10,6 +10,10 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +25,9 @@ public class NavDrawerListAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<NavDrawerItem> navDrawerItems;
+    private int color_pressed;
+    private TypedArray navMenuIcons_pressed;
+    private int changenum=-1;
 
     public NavDrawerListAdapter(Context context, ArrayList<NavDrawerItem> navDrawerItems){
         this.context = context;
@@ -44,6 +51,7 @@ public class NavDrawerListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.v("네브드로어어댑터",String.valueOf(position));
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
                     context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -54,7 +62,22 @@ public class NavDrawerListAdapter extends BaseAdapter {
         TextView txtTitle = (TextView) convertView.findViewById(R.id.title);
         TextView txtCount = (TextView) convertView.findViewById(R.id.counter);
 
-        imgIcon.setImageResource(navDrawerItems.get(position).getIcon());
+        if(changenum == position) {
+            imgIcon.setImageResource(navMenuIcons_pressed.getResourceId(position, -1));
+            txtTitle.setTextColor(color_pressed);
+        }
+        else {
+            imgIcon.setImageResource(navDrawerItems.get(position).getIcon());
+            txtTitle.setTextColor(Color.DKGRAY);
+        }
+
+        if(changenum == -1){
+            if(position == 0){
+                imgIcon.setImageResource(navMenuIcons_pressed.getResourceId(position, -1));
+                txtTitle.setTextColor(color_pressed);
+            }
+        }
+
         txtTitle.setText(navDrawerItems.get(position).getTitle());
 
         // displaying count
@@ -67,6 +90,19 @@ public class NavDrawerListAdapter extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    public void getResource(Resources rs){
+        Log.v("겟리소스","ㅇㅇ");
+
+        navMenuIcons_pressed =  rs.obtainTypedArray(R.array.nav_drawer_icons_pressed);
+        color_pressed = rs.getColor(R.color.hotpink);
+    }
+
+    public void changeIcon(int position){
+        Log.v("체인지", String.valueOf(position));
+
+        changenum = position;
     }
 
 }

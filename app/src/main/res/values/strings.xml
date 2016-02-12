@@ -66,11 +66,19 @@
 
     <!-- Nav Drawer List Item Icons --><!-- Keep them in order as the titles are in -->
     <array name="nav_drawer_icons">
-        <item>@drawable/earth</item>
+        <item>@drawable/mymap</item>
         <item>@drawable/review</item>
         <item>@drawable/search</item>
-        <item>@drawable/friends</item>
-        <item>@drawable/settings</item>
+        <item>@drawable/friend</item>
+        <item>@drawable/setting</item>
+    </array>
+
+    <array name="nav_drawer_icons_pressed">
+        <item>@drawable/mymappink</item>
+        <item>@drawable/reviewpink</item>
+        <item>@drawable/searchpink</item>
+        <item>@drawable/friendpink</item>
+        <item>@drawable/settingpink</item>
     </array>
 
     <!-- Content Description -->

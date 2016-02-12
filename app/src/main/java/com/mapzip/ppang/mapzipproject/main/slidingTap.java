@@ -86,6 +86,7 @@ public class slidingTap extends FragmentActivity{
         // setting the nav drawer list adapter
         adapter = new NavDrawerListAdapter(getApplicationContext(),
                 navDrawerItems);
+        adapter.getResource(getResources());
         mDrawerList.setAdapter(adapter);
 
         // enabling action bar app icon and behaving it as toggle button
@@ -146,6 +147,8 @@ public class slidingTap extends FragmentActivity{
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
+            adapter.changeIcon(position);
+
             // display view for selected nav drawer item
             displayView(position);
         }

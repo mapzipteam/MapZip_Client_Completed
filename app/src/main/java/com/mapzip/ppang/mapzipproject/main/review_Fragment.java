@@ -95,7 +95,7 @@ public class review_Fragment extends Fragment implements AbsListView.OnScrollLis
         user = UserData.getInstance();
         arrsize = 0;
         selectNum = -1;
-        getActivity().getActionBar().setTitle("     리뷰");
+        //getActivity().getActionBar().setTitle("리뷰");
     }
 
     @Override

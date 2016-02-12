@@ -124,7 +124,7 @@ public class home_Fragment extends Fragment implements View.OnClickListener {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         user = UserData.getInstance();
-        getActivity().getActionBar().setTitle("     "+user.getUserName() + "의 지도");
+        //getActivity().getActionBar().setTitle(user.getUserName() + "의 지도");
         getActivity().invalidateOptionsMenu();
 /*
         ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);

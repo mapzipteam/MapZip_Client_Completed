@@ -88,7 +88,7 @@ public class serarch_Fragment extends Fragment implements AbsListView.OnScrollLi
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        getActivity().getActionBar().setTitle("     검색");
+        //getActivity().getActionBar().setTitle("검색");
         selectlock = false;
         res = getResources();
         asyncDialog = new ProgressDialog(this.getActivity());
