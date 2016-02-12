@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.mapzip.ppang.mapzipproject"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 5
         versionName "1.5"
     }
@@ -25,14 +25,12 @@ android {
         exclude 'META-INF/DEPENDENCIES'
     }
 
-
-    
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile "com.google.android.gms:play-services:8.3.0"
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile "com.google.android.gms:play-services:8.4.0"
     compile 'com.mcxiaoke.volley:library:1.0.18'
     compile('org.apache.httpcomponents:httpmime:4.3.6') {
         exclude module: 'httpclient'
