@@ -21,6 +21,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.mapzip.ppang.mapzipproject.R;
 import com.mapzip.ppang.mapzipproject.model.SystemMain;
 import com.mapzip.ppang.mapzipproject.network.MyVolley;
@@ -165,10 +167,21 @@ public class joinFragment extends Fragment {
                 InputMethodManager imm3 = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm3.hideSoftInputFromWindow(inputName.getWindowToken(), 0);
                 DoJoin(v);
+
+                sendUserActionToAnswers();
             }
         });
 
         return rootView;
+    }
+
+    private void sendUserActionToAnswers() {
+        Answers.getInstance().logContentView(new ContentViewEvent()
+        .putContentName("Join Action")
+        .putContentType("Account")
+        .putContentId("0")
+        .putCustomAttribute("Example1", 1)
+        .putCustomAttribute("Example2", "1"));
     }
 
     public void joinCheck(){

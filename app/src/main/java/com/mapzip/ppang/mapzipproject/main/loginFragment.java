@@ -26,6 +26,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.mapzip.ppang.mapzipproject.R;
 import com.mapzip.ppang.mapzipproject.model.SystemMain;
 import com.mapzip.ppang.mapzipproject.model.UserData;
@@ -275,6 +277,7 @@ public class loginFragment extends Fragment {
                         toast.setDuration(Toast.LENGTH_SHORT);
                         toast.setView(layout_toast);
                         toast.show();
+                        sendLoginSuccessToAnswers();
                     } else if(response.get("state").toString().equals("201")) {
                         // toast
                         text_toast.setText("존재하지 않는 계정정보입니다.");
@@ -290,6 +293,15 @@ public class loginFragment extends Fragment {
                 lockBtn =false;
             }
         };
+    }
+
+    private void sendLoginSuccessToAnswers() {
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Login Action")
+                .putContentType("Login")
+                .putContentId("1")
+                .putCustomAttribute("Login Example1", 2)
+                .putCustomAttribute("Login Example2", "2"));
     }
 
     private Response.ErrorListener createMyReqErrorListener() {

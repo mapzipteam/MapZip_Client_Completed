@@ -75,6 +75,9 @@
         </service>
         <!-- [END gcm_registration_service] -->
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="5c9a4e2a6c9d594c955fe2345d1d114e7db91654" />
     </application>
 
 </manifest>
