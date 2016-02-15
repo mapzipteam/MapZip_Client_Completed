@@ -47,11 +47,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile "com.google.android.gms:play-services:8.4.0"
     compile 'com.mcxiaoke.volley:library:1.0.18'
+    compile 'com.naver.maps.open:naver-map-api:2.1.1@aar'
+    compile 'org.apache.httpcomponents:httpcore:4.4.4'
     compile('org.apache.httpcomponents:httpmime:4.3.6') {
         exclude module: 'httpclient'
     }
-    compile project(':nmaps')
-    compile project(':httpcore-4.4.1')
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
