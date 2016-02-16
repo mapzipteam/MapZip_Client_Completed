@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="facebook_app_id">443487665850615</string>
 
     <string name="app_name">MapZip</string>
     <string name="action_settings">Settings</string>

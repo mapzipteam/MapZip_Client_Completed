@@ -9,6 +9,8 @@ import android.content.Context;
 import android.graphics.Typeface;
 
 import com.crashlytics.android.Crashlytics;
+import com.facebook.appevents.AppEventsLogger;
+
 import io.fabric.sdk.android.Fabric;
 import java.lang.reflect.Field;
 
@@ -18,11 +20,19 @@ public class FontApplication extends Application {
         super.onCreate();
 
         initFabric();
+        AppEventsLogger.activateApp(this);
 
         setDefaultFont(this, "DEFAULT", "default_font2.ttf");
         setDefaultFont(this, "SANS_SERIF", "default_font2.ttf");
         setDefaultFont(this, "SERIF", "default_font2.ttf");
 
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
+        AppEventsLogger.deactivateApp(this);
     }
 
     /**
