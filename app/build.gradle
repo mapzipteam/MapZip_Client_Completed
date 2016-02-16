@@ -26,6 +26,8 @@ android {
         targetSdkVersion 23
         versionCode 5
         versionName "1.5"
+        // Enabling Multidex Support.
+        multiDexEnabled true
     }
     buildTypes {
         release {

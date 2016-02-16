@@ -20,7 +20,7 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".main.MainActivity"
+            android:name=".ui.account.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"></activity>
         <activity android:name="com.mapzip.ppang.mapzipproject.main.slidingTap" />
@@ -41,6 +41,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name" />
+
         <!-- [START gcm_receiver] -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
