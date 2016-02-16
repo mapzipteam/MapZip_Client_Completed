@@ -22,10 +22,12 @@ android {
 
     defaultConfig {
         applicationId "com.mapzip.ppang.mapzipproject"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 5
         versionName "1.5"
+        // Enabling Multidex Support.
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -42,6 +44,10 @@ android {
 
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.1.1'
@@ -55,4 +61,5 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
+    compile 'com.facebook.android:facebook-android-sdk:4.10.0'
 }

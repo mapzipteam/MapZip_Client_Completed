@@ -1,11 +1,10 @@
-package com.mapzip.ppang.mapzipproject.main;
+package com.mapzip.ppang.mapzipproject.ui.account;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,7 +27,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.mapzip.ppang.mapzipproject.R;
+import com.mapzip.ppang.mapzipproject.main.slidingTap;
 import com.mapzip.ppang.mapzipproject.model.SystemMain;
 import com.mapzip.ppang.mapzipproject.model.UserData;
 import com.mapzip.ppang.mapzipproject.network.MyVolley;
@@ -40,7 +45,9 @@ import org.json.JSONObject;
 /**
  * Created by ppangg on 2015-07-31.
  */
-public class loginFragment extends Fragment {
+public class LoginFragment extends Fragment {
+
+    private CallbackManager mCallbackManager;
 
     private boolean lockBtn;
     private LoadingTask Loading;
@@ -48,9 +55,10 @@ public class loginFragment extends Fragment {
     private EditText inputID;
     private EditText inputPW;
     private Button LoginBtn;
+    private LoginButton mLoginButton;
     public UserData user;
     public int map;
-    public ProgressDialog  asyncDialog;
+    public ProgressDialog asyncDialog;
 
     // head
     private ImageView idicon;
@@ -67,14 +75,14 @@ public class loginFragment extends Fragment {
     private CheckBox check_auto;
 
 
-    public static loginFragment create(int pageNumber,int isAuto,String auto_id, String auto_pw) {
+    public static LoginFragment create(int pageNumber, int isAuto, String auto_id, String auto_pw) {
 
-        loginFragment fragment = new loginFragment();
+        LoginFragment fragment = new LoginFragment();
         Bundle args = new Bundle();
         args.putInt("page", pageNumber);
-        args.putInt("isAuto",isAuto);
-        args.putString("auto_id",auto_id);
-        args.putString("auto_pw",auto_pw);
+        args.putInt("isAuto", isAuto);
+        args.putString("auto_id", auto_id);
+        args.putString("auto_pw", auto_pw);
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,16 +91,16 @@ public class loginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isAuto = getArguments().getInt("isAuto");
-        if(isAuto == 1){
-            auto_id = getArguments().getString("auto_id","");
-            auto_pw = getArguments().getString("auto_pw","");
+        if (isAuto == 1) {
+            auto_id = getArguments().getString("auto_id", "");
+            auto_pw = getArguments().getString("auto_pw", "");
         }
         res = getResources();
         asyncDialog = new ProgressDialog(this.getActivity());
         user = UserData.getInstance();
 
         Loading = new LoadingTask();
-        lockBtn=false;
+        lockBtn = false;
 
     }
 
@@ -115,7 +123,7 @@ public class loginFragment extends Fragment {
         pwicon.setBackgroundResource(R.drawable.pwicongray);
 
         // Auto_Login CheckBox
-        check_auto = (CheckBox)rootView.findViewById(R.id.check_auto);
+        check_auto = (CheckBox) rootView.findViewById(R.id.check_auto);
         check_auto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,7 +139,7 @@ public class loginFragment extends Fragment {
         inputID.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus)
+                if (hasFocus)
                     idicon.setBackgroundResource(R.drawable.idiconyellow);
                 else
                     idicon.setBackgroundResource(R.drawable.idicongray);
@@ -140,14 +148,14 @@ public class loginFragment extends Fragment {
         inputPW.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus)
+                if (hasFocus)
                     pwicon.setBackgroundResource(R.drawable.pwiconyellow);
                 else
                     pwicon.setBackgroundResource(R.drawable.pwicongray);
             }
         });
 
-        if(user.getIsAuto() == 1){
+        if (user.getIsAuto() == 1) {
             check_auto.setChecked(true);
             inputID.setText(auto_id);
             inputPW.setText(auto_pw);
@@ -156,14 +164,53 @@ public class loginFragment extends Fragment {
         LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             if(lockBtn==false) {
-                 lockBtn = true;
-                 DoLogin(v);
-             }
+                if (lockBtn == false) {
+                    lockBtn = true;
+                    DoLogin(v);
+                }
             }
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setFacebookLogin(view);
+    }
+
+    private void setFacebookLogin(View view) {
+        mCallbackManager = CallbackManager.Factory.create();
+
+        mLoginButton = (LoginButton) view.findViewById(R.id.button_fb_login);
+        mLoginButton.setReadPermissions("public_profile");
+        mLoginButton.setFragment(this);
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Log.i("LoginFragment", "onSuccess");
+                        Log.i("LoginFragment", loginResult.getAccessToken().getUserId());
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.i("LoginFragment", "onCancel");
+
+                    }
+
+                    @Override
+                    public void onError(FacebookException error) {
+                        Log.i("LoginFragment", "onError");
+
+                    }
+                });
+            }
+        });
     }
 
     @SuppressLint("LongLogTag")
@@ -177,9 +224,9 @@ public class loginFragment extends Fragment {
 
         if (userid != null && !userid.equals("") && userpw != null && !userpw.equals("")) {
 
-            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(inputPW.getWindowToken(), 0);
-            InputMethodManager imm2 = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm2 = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(inputID.getWindowToken(), 0);
 
             JSONObject obj = new JSONObject();
@@ -225,19 +272,19 @@ public class loginFragment extends Fragment {
                         map = mapcount;
 
                         // 지도 순서 맞추기
-                        int metaorder[] = new int[mapcount+1];
+                        int metaorder[] = new int[mapcount + 1];
                         metaorder[0] = -1;
-                        for(int i=0; i<mapcount; i++){
+                        for (int i = 0; i < mapcount; i++) {
                             metaorder[Integer.parseInt(response.getJSONArray("mapmeta_info").getJSONObject(i).getString("map_id"))] = i;
                         }
 
                         JSONArray newmetaarr = new JSONArray();
-                        for(int j=1; j<metaorder.length; j++){
+                        for (int j = 1; j < metaorder.length; j++) {
                             newmetaarr.put(response.getJSONArray("mapmeta_info").getJSONObject(metaorder[j]));
                         }
 
                         user.setMapmetaArray(newmetaarr);
-                        Log.v("맵메타",String.valueOf(user.getMapmetaArray()));
+                        Log.v("맵메타", String.valueOf(user.getMapmetaArray()));
 
                         JSONObject jar = response.getJSONObject("gu_enroll_num");
                         Log.v("구넘버", String.valueOf(jar));
@@ -267,8 +314,7 @@ public class loginFragment extends Fragment {
                             }
                         }
 
-                           Loading.execute();
-
+                        Loading.execute();
 
 
                         // toast
@@ -278,7 +324,7 @@ public class loginFragment extends Fragment {
                         toast.setView(layout_toast);
                         toast.show();
                         sendLoginSuccessToAnswers();
-                    } else if(response.get("state").toString().equals("201")) {
+                    } else if (response.get("state").toString().equals("201")) {
                         // toast
                         text_toast.setText("존재하지 않는 계정정보입니다.");
                         Toast toast = new Toast(getActivity());
@@ -290,7 +336,7 @@ public class loginFragment extends Fragment {
                     Log.v("에러", "제이손");
                 }
 
-                lockBtn =false;
+                lockBtn = false;
             }
         };
     }
@@ -316,16 +362,17 @@ public class loginFragment extends Fragment {
                     toast.setView(layout_toast);
                     toast.show();
 
-                    Log.e("loginFragment", error.getMessage());
+                    Log.e("LoginFragment", error.getMessage());
                 } catch (NullPointerException ex) {
                     // toast
-                    Log.e("loginFragment", "nullpointexception");
+                    Log.e("LoginFragment", "nullpointexception");
                 }
 
-                lockBtn =false;
+                lockBtn = false;
             }
         };
     }
+
     protected class LoadingTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -343,8 +390,8 @@ public class loginFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... arg0) {
             for (int mapnum = 1; mapnum <= map; mapnum++)
-            user.setMapImage(mapnum, res);
-         return null;
+                user.setMapImage(mapnum, res);
+            return null;
         }
 
 
@@ -360,7 +407,6 @@ public class loginFragment extends Fragment {
 
             super.onPostExecute(result);
         }
-
 
 
     }

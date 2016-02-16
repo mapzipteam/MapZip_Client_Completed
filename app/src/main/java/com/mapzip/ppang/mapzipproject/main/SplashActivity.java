@@ -4,20 +4,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -25,6 +19,7 @@ import com.mapzip.ppang.mapzipproject.R;
 import com.mapzip.ppang.mapzipproject.gcm.QuickstartPreferences;
 import com.mapzip.ppang.mapzipproject.gcm.RegistrationIntentService;
 import com.mapzip.ppang.mapzipproject.model.UserData;
+import com.mapzip.ppang.mapzipproject.ui.account.MainActivity;
 
 public class SplashActivity extends Activity {
 
@@ -54,19 +49,19 @@ public class SplashActivity extends Activity {
 
         userdata = UserData.getInstance();
 
-        StartImage_ma = (ImageView)findViewById(R.id.start_ma_image);
-        StartImage_flag1 = (ImageView)findViewById(R.id.start_flag1_image);
-        StartImage_zi = (ImageView)findViewById(R.id.start_zi_image);
-        StartImage_flag2 = (ImageView)findViewById(R.id.start_flag2_image);
-        start_text_ani = AnimationUtils.loadAnimation(this,R.anim.start_alpha);
-        start_flag_ani_1 = AnimationUtils.loadAnimation(this,R.anim.start_up2down_1);
-        start_flag_ani_2 = AnimationUtils.loadAnimation(this,R.anim.start_up2down_2);
+        StartImage_ma = (ImageView) findViewById(R.id.start_ma_image);
+        StartImage_flag1 = (ImageView) findViewById(R.id.start_flag1_image);
+        StartImage_zi = (ImageView) findViewById(R.id.start_zi_image);
+        StartImage_flag2 = (ImageView) findViewById(R.id.start_flag2_image);
+        start_text_ani = AnimationUtils.loadAnimation(this, R.anim.start_alpha);
+        start_flag_ani_1 = AnimationUtils.loadAnimation(this, R.anim.start_up2down_1);
+        start_flag_ani_2 = AnimationUtils.loadAnimation(this, R.anim.start_up2down_2);
         StartImage_ma.startAnimation(start_text_ani);
         StartImage_flag1.startAnimation(start_flag_ani_1);
         StartImage_zi.startAnimation(start_text_ani);
         StartImage_flag2.startAnimation(start_flag_ani_2);
         Handler hd = new Handler();
-        hd.postDelayed(new splashhandler(),2500);
+        hd.postDelayed(new splashhandler(), 2500);
     }
 
     @Override
@@ -77,14 +72,14 @@ public class SplashActivity extends Activity {
 
     }
 
-    private class splashhandler implements Runnable{
+    private class splashhandler implements Runnable {
         public void run() {
             startActivity(new Intent(getApplication(), MainActivity.class)); // 로딩이 끝난후 이동할 Activity
             SplashActivity.this.finish(); // 로딩페이지 Activity Stack에서 제거
         }
     }
 
-    private void gcmInit(){
+    private void gcmInit() {
         registBroadcastReceiver();
 
         getInstanceIdToken();
@@ -114,28 +109,28 @@ public class SplashActivity extends Activity {
     /**
      * LocalBroadcast 리시버를 정의한다. 토큰을 획득하기 위한 READY, GENERATING, COMPLETE 액션에 따라 UI에 변화를 준다.
      */
-    private void registBroadcastReceiver(){
+    private void registBroadcastReceiver() {
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
 
 
-                if(action.equals(QuickstartPreferences.REGISTRATION_READY)){
+                if (action.equals(QuickstartPreferences.REGISTRATION_READY)) {
                     // 액션이 READY일 경우
                     Log.d(TAG, "GCM 준비완료");
-                } else if(action.equals(QuickstartPreferences.REGISTRATION_GENERATING)){
+                } else if (action.equals(QuickstartPreferences.REGISTRATION_GENERATING)) {
                     // 액션이 GENERATING일 경우
                     Log.d(TAG, "GCM 토큰생성중");
-                } else if(action.equals(QuickstartPreferences.REGISTRATION_COMPLETE)){
+                } else if (action.equals(QuickstartPreferences.REGISTRATION_COMPLETE)) {
                     // 액션이 COMPLETE일 경우
                     Log.d(TAG, "GCM 생성완료" + intent.getStringExtra("token"));
-                }else if(action.equals(QuickstartPreferences.REGISTRATION_NOCHANGE)){
+                } else if (action.equals(QuickstartPreferences.REGISTRATION_NOCHANGE)) {
                     String token = intent.getStringExtra("token");
-                    if(token == null){
-                        Log.d(TAG,"GCM 패키지 변화없음 : gcm token empty");
-                    }else{
-                        Log.d(TAG,"GCM 패키지 변화없음 : "+userdata.getGcm_token());
+                    if (token == null) {
+                        Log.d(TAG, "GCM 패키지 변화없음 : gcm token empty");
+                    } else {
+                        Log.d(TAG, "GCM 패키지 변화없음 : " + userdata.getGcm_token());
                     }
                 }
 
@@ -160,9 +155,4 @@ public class SplashActivity extends Activity {
         }
         return true;
     }
-
-
-
-
-
 }

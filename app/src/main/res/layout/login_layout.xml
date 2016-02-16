@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:gravity="center"
-    android:background="@drawable/loginbg"
     android:layout_height="match_parent"
+    android:background="@drawable/loginbg"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    >
+    android:gravity="center"
+    android:orientation="vertical">
 
     <ImageView
-        android:layout_marginTop="20dp"
+        android:id="@+id/mapziplogo"
         android:layout_width="350dp"
         android:layout_height="140dp"
-        android:id="@+id/mapziplogo"
-        android:src="@drawable/loginmapzip"
-        android:layout_marginBottom="100dp"/>
+        android:layout_marginBottom="100dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/loginmapzip" />
 
     <RelativeLayout
         android:id="@+id/loginid"
@@ -25,20 +24,19 @@
         android:background="@drawable/logintxtbg">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
             android:id="@+id/idicon"
-            />
+            android:layout_width="60dp"
+            android:layout_height="match_parent" />
 
         <EditText
+            android:id="@+id/InputID"
             android:layout_width="230dp"
             android:layout_height="match_parent"
-            android:id="@+id/InputID"
-            android:background="@color/transparent"
-            android:singleLine="true"
-            android:maxLength="15"
             android:layout_marginLeft="60dp"
-            android:hint="ID" />
+            android:background="@color/transparent"
+            android:hint="ID"
+            android:maxLength="15"
+            android:singleLine="true" />
 
     </RelativeLayout>
 
@@ -47,59 +45,64 @@
         android:layout_width="290dp"
         android:layout_height="46dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/logintxtbg"
-        android:layout_marginTop="3dp">
+        android:layout_marginTop="3dp"
+        android:background="@drawable/logintxtbg">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
             android:id="@+id/pwicon"
-            />
+            android:layout_width="60dp"
+            android:layout_height="match_parent" />
 
         <EditText
-        android:layout_width="230dp"
-        android:layout_height="match_parent"
-        android:inputType="textPassword"
-        android:id="@+id/InputPW"
-        android:background="@color/transparent"
-        android:hint="PW"
-        android:maxLength="15"
-        android:layout_marginLeft="60dp"
-        android:singleLine="true"
-        />
+            android:id="@+id/InputPW"
+            android:layout_width="230dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="60dp"
+            android:background="@color/transparent"
+            android:hint="PW"
+            android:inputType="textPassword"
+            android:maxLength="15"
+            android:singleLine="true" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:gravity="center">
 
-    <Button
-        android:layout_width="290dp"
-        android:layout_height="48dp"
-        android:background="@drawable/loginbtn"
-        android:id="@+id/btnLogin" />
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="290dp"
+            android:layout_height="48dp"
+            android:background="@drawable/loginbtn" />
 
-    <CheckBox
-        android:id="@+id/check_auto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnLogin"
-        android:text="자동 로그인"/>
+        <CheckBox
+            android:id="@+id/check_auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnLogin"
+            android:text="자동 로그인" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/button_fb_login"
+            android:layout_width="290dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/check_auto"
+            android:layout_marginTop="20dp" />
 
     </RelativeLayout>
 
     <TextView
         android:id="@+id/TextState"
-        android:layout_marginTop="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:text="> 밀어서 가입하기"
         android:textColor="@color/textbrown"
-        android:textStyle="bold"
         android:textSize="20sp"
-        android:text="> 밀어서 가입하기"/>
+        android:textStyle="bold" />
 
 </LinearLayout>

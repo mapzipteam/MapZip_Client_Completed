@@ -1,4 +1,4 @@
-package com.mapzip.ppang.mapzipproject.main;
+package com.mapzip.ppang.mapzipproject.ui.account;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 /**
  * Created by ppangg on 2015-07-31.
  */
-public class joinFragment extends Fragment {
+public class JoinFragment extends Fragment {
 
     private EditText inputID;
     private EditText inputName;
@@ -60,8 +60,8 @@ public class joinFragment extends Fragment {
     private View layout_toast;
     private TextView text_toast;
 
-    public static joinFragment create(int pageNumber) {
-        joinFragment fragment = new joinFragment();
+    public static JoinFragment create(int pageNumber) {
+        JoinFragment fragment = new JoinFragment();
         Bundle args = new Bundle();
         args.putInt("page", pageNumber);
         fragment.setArguments(args);
